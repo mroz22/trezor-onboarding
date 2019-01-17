@@ -11,7 +11,7 @@ const ProgressStepWrapper = styled.div`
 `;
 
 const Circle = styled.div` 
-    border: 1px solid; 
+    border: 1.2px solid; 
     height: 25px;
     width: 25px;
     border-radius: 50%;
@@ -28,7 +28,7 @@ const Text = styled.div`
 const ProgressStep = (props) => {
     const color = props.isActive ? colors.brandPrimary : colors.gray;
     const backgroundColor = props.isFinished && !props.isActive ? colors.brandPrimary : 'trasparent';
-    const borderColor = props.isActive ? colors.brandPrimary : colors.gray;
+    const borderColor = props.isActive || props.isFinished ? colors.brandPrimary : colors.gray;
     return (
         <ProgressStepWrapper>
             <Circle style={{
@@ -41,7 +41,7 @@ const ProgressStep = (props) => {
             </Circle>
 
             <Text style={{
-                color: props.isFinished ? colors.brandPrimary : colors.gray,
+                color: props.isFinished || props.isActive ? colors.brandPrimary : colors.gray,
             }}
             >{props.step.name}
             </Text>

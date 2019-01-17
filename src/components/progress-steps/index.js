@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
 const Line = styled.div`
     flex-grow: 1;
-    height: 4px;
+    height: 1.3px;
     background-color: ${colors.brandPrimary};
     align-self: center;
 `;
