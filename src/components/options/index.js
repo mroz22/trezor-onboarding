@@ -1,4 +1,3 @@
-import Option from 'components/options/Option';
-import OptionsList from 'components/options/OptionsList';
+import Option from './components/Option';
 
-export { Option, OptionsList };
+export { Option };
