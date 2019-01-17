@@ -18,8 +18,8 @@ const Line = styled.div`
     align-self: center;
 `;
 
-const isStepFinished = (stepIndex, steps) => {
-    const active = steps.findIndex(s => s.active);
+const isStepFinished = (stepIndex, steps, activeStep) => {
+    const active = steps.findIndex(s => s.name === activeStep);
     return stepIndex < active;
 };
 
@@ -31,7 +31,7 @@ const ProgressSteps = props => (
                     step={step}
                     index={index}
                     isActive={props.activeStep === step.name}
-                    isFinished={isStepFinished(index, props.steps)}
+                    isFinished={isStepFinished(index, props.steps, props.activeStep)}
                 />
                 {index !== props.steps.length - 1 ? <Line /> : null}
             </React.Fragment>

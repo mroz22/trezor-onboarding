@@ -6,26 +6,28 @@ import UnboxingStep from './components/UnboxingStep';
 import SelectDeviceStep from './components/SelectDeviceStep';
 
 const Wrapper = styled.div`
-    display: 'grid';
+    display: grid;
     grid-template-areas: 
-        'steps', 'steps', 'steps'
-        'main', 'main', 'main'
-        'controls', 'controls', 'controls';
+        'steps'
+        'main'
+        'controls';
+    grid-template-rows: 100px 5fr 1fr;    
+    grid-template-columns: 1fr;
 `;
 
 const ProgressStepsWrapper = styled.div`
-    grid-area: 'steps';
-    background-color: pink;
+    grid-area: steps;
+    border: 1px dashed bisque
 `;
 
 const ComponentWrapper = styled.div`
-    grid-area: 'main';
-    background-color: yellow;
+    grid-area: main;
+    border: 1px dotted darkolivegreen
 `;
 
 const ControlsWrapper = styled.div`
-    grid-area: 'controls';
-    background-color: grey;
+    grid-area: controls;
+    border: 1px dotted dodgerblue
 `;
 
 class Onboarding extends React.Component {
