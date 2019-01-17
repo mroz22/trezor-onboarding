@@ -38,7 +38,7 @@ class Onboarding extends React.Component {
                 name: 'SelectDevice',
                 component: <SelectDeviceStep />,
                 hasDot: false,
-                showProgressSteps: false,
+                showProgressSteps: true,
             }, {
                 name: 'Unboxing',
                 component: <UnboxingStep />,
@@ -71,7 +71,12 @@ class Onboarding extends React.Component {
 
     nextStep = () => {
         const currentIndex = this.state.steps.findIndex(step => step.name === this.state.activeStep);
-        this.setState(prevState => ({ activeStep: prevState.steps[currentIndex + 1].name }));
+        // todo: remove circular
+        if (currentIndex === this.state.steps.length - 1) {
+            this.setState(prevState => ({ activeStep: prevState.steps[0].name }));
+        } else {
+            this.setState(prevState => ({ activeStep: prevState.steps[currentIndex + 1].name }));
+        }
     }
 
     getCurrentStep = () => this.state.steps.find(s => s.name === this.state.activeStep)
@@ -84,6 +89,7 @@ class Onboarding extends React.Component {
                         this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps} activeStep={this.state.activeStep} />
                     }
                 </ProgressStepsWrapper>
+                active step: {this.state.activeStep}
 
                 <ComponentWrapper>
                     {this.getCurrentStep().component}

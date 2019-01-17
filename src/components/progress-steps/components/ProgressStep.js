@@ -18,7 +18,6 @@ const Circle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${colors.brandPrimary};
 `;
 
 const Text = styled.div`
@@ -27,19 +26,22 @@ const Text = styled.div`
 `;
 
 const ProgressStep = (props) => {
-    const color = props.isActive ? colors.brandPrimary : colors.grayDark;
+    const color = props.isActive ? colors.brandPrimary : colors.gray;
+    const backgroundColor = props.isFinished && !props.isActive ? colors.brandPrimary : 'trasparent';
+    const borderColor = props.isActive ? colors.brandPrimary : colors.gray;
     return (
         <ProgressStepWrapper>
             <Circle style={{
-                borderColor: color,
+                borderColor,
                 color,
+                backgroundColor,
             }}
-            > {
-                    props.isFinished ? <IconCheck /> : props.index + 1}
+            >
+                { props.isFinished ? <IconCheck style={{ color: colors.white }} /> : props.index + 1}
             </Circle>
 
             <Text style={{
-                color,
+                color: props.isFinished ? colors.brandPrimary : colors.gray,
             }}
             >{props.step.name}
             </Text>

@@ -1,5 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const IconCheck = () => (<React.Fragment>✔</React.Fragment>);
+const IconCheck = props => (<span style={props.style}>✔</span>);
+
+IconCheck.propTypes = {
+    style: PropTypes.object,
+};
 
 export default IconCheck;

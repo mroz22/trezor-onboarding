@@ -33,7 +33,7 @@ const ProgressSteps = props => (
                     isActive={props.activeStep === step.name}
                     isFinished={isStepFinished(index, props.steps, props.activeStep)}
                 />
-                {index !== props.steps.length - 1 ? <Line /> : null}
+                {index !== props.steps.length - 1 ? <Line style={{ backgroundColor: isStepFinished(index, props.steps, props.activeStep) ? colors.brandPrimary : colors.gray }} /> : null}
             </React.Fragment>
         ))}
     </Wrapper>
