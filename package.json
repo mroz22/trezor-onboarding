@@ -1,8 +1,8 @@
 {
-  "name": "vladimirvolek.cz",
+  "name": "trezor-onboarding",
   "version": "1.0.0",
-  "repository": "git@github.com:vladimirvolek/vladimirvolek.cz.git",
-  "author": "Vladimir Volek <vladimir.volek@satoshilabs.com>",
+  "repository": "https://github.com/mroz22/trezor-onboarding",
+  "author": "Monkey donkey",
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server",
@@ -10,9 +10,6 @@
     "lint:js": "npx eslint ./src",
     "lint:css": "npx stylelint './src/**/*.js'",
     "build": "rimraf dist && npx webpack --progress --bail"
-  },
-  "bin": {
-    "flow": "./node_modules/flow-bin"
   },
   "dependencies": {
     "babel-plugin-module-resolver": "^3.1.1",
@@ -36,17 +33,13 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "eslint": "^5.12.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-import-resolver-babel-module": "5.0.0-beta.1",
     "eslint-loader": "^2.1.1",
-    "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.12.3",
-    "flow-bin": "^0.90.0",
-    "flow-webpack-plugin": "^1.2.0",
     "html-webpack-plugin": "^3.2.0",
     "stylelint": "^9.9.0",
     "stylelint-config-recommended": "^2.1.0",

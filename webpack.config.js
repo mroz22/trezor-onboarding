@@ -1,7 +1,6 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FlowWebpackPlugin = require('flow-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
@@ -68,9 +67,6 @@ module.exports = {
             inject: true,
         }),
         new UglifyJSPlugin(),
-        new FlowWebpackPlugin({
-            reportingSeverity: 'warning',
-        }),
     ],
 
 };

@@ -5,7 +5,6 @@ module.exports = {
     ],
     plugins: [
         'react-hot-loader/babel',
-        'transform-flow-strip-types',
         '@babel/plugin-proposal-class-properties',
         ['module-resolver', {
             root: ['./src'],
