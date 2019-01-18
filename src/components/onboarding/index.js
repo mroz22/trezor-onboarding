@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import ProgressSteps from 'components/progress-steps';
+import Button from 'components/button';
 
 import UnboxingStep from './steps/UnboxingStep';
 import SelectDeviceStep from './steps/SelectDeviceStep';
 import HologramStep from './steps/HologramStep';
 import BridgeStep from './steps/BridgeStep';
 import FirmwareStep from './steps/FirmwareStep';
+import WelcomeStep from './steps/WelcomeStep';
 
 const Wrapper = styled.div`
     display: grid;
@@ -21,18 +23,17 @@ const Wrapper = styled.div`
 
 const ProgressStepsWrapper = styled.div`
     grid-area: steps;
-    border: 1px dashed bisque;
-    /* padding: 20px 20px 20px 20px; */
+    /* border: 1px dashed bisque; */
 `;
 
 const ComponentWrapper = styled.div`
     grid-area: main;
-    border: 1px dotted darkolivegreen
+    /* border: 1px dotted darkolivegreen */
 `;
 
 const ControlsWrapper = styled.div`
     grid-area: controls;
-    border: 1px dotted dodgerblue
+    /* border: 1px dotted dodgerblue */
 `;
 
 class Onboarding extends React.Component {
@@ -40,9 +41,14 @@ class Onboarding extends React.Component {
         super();
         this.state = {
             steps: [{
-                name: 'SelectDevice',
-                component: <SelectDeviceStep />,
+                name: 'Welcome',
+                component: <WelcomeStep />,
                 hasDot: false,
+                showProgressSteps: false,
+            }, {
+                name: 'Select device',
+                component: <SelectDeviceStep />,
+                hasDot: true,
                 showProgressSteps: true,
             }, {
                 name: 'Unboxing',
@@ -70,7 +76,7 @@ class Onboarding extends React.Component {
                 hasDot: true,
                 showProgressSteps: true,
             }],
-            activeStep: 'SelectDevice',
+            activeStep: 'Welcome',
         };
     }
 
@@ -91,7 +97,7 @@ class Onboarding extends React.Component {
             <Wrapper>
                 <ProgressStepsWrapper>
                     {
-                        this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps} activeStep={this.state.activeStep} />
+                        this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps.filter(step => step.hasDot)} activeStep={this.state.activeStep} />
                     }
                 </ProgressStepsWrapper>
 
@@ -100,9 +106,8 @@ class Onboarding extends React.Component {
                 </ComponentWrapper>
 
                 <ControlsWrapper>
-                    <button type="button" onClick={this.nextStep}>Next</button>
+                    <Button text="Next" onClick={() => this.nextStep()} />
                 </ControlsWrapper>
-                {/* <Button text="Next" fn={() => Onboarding.nextStep()} /> */}
             </Wrapper>
         );
     }
