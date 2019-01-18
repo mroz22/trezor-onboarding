@@ -5,18 +5,41 @@ import colors from 'config/colors';
 
 const OptionWrapper = styled.div`
     height: 200px;
-    width: 100px;
-    border: solid 1px ${colors.gray}
+    width: 170px;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: solid 1px ${colors.gray};
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
 `;
 
-class Option extends React.Component {
-    static propTypes = {
-        text: PropTypes.string,
-    }
+const OptionText = styled.div`
+`;
 
-    render() {
-        return (<OptionWrapper>{this.props.text}</OptionWrapper>);
-    }
-}
+const Circle = styled.div`
+    background-color: ${colors.brandPrimary};
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    align-self: flex-end;
+`;
+
+
+const Option = props => (
+    <OptionWrapper onClick={props.onClick} style={{ borderColor: props.isSelected ? colors.brandPrimary : colors.gray }}>
+        <Circle style={{ visibility: props.isSelected ? 'visible' : 'hidden' }} />
+        <OptionText>{props.text}</OptionText>
+    </OptionWrapper>
+);
+
+Option.propTypes = {
+    text: PropTypes.string,
+    isSelected: PropTypes.bool,
+};
 
 export default Option;

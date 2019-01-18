@@ -9,9 +9,11 @@ const Wrapper = styled.div`
 `;
 
 const isStepFinished = (stepIndex, steps, activeStep) => {
-    const active = steps.findIndex(s => s.name === activeStep);
-    return stepIndex < active;
+    const activeIndex = steps.findIndex(s => s.name === activeStep);
+    return stepIndex < activeIndex;
 };
+
+const isStepActive = (stepIndex, steps, activeStep) => steps[stepIndex].dot === activeStep;
 
 const ProgressSteps = props => (
     <React.Fragment>
@@ -21,7 +23,7 @@ const ProgressSteps = props => (
                     <ProgressStep
                         step={step}
                         index={index}
-                        isActive={props.activeStep === step.name}
+                        isActive={isStepActive(index, props.steps, props.activeStep)}
                         isFinished={isStepFinished(index, props.steps, props.activeStep)}
                         isLast={props.steps.length - 1 === index}
                     />

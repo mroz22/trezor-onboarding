@@ -43,40 +43,59 @@ class Onboarding extends React.Component {
             steps: [{
                 name: 'Welcome',
                 component: <WelcomeStep />,
-                hasDot: false,
                 showProgressSteps: false,
             }, {
                 name: 'Select device',
                 component: <SelectDeviceStep />,
-                hasDot: true,
+                dot: 'Select device',
                 showProgressSteps: true,
             }, {
                 name: 'Unboxing',
                 component: <HologramStep />,
-                hasDot: true,
+                dot: 'Unboxing',
                 showProgressSteps: true,
             }, {
                 name: 'Bridge',
                 component: <BridgeStep />,
-                hasDot: true,
+                dot: 'Bridge',
                 showProgressSteps: true,
             }, {
                 name: 'Firmware',
                 component: <FirmwareStep />,
-                hasDot: true,
+                dot: 'Firmware',
                 showProgressSteps: true,
             }, {
                 name: 'Start',
                 component: <UnboxingStep />,
-                hasDot: true,
+                dot: 'Start',
                 showProgressSteps: true,
             }, {
                 name: 'Security',
                 component: <UnboxingStep />,
-                hasDot: true,
+                dot: 'Security',
+                showProgressSteps: true,
+            }, {
+                name: 'Backup',
+                component: <div>Backup</div>,
+                dot: 'Security',
+                showProgressSteps: true,
+            }, {
+                name: 'Pin',
+                component: <div>PIN</div>,
+                dot: 'Security',
+                showProgressSteps: true,
+            }, {
+                name: 'Bookmark',
+                component: <div>Bookmark</div>,
+                dot: 'Security',
+                showProgressSteps: true,
+            }, {
+                name: 'Newsletter',
+                component: <div>Newsletter</div>,
+                dot: 'Security',
                 showProgressSteps: true,
             }],
-            activeStep: 'Welcome',
+            activeStep: 'Select device',
         };
     }
 
@@ -97,7 +116,7 @@ class Onboarding extends React.Component {
             <Wrapper>
                 <ProgressStepsWrapper>
                     {
-                        this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps.filter(step => step.hasDot)} activeStep={this.state.activeStep} />
+                        this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps.filter(step => step.dot)} activeStep={this.state.activeStep} />
                     }
                 </ProgressStepsWrapper>
 

@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Option } from 'components/options';
+import { OptionsList } from 'components/options';
 import { Heading1 } from 'components/headings';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
+
 
 class SelectDeviceStep extends React.Component {
     constructor(props) {
@@ -14,17 +15,23 @@ class SelectDeviceStep extends React.Component {
             }, {
                 text: 'Model T',
             }],
+
+            selected: '',
         };
+    }
+
+    selectDevice(text) {
+        this.setState({ selected: text });
     }
 
     render() {
         return (
-            <StepWrapper className="wrapper">
-                <StepHeadingWrapper className="blabla">
+            <StepWrapper>
+                <StepHeadingWrapper>
                     <Heading1>Chose your device</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
-                    { this.state.options.map(opt => <Option key={opt.text} text={opt.text} />)}
+                    <OptionsList options={this.state.options} selected={this.state.selected} onSelect={this.selectDevice.bind(this)} />
                 </StepBodyWrapper>
             </StepWrapper>
         );
