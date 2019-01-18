@@ -6,7 +6,7 @@ import Button from 'components/button';
 
 import UnboxingStep from './steps/UnboxingStep';
 import SelectDeviceStep from './steps/SelectDeviceStep';
-import HologramStep from './steps/HologramStep';
+import HologramStep from './steps/HologramStep/HologramStep';
 import BridgeStep from './steps/BridgeStep';
 import FirmwareStep from './steps/FirmwareStep';
 import WelcomeStep from './steps/WelcomeStep';

@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-import colors from 'config/colors';
 import reset from 'styled-reset';
 
 const baseStyles = createGlobalStyle`
@@ -9,7 +8,6 @@ const baseStyles = createGlobalStyle`
         height: 100%;
         position: relative;
         font-size: 14px;
-        color: ${colors.TEXT};
     }
 
     * , *:before , *:after {
