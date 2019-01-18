@@ -6,8 +6,8 @@ import Onboarding from 'components/onboarding';
 
 const Wrapper = styled.div`
     display: flex;
-    min-height: 100vh;
     flex-direction: column;
+    min-height: 100vh;
 `;
 
 const App = () => (

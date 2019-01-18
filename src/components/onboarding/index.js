@@ -2,8 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import ProgressSteps from 'components/progress-steps';
-import UnboxingStep from './components/UnboxingStep';
-import SelectDeviceStep from './components/SelectDeviceStep';
+
+import UnboxingStep from './steps/UnboxingStep';
+import SelectDeviceStep from './steps/SelectDeviceStep';
+import HologramStep from './steps/HologramStep';
+import BridgeStep from './steps/BridgeStep';
+import FirmwareStep from './steps/FirmwareStep';
 
 const Wrapper = styled.div`
     display: grid;
@@ -11,13 +15,14 @@ const Wrapper = styled.div`
         'steps'
         'main'
         'controls';
-    grid-template-rows: 100px 5fr 1fr;    
+    grid-template-rows: 1fr 80vh 1fr;    
     grid-template-columns: 1fr;
 `;
 
 const ProgressStepsWrapper = styled.div`
     grid-area: steps;
-    border: 1px dashed bisque
+    border: 1px dashed bisque;
+    /* padding: 20px 20px 20px 20px; */
 `;
 
 const ComponentWrapper = styled.div`
@@ -41,17 +46,17 @@ class Onboarding extends React.Component {
                 showProgressSteps: true,
             }, {
                 name: 'Unboxing',
-                component: <UnboxingStep />,
+                component: <HologramStep />,
                 hasDot: true,
                 showProgressSteps: true,
             }, {
                 name: 'Bridge',
-                component: <UnboxingStep />,
+                component: <BridgeStep />,
                 hasDot: true,
                 showProgressSteps: true,
             }, {
                 name: 'Firmware',
-                component: <UnboxingStep />,
+                component: <FirmwareStep />,
                 hasDot: true,
                 showProgressSteps: true,
             }, {
@@ -89,7 +94,6 @@ class Onboarding extends React.Component {
                         this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps} activeStep={this.state.activeStep} />
                     }
                 </ProgressStepsWrapper>
-                active step: {this.state.activeStep}
 
                 <ComponentWrapper>
                     {this.getCurrentStep().component}
