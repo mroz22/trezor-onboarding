@@ -11,9 +11,9 @@ const Wrapper = styled.div`
     padding-top: 40px;
 `;
 
-const App = () => (
+const App = ({state}) => (
     <Wrapper>
-        <Onboarding />
+        <Onboarding state={state} />
     </Wrapper>
 );
 

@@ -37,8 +37,8 @@ const ControlsWrapper = styled.div`
 `;
 
 class Onboarding extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             steps: [{
                 name: 'Welcome',
@@ -56,7 +56,7 @@ class Onboarding extends React.Component {
                 showProgressSteps: true,
             }, {
                 name: 'Bridge',
-                component: <BridgeStep />,
+                component: <BridgeStep state={props.state} />,
                 dot: 'Bridge',
                 showProgressSteps: true,
             }, {
