@@ -40,6 +40,7 @@ const Option = props => (
 Option.propTypes = {
     text: PropTypes.string,
     isSelected: PropTypes.bool,
+    onClick: PropTypes.func,
 };
 
 export default Option;

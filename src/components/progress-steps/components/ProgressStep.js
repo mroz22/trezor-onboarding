@@ -60,7 +60,7 @@ const ProgressStep = (props) => {
             <Text style={{
                 color: props.isFinished || props.isActive ? colors.brandPrimary : colors.gray,
             }}
-            >{props.step.name}
+            >{props.step}
             </Text>
         </ProgressStepWrapper>
     );
@@ -71,7 +71,7 @@ ProgressStep.propTypes = {
     isFinished: PropTypes.bool,
     isLast: PropTypes.bool,
     index: PropTypes.number.isRequired,
-    step: PropTypes.object, // todo: better validation
+    step: PropTypes.string,
 };
 
 export default ProgressStep;

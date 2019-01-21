@@ -31,7 +31,12 @@ class SelectDeviceStep extends React.Component {
                     <Heading1>Chose your device</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
-                    <OptionsList options={this.state.options} selected={this.state.selected} onSelect={this.selectDevice.bind(this)} />
+                    <OptionsList
+                        options={this.state.options}
+                        selected={this.state.selected}
+                        onSelect={this.selectDevice.bind(this)}
+                        // onSelect={() => this.selectDevice()} // hmm how to get around this?
+                    />
                 </StepBodyWrapper>
             </StepWrapper>
         );

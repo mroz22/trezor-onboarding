@@ -9,17 +9,17 @@ const Wrapper = styled.div`
 `;
 
 const isStepFinished = (stepIndex, steps, activeStep) => {
-    const activeIndex = steps.findIndex(s => s.name === activeStep);
+    const activeIndex = steps.findIndex(s => s === activeStep);
     return stepIndex < activeIndex;
 };
 
-const isStepActive = (stepIndex, steps, activeStep) => steps[stepIndex].dot === activeStep;
+const isStepActive = (stepIndex, steps, activeStep) => steps[stepIndex] === activeStep;
 
 const ProgressSteps = props => (
     <React.Fragment>
         <Wrapper>
             { props.steps.map((step, index) => (
-                <React.Fragment key={step.name}>
+                <React.Fragment key={step}>
                     <ProgressStep
                         step={step}
                         index={index}
@@ -35,7 +35,7 @@ const ProgressSteps = props => (
 
 ProgressSteps.propTypes = {
     activeStep: PropTypes.string.isRequired,
-    steps: PropTypes.array.isRequired, // todo: better types
+    steps: PropTypes.array.isRequired, // todo: better types string
 };
 
 export default ProgressSteps;

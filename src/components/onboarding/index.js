@@ -111,12 +111,14 @@ class Onboarding extends React.Component {
 
     getCurrentStep = () => this.state.steps.find(s => s.name === this.state.activeStep)
 
+
     render() {
         return (
             <Wrapper>
                 <ProgressStepsWrapper>
                     {
-                        this.getCurrentStep().showProgressSteps && <ProgressSteps steps={this.state.steps.filter(step => step.dot)} activeStep={this.state.activeStep} />
+                        this.getCurrentStep().showProgressSteps
+                        && <ProgressSteps steps={[...new Set(this.state.steps.filter(s => s.dot).map(s => s.dot))]} activeStep={this.state.steps.find(s => s.name === this.state.activeStep).dot} />
                     }
                 </ProgressStepsWrapper>
 

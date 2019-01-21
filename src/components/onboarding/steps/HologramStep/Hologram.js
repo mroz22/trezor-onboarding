@@ -8,9 +8,11 @@ const Hologram = (props) => {
         2: 'TT_hologram.mp4',
     };
     return (
-        <video width="320" height="240" autoPlay loop>
+        <video width={320} height={240} autoPlay loop>
+            <track src={`${path}/track.vtt`} kind="descriptions" />
             <source src={`${path}/${sources[props.model]}`} type="video/mp4" />
         </video>
+
     );
 };
 
