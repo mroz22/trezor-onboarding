@@ -12,7 +12,6 @@ const Hologram = (props) => {
             <track src={`${path}/track.vtt`} kind="descriptions" />
             <source src={`${path}/${sources[props.model]}`} type="video/mp4" />
         </video>
-
     );
 };
 

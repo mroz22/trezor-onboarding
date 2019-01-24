@@ -1,15 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { types } from 'config/state';
+
 import ProgressSteps from 'components/progress-steps';
 import Button from 'components/button';
 
-import UnboxingStep from './steps/UnboxingStep';
 import SelectDeviceStep from './steps/SelectDeviceStep';
 import HologramStep from './steps/HologramStep/HologramStep';
 import BridgeStep from './steps/BridgeStep';
 import FirmwareStep from './steps/FirmwareStep';
 import WelcomeStep from './steps/WelcomeStep';
+import SetPinStep from './steps/SetPinStep';
+import BackupStep from './steps/BackupStep';
+import BookmarkStep from './steps/BookmarkStep';
+import NewsletterStep from './steps/NewsletterStep';
+import StartStep from './steps/StartStep';
+import FinalStep from './steps/FinalStep';
 
 const Wrapper = styled.div`
     display: grid;
@@ -23,112 +30,135 @@ const Wrapper = styled.div`
 
 const ProgressStepsWrapper = styled.div`
     grid-area: steps;
-    /* border: 1px dashed bisque; */
 `;
 
 const ComponentWrapper = styled.div`
     grid-area: main;
-    /* border: 1px dotted darkolivegreen */
 `;
 
 const ControlsWrapper = styled.div`
     grid-area: controls;
-    /* border: 1px dotted dodgerblue */
+    display: flex;
+    justify-content: space-around;
+    padding: 0px 50px 50px 50px;
 `;
 
 class Onboarding extends React.Component {
+    static propTypes = {
+        state: types.state,
+        actions: types.actions,
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             steps: [{
                 name: 'Welcome',
-                component: <WelcomeStep />,
+                component: WelcomeStep,
                 showProgressSteps: false,
+                showControls: false,
             }, {
                 name: 'Select device',
-                component: <SelectDeviceStep />,
+                component: SelectDeviceStep,
                 dot: 'Select device',
                 showProgressSteps: true,
+                showControls: false,
             }, {
                 name: 'Unboxing',
-                component: <HologramStep />,
+                component: HologramStep,
                 dot: 'Unboxing',
                 showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Bridge',
-                component: <BridgeStep state={props.state} />,
+                component: BridgeStep,
                 dot: 'Bridge',
                 showProgressSteps: true,
+                showControls: true,
+                nextDisabled: state => state.transport.actual.type !== 'bridge',
             }, {
                 name: 'Firmware',
-                component: <FirmwareStep />,
+                component: FirmwareStep,
                 dot: 'Firmware',
                 showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Start',
-                component: <UnboxingStep />,
+                component: StartStep,
                 dot: 'Start',
                 showProgressSteps: true,
-            }, {
-                name: 'Security',
-                component: <UnboxingStep />,
-                dot: 'Security',
-                showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Backup',
-                component: <div>Backup</div>,
+                component: BackupStep,
                 dot: 'Security',
                 showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Pin',
-                component: <div>PIN</div>,
+                component: SetPinStep,
                 dot: 'Security',
                 showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Bookmark',
-                component: <div>Bookmark</div>,
+                component: BookmarkStep,
                 dot: 'Security',
                 showProgressSteps: true,
+                showControls: true,
             }, {
                 name: 'Newsletter',
-                component: <div>Newsletter</div>,
+                component: NewsletterStep,
                 dot: 'Security',
                 showProgressSteps: true,
+                showControls: true,
+            }, {
+                name: 'Final',
+                component: FinalStep,
+                showProgressSteps: false,
+                showControls: false,
             }],
-            activeStep: 'Select device',
         };
     }
 
-    nextStep = () => {
-        const currentIndex = this.state.steps.findIndex(step => step.name === this.state.activeStep);
-        // todo: remove circular
-        if (currentIndex === this.state.steps.length - 1) {
-            this.setState(prevState => ({ activeStep: prevState.steps[0].name }));
-        } else {
-            this.setState(prevState => ({ activeStep: prevState.steps[currentIndex + 1].name }));
-        }
+    getCurrentStep = () => this.state.steps[this.props.state.activeStep]
+
+    isNextDisabledForStep = () => {
+
     }
 
-    getCurrentStep = () => this.state.steps.find(s => s.name === this.state.activeStep)
-
-
     render() {
+        const StepTag = this.getCurrentStep().component;
         return (
             <Wrapper>
                 <ProgressStepsWrapper>
                     {
                         this.getCurrentStep().showProgressSteps
-                        && <ProgressSteps steps={[...new Set(this.state.steps.filter(s => s.dot).map(s => s.dot))]} activeStep={this.state.steps.find(s => s.name === this.state.activeStep).dot} />
+                        && <ProgressSteps steps={[...new Set(this.state.steps.filter(s => s.dot).map(s => s.dot))]} activeStep={this.state.steps[this.props.state.activeStep].dot} />
                     }
                 </ProgressStepsWrapper>
 
                 <ComponentWrapper>
-                    {this.getCurrentStep().component}
+                    <StepTag state={this.props.state} actions={this.props.actions} />
+
                 </ComponentWrapper>
 
-                <ControlsWrapper>
-                    <Button text="Next" onClick={() => this.nextStep()} />
-                </ControlsWrapper>
+                {
+                    this.getCurrentStep().showControls
+                    && (
+                        <ControlsWrapper>
+                            <Button text="Back" onClick={this.props.actions.previousStep} />
+                            <div>Dont know what to do? Read user manual</div>
+                            <button
+                                type="button"
+                                onClick={this.props.actions.nextStep}
+                                disabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
+                            >Continue
+                            </button>
+                        </ControlsWrapper>
+                    )
+                }
+
             </Wrapper>
         );
     }

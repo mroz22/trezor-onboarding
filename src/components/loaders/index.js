@@ -4,62 +4,36 @@ import styled from 'styled-components';
 
 import colors from 'config/colors';
 
-const Donut = styled.div`
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border-right: solid 5px ${colors.brandPrimary};
-    transform: translateZ(100);
-    animation: linear 1.1s infinite linear;
-    
-    @keyframes linear {
-        from {
-            transform: linear(360deg);
-        }
-        to {
-            transform: linear(120deg);
-        }
+class Progress extends React.Component {
+    progress = percent => this.circumference(this.normalizeRadius()) - percent / 100 * this.circumference(this.normalizeRadius());
+
+    circumference = radius => radius * 2 * Math.PI;
+
+    normalizeRadius = () => this.props.radius - this.props.stroke; //* 2;
+
+    render() {
+        const style = {
+            transition: 'stroke-dashoffset 0.35s',
+            transform: 'rotate(-90deg)',
+            transformOrigin: '50% 50%',
+            strokeDashoffset: `${this.progress(this.props.progress)}`,
+            strokeDasharray: `${this.circumference(this.normalizeRadius())}  ${this.circumference(this.normalizeRadius())}`,
+        };
+        return (
+            <svg height={this.props.radius * 2} width={this.props.radius * 2}>
+                <circle
+                    style={style}
+                    stroke={colors.brandPrimary}
+                    strokeWidth={this.props.stroke}
+                    fill="transparent"
+                    r={this.props.radius - this.props.stroke}
+                    cx={this.props.radius}
+                    cy={this.props.radius}
+                />
+            </svg>
+        );
+        /* eslint-enable react/react-in-jsx-scope */
     }
-`;
-
-const Loader = () => <Donut />;
-
-export default Loader;
-// Loader.propTypes = {
-//     type: PropTypes.string.isRequired, // todo: enum
-// };
-
-/*
-
-.trz-spinner-wrapper {
-  max-height: 41px;
-  margin-right: 5px;
-  display: inline;
 }
 
-.trz-spinner-countdown {
-  position: relative;
-  left: 14.8px;
-}
-
-.trz-spinner,
-.trz-spinner:after {
-  border-radius: 50%;
-  width: 10em;
-  height: 10em;
-}
-.trz-spinner {
-  display: inline-block;
-  font-size: 2.2px;
-  top: 1.5px;
-  margin: -4px;
-  position: relative;
-  border: .8em solid rgba(255, 255, 255, 0.2);
-  border-left-color: #ffffff;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation: spin 1.1s infinite linear;
-  animation: spin 1.1s infinite linear;
-}
-*/
+export default Progress;

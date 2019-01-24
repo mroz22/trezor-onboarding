@@ -13,10 +13,10 @@ const OptionsList = props => (
     <OptionsWrapper>
         {props.options.map(opt => (
             <Option
-                onClick={() => props.onSelect(opt.text)}
+                onClick={() => props.onSelect(opt[props.selectedAccessor])}
                 key={opt.text}
                 text={opt.text}
-                isSelected={opt.text === props.selected}
+                isSelected={opt[props.selectedAccessor] === props.selected}
             />
         ))}
     </OptionsWrapper>
@@ -24,7 +24,8 @@ const OptionsList = props => (
 
 OptionsList.propTypes = {
     options: PropTypes.array, // todo: better
-    selected: PropTypes.string, // todo: better
+    selected: PropTypes.any,
+    selectedAccessor: PropTypes.string,
     onSelect: PropTypes.func, // todo: better
 };
 
