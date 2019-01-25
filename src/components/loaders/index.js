@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 // import PropTypes from 'prop-types';
 
 import colors from 'config/colors';
@@ -13,7 +12,7 @@ class Progress extends React.Component {
 
     render() {
         const style = {
-            transition: 'stroke-dashoffset 0.35s',
+            transition: 'stroke-dashoffset 0.05s',
             transform: 'rotate(-90deg)',
             transformOrigin: '50% 50%',
             strokeDashoffset: `${this.progress(this.props.progress)}`,

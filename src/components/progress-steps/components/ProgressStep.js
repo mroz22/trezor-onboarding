@@ -34,8 +34,14 @@ const Text = styled.div`
 
 const ProgressStep = (props) => {
     const color = props.isActive ? colors.brandPrimary : colors.gray;
-    const backgroundColor = props.isFinished && !props.isActive ? colors.brandPrimary : 'trasparent';
     const borderColor = props.isActive || props.isFinished ? colors.brandPrimary : colors.gray;
+    let backgroundColor;
+    if (props.isActive) {
+        backgroundColor = 'transparent';
+    } else if (props.isFinished) {
+        backgroundColor = colors.brandPrimary;
+    }
+
     return (
         <ProgressStepWrapper>
             <Line style={{

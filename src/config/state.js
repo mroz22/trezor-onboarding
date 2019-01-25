@@ -14,6 +14,7 @@ const types = {
         activeStep: PropTypes.number,
         Connect: PropTypes.object, // todo: better
         error: PropTypes.any, // todo: better
+        backupUnderstood: PropTypes.bool,
     }),
 
     actions: PropTypes.exact({
@@ -38,6 +39,7 @@ const state = {
     activeStep: 0,
     Connect: null,
     error: null,
+    backupUnderstood: true,
 };
 
 export {

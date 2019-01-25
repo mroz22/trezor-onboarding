@@ -91,7 +91,7 @@ class App extends React.Component {
         const onDeviceEvent = (event) => {
             console.log('DEVICE_EVENT', event);
             if (event.type === 'device-connect') {
-                this.setState({ device: event.payload.features });
+                this.setState({ device: event.payload });
             } else if (event.type === 'device-disconnect') {
                 this.setState({ device: null });
             }
@@ -128,10 +128,10 @@ class App extends React.Component {
                 <Error error={this.state.error} />
                 <div>
                     debug <br />
-                    device: { this.state.device ? this.state.device.device_id : 'no device' } <br />
+                    device: { this.state.device ? this.state.device.path : 'no device' } <br />
                     actual transport: {this.state.transport.actual.type} <br />
-                    to be used transport: {this.state.transport.toBeUsed}
-
+                    to be used transport: {this.state.transport.toBeUsed} <br />
+                    activeStep: {this.state.activeStep}
                 </div>
             </Wrapper>
         );

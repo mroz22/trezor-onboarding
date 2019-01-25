@@ -1,22 +1,19 @@
+import Button from 'components/button';
+import ProgressSteps from 'components/progress-steps';
+import { types } from 'config/state';
 import React from 'react';
 import styled from 'styled-components';
-
-import { types } from 'config/state';
-
-import ProgressSteps from 'components/progress-steps';
-import Button from 'components/button';
-
-import SelectDeviceStep from './steps/SelectDeviceStep';
-import HologramStep from './steps/HologramStep/HologramStep';
-import BridgeStep from './steps/BridgeStep';
-import FirmwareStep from './steps/FirmwareStep';
-import WelcomeStep from './steps/WelcomeStep';
-import SetPinStep from './steps/SetPinStep';
 import BackupStep from './steps/BackupStep';
 import BookmarkStep from './steps/BookmarkStep';
-import NewsletterStep from './steps/NewsletterStep';
-import StartStep from './steps/StartStep';
+import BridgeStep from './steps/BridgeStep';
 import FinalStep from './steps/FinalStep';
+import FirmwareStep from './steps/FirmwareStep';
+import HologramStep from './steps/HologramStep/HologramStep';
+import NewsletterStep from './steps/NewsletterStep';
+import SelectDeviceStep from './steps/SelectDeviceStep';
+import SetPinStep from './steps/SetPinStep';
+import StartStep from './steps/StartStep';
+import WelcomeStep from './steps/WelcomeStep';
 
 const Wrapper = styled.div`
     display: grid;
@@ -75,7 +72,7 @@ class Onboarding extends React.Component {
                 dot: 'Bridge',
                 showProgressSteps: true,
                 showControls: true,
-                nextDisabled: state => state.transport.actual.type !== 'bridge',
+                nextDisabled: state => state.device === null,
             }, {
                 name: 'Firmware',
                 component: FirmwareStep,
@@ -123,24 +120,21 @@ class Onboarding extends React.Component {
 
     getCurrentStep = () => this.state.steps[this.props.state.activeStep]
 
-    isNextDisabledForStep = () => {
-
-    }
-
     render() {
         const StepTag = this.getCurrentStep().component;
+        const { activeStep } = this.props.state;
+        const { steps } = this.state;
         return (
             <Wrapper>
                 <ProgressStepsWrapper>
                     {
                         this.getCurrentStep().showProgressSteps
-                        && <ProgressSteps steps={[...new Set(this.state.steps.filter(s => s.dot).map(s => s.dot))]} activeStep={this.state.steps[this.props.state.activeStep].dot} />
+                        && <ProgressSteps steps={[...new Set(steps.filter(s => s.dot).map(s => s.dot))]} activeStep={steps[activeStep]} dot={steps[activeStep].dot} />
                     }
                 </ProgressStepsWrapper>
 
                 <ComponentWrapper>
                     <StepTag state={this.props.state} actions={this.props.actions} />
-
                 </ComponentWrapper>
 
                 {
@@ -158,7 +152,6 @@ class Onboarding extends React.Component {
                         </ControlsWrapper>
                     )
                 }
-
             </Wrapper>
         );
     }

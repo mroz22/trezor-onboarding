@@ -8,6 +8,33 @@ import { Heading1 } from 'components/headings';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
+const WebUSBButtonWrapper = styled.div`
+    width: 100px;
+    height: 40px;
+    background-color: ${colors.brandPrimary};
+    color: ${colors.white};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    iframe {
+        position: initial !important;
+    }
+`;
+
+class WebUSBButton extends React.Component {
+    componentDidMount() {
+        this.props.renderWebUSBFn('.webusb');
+    }
+
+    render() {
+        return (
+            <WebUSBButtonWrapper className="webusb">
+                <span style={{ position: 'absolute' }}>Check for devices</span>
+            </WebUSBButtonWrapper>
+        );
+    }
+}
+
 const VersionBadgeWrapper = styled.div`
     border: 1px solid ${colors.brandPrimary};
     display: inline-block;
@@ -24,7 +51,10 @@ VersionBadge.propTypes = {
 };
 
 const WebUSBCase = () => (
-    <div>Your browser supports WebUSB functionality. You might proceed to next step now.</div>
+    <div>
+    Your browser supports WebUSB functionality. You might proceed to next step now.
+        <WebUSBButton className="webusb" />
+    </div>
 );
 
 const BridgeNotInstalledCase = () => (
@@ -41,6 +71,8 @@ const BridgeNotInstalledCase = () => (
             <li>Check connection</li>
             <button type="button">Download</button>
         </ul>
+
+        <button>Check connection</button>
     </React.Fragment>
 );
 
@@ -59,10 +91,6 @@ BridgeInstalledCase.propTypes = {
 };
 
 class BridgeStep extends React.Component {
-    componentDidMount() {
-        this.props.state.Connect.default.renderWebUSBButton('.webusb');
-    }
-
     render() {
         return (
             <StepWrapper className="wrapper">
@@ -78,11 +106,14 @@ class BridgeStep extends React.Component {
                     }
 
                     {
-                        (this.props.state.transport.actual.type === 'webUSB' && this.props.state.transport.toBeUsed === 'webUSB') && <WebUSBCase />
+                        this.props.state.transport.actual.type === 'webUSB' && this.props.state.transport.toBeUsed === 'webUSB'
+                        && (
+                            <React.Fragment>
+                                Your browser supports WebUSB functionality. You might proceed to next step now.
+                                <WebUSBButton renderWebUSBFn={this.props.state.Connect.default.renderWebUSBButton} />
+                            </React.Fragment>
+                        )
                     }
-                    <div className="webusb" />
-                    <div className="trezor-webusb-button">bla</div>
-                    <div className="trezor-webusb-button" />
                 </StepBodyWrapper>
             </StepWrapper>
         );
