@@ -3,14 +3,9 @@ import React from 'react';
 import { types } from 'config/state';
 
 import { Heading1 } from 'components/headings';
-
+import { CallToAction } from 'components/prompts';
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
-const CallToAction = ({ visible }) => (
-    <div style={{ visibility: visible ? 'visible' : 'hidden' }}>
-        Complete action on your device
-    </div>
-);
 
 class StartStep extends React.Component {
     constructor() {
@@ -39,6 +34,8 @@ class StartStep extends React.Component {
                 return this.props.actions.handleError(response.payload.error);
             }
             this.setState({ created: true });
+        }).catch((err) => {
+            console.log('err', err);
         });
     }
 
@@ -49,7 +46,11 @@ class StartStep extends React.Component {
                     <Heading1>Create or recover</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
-                    { !this.state.created && (
+                    {
+                        this.props.state.device.features.initialized && <div>Device is already initialized. This means someone has already created a wallet and has access to it. You should reset your device and start again.</div>
+                    }
+
+                    { !this.props.state.device.features.initialized && !this.state.created && (
                         <React.Fragment>
                             <div>Have not used Trezor before?</div>
                             <button type="button" onClick={this.createNew}>Create new</button>

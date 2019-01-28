@@ -15,6 +15,7 @@ const types = {
         Connect: PropTypes.object, // todo: better
         error: PropTypes.any, // todo: better
         backupUnderstood: PropTypes.bool,
+        usbAvailable: PropTypes.bool,
     }),
 
     actions: PropTypes.exact({
@@ -23,6 +24,8 @@ const types = {
         previousStep: PropTypes.func,
         resetDevice: PropTypes.func,
         handleError: PropTypes.func,
+        applyFlags: PropTypes.func,
+        applySettings: PropTypes.func,
     }),
 };
 
@@ -40,6 +43,7 @@ const state = {
     Connect: null,
     error: null,
     backupUnderstood: true,
+    usbAvailable: !!navigator.usb,
 };
 
 export {

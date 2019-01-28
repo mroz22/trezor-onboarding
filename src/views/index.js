@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
-// import TrezorConnect, { DEVICE_EVENT, TRANSPORT_EVENT } from 'trezor-connect';
 import * as Connect from 'trezor-connect';
 
 import { state } from 'config/state';
 import Onboarding from 'components/onboarding';
 
-console.log(Connect);
+window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
 
-// window.__TREZOR_CONNECT_SRC = 'https://localhost:8088/';
+
+console.log(Connect);
 
 const Wrapper = styled.div`
     display: flex;
@@ -39,6 +39,12 @@ class App extends React.Component {
             resetDevice: () => Connect.default.resetDevice({
                 label: 'My fancy Trezor',
                 skipBackup: true,
+            }),
+            applyFlags: () => Connect.default.applyFlags({
+                flags: 1,
+            }),
+            applySettings: ({ label }) => Connect.default.applySettings({
+                label,
             }),
             handleError: (error) => {
                 console.log('handling Error');
@@ -106,10 +112,10 @@ class App extends React.Component {
 
         try {
             await Connect.default.init({
-                // transportReconnect: true,
-                debug: false,
+                transportReconnect: true,
+                debug: true,
                 popup: false,
-                webusb: true,
+                webusb: this.state.usbAvailable,
             });
         } catch (err) {
             console.warn('err', err);
@@ -131,7 +137,9 @@ class App extends React.Component {
                     device: { this.state.device ? this.state.device.path : 'no device' } <br />
                     actual transport: {this.state.transport.actual.type} <br />
                     to be used transport: {this.state.transport.toBeUsed} <br />
-                    activeStep: {this.state.activeStep}
+                    activeStep: {this.state.activeStep} <br />
+                    usbAvailable: {this.state.usbAvailable ? 'true' : 'false'}
+
                 </div>
             </Wrapper>
         );

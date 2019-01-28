@@ -10,7 +10,7 @@ const BookmarkStep = () => (
             <Heading1>Bookmark</Heading1>
         </StepHeadingWrapper>
         <StepBodyWrapper>
-            <div>Protect yourself from phishing sites.</div>
+            <div>Protect yourself from phishing sites. Attacker might create a fake site and try to trick you into entering your seed in it. Bookmark wallet.trezor.io to always use genuine website.</div>
         </StepBodyWrapper>
     </StepWrapper>
 );

@@ -14,6 +14,9 @@ import SelectDeviceStep from './steps/SelectDeviceStep';
 import SetPinStep from './steps/SetPinStep';
 import StartStep from './steps/StartStep';
 import WelcomeStep from './steps/WelcomeStep';
+import WebUSBStep from './steps/WebUSBStep';
+import NameStep from './steps/NameStep';
+import ConnectStep from './steps/ConnectStep';
 
 const Wrapper = styled.div`
     display: grid;
@@ -40,6 +43,12 @@ const ControlsWrapper = styled.div`
     padding: 0px 50px 50px 50px;
 `;
 
+const resolveCommunicationStep = (state) => {
+    if (state.usbAvailable) {
+        return WebUSBStep;
+    }
+    return BridgeStep;
+};
 class Onboarding extends React.Component {
     static propTypes = {
         state: types.state,
@@ -67,9 +76,15 @@ class Onboarding extends React.Component {
                 showProgressSteps: true,
                 showControls: true,
             }, {
+                name: 'Connect',
+                component: ConnectStep,
+                dot: 'Connect device',
+                showProgressSteps: true,
+                showControls: true,
+            }, {
                 name: 'Bridge',
-                component: BridgeStep,
-                dot: 'Bridge',
+                component: resolveCommunicationStep(props.state),
+                dot: 'Connect device',
                 showProgressSteps: true,
                 showControls: true,
                 nextDisabled: state => state.device === null,
@@ -79,6 +94,7 @@ class Onboarding extends React.Component {
                 dot: 'Firmware',
                 showProgressSteps: true,
                 showControls: true,
+                nextDisabled: state => state.device.firmware !== 'valid',
             }, {
                 name: 'Start',
                 component: StartStep,
@@ -100,6 +116,12 @@ class Onboarding extends React.Component {
             }, {
                 name: 'Bookmark',
                 component: BookmarkStep,
+                dot: 'Security',
+                showProgressSteps: true,
+                showControls: true,
+            }, {
+                name: 'Name',
+                component: NameStep,
                 dot: 'Security',
                 showProgressSteps: true,
                 showControls: true,

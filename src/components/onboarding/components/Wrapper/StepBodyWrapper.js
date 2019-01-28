@@ -6,6 +6,8 @@ const StepBodyWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-left: 30px;
+    padding-right: 30px;
 `;
 
 export default StepBodyWrapper;

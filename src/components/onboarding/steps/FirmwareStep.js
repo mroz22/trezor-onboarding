@@ -32,9 +32,8 @@ class FirmwareStep extends React.Component {
                     <Heading1>Firmware</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
-                    <Progress progress={this.state.progress} radius={60} stroke={20} />
                     {
-                        this.state.progress === 0 && (
+                        this.state.progress === 0 && this.props.state.device.firmware === 'outdated' && (
                             <React.Fragment>
                                 <div>Your device is shipped without firmware. Its time to install it.</div>
                                 <button type="button" onClick={this.install}>Install</button>
@@ -43,8 +42,11 @@ class FirmwareStep extends React.Component {
                     }
 
                     {
-                        this.state.progress === 100 && <div>Perfect. The newest firwmare is installed. Time to continue</div>
+                        this.props.state.device.firmware === 'valid' && <div>Perfect. The newest firwmare is installed. Time to continue</div>
                     }
+
+                    <Progress progress={this.state.progress} radius={60} stroke={20} />
+
 
                 </StepBodyWrapper>
             </StepWrapper>

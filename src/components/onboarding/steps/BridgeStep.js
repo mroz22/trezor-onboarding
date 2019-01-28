@@ -8,33 +8,6 @@ import { Heading1 } from 'components/headings';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
-const WebUSBButtonWrapper = styled.div`
-    width: 100px;
-    height: 40px;
-    background-color: ${colors.brandPrimary};
-    color: ${colors.white};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    iframe {
-        position: initial !important;
-    }
-`;
-
-class WebUSBButton extends React.Component {
-    componentDidMount() {
-        this.props.renderWebUSBFn('.webusb');
-    }
-
-    render() {
-        return (
-            <WebUSBButtonWrapper className="webusb">
-                <span style={{ position: 'absolute' }}>Check for devices</span>
-            </WebUSBButtonWrapper>
-        );
-    }
-}
-
 const VersionBadgeWrapper = styled.div`
     border: 1px solid ${colors.brandPrimary};
     display: inline-block;
@@ -50,20 +23,8 @@ VersionBadge.propTypes = {
     version: PropTypes.string,
 };
 
-const WebUSBCase = () => (
-    <div>
-    Your browser supports WebUSB functionality. You might proceed to next step now.
-        <WebUSBButton className="webusb" />
-    </div>
-);
-
 const BridgeNotInstalledCase = () => (
     <React.Fragment>
-        <h1>
-            Trezor Bridge
-            {/* <VersionBadge version={props.state.transport.version} /> */}
-        </h1>
-        <div>A communication tool to facilitate the connection between your Trezor and your internet browser</div>
         <div>Install bridge to establish communication with your device</div>
         <ul>
             <li>Download bridge</li>
@@ -78,10 +39,6 @@ const BridgeNotInstalledCase = () => (
 
 const BridgeInstalledCase = ({ version }) => (
     <React.Fragment>
-        <h1>
-            Trezor Bridge
-            <VersionBadge version={version} />
-        </h1>
         <div>It looks like Trezor Bridge is already installed. You can proceed to the next step</div>
     </React.Fragment>
 );
@@ -98,6 +55,11 @@ class BridgeStep extends React.Component {
                     <Heading1>Establish connection with your device</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
+                    <h1>
+                        Trezor Bridge
+                        {/* <VersionBadge version={props.state.transport.version} /> */}
+                    </h1>
+                    <div>A communication tool to facilitate the connection between your Trezor and your internet browser</div>
                     {
                         (this.props.state.transport.actual.type !== 'bridge' && this.props.state.transport.toBeUsed === 'bridge') && <BridgeNotInstalledCase />
                     }
@@ -105,15 +67,6 @@ class BridgeStep extends React.Component {
                         (this.props.state.transport.actual.type === 'bridge' && this.props.state.transport.toBeUsed === 'bridge') && <BridgeInstalledCase />
                     }
 
-                    {
-                        this.props.state.transport.actual.type === 'webUSB' && this.props.state.transport.toBeUsed === 'webUSB'
-                        && (
-                            <React.Fragment>
-                                Your browser supports WebUSB functionality. You might proceed to next step now.
-                                <WebUSBButton renderWebUSBFn={this.props.state.Connect.default.renderWebUSBButton} />
-                            </React.Fragment>
-                        )
-                    }
                 </StepBodyWrapper>
             </StepWrapper>
         );

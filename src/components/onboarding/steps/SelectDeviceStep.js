@@ -27,7 +27,7 @@ class SelectDeviceStep extends React.Component {
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
-                    <Heading1>Chose your device { this.props.state.selectedModel } </Heading1>
+                    <Heading1>Select your device</Heading1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     <OptionsList
