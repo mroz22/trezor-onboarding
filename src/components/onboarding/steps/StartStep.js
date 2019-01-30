@@ -6,7 +6,6 @@ import { Heading1 } from 'components/headings';
 import { CallToAction } from 'components/prompts';
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
-
 class StartStep extends React.Component {
     constructor() {
         super();

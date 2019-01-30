@@ -6862,10 +6862,8 @@ toposort@^1.0.0:
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
   integrity sha1-LmhELZ9k7HILjMieZEOsbKqVACk=
 
-trezor-connect@latest:
+trezor-connect@../connect/npm:
   version "6.0.3"
-  resolved "https://registry.yarnpkg.com/trezor-connect/-/trezor-connect-6.0.3.tgz#35e1c168c5f8ac2c33a268ffb8dff7c5cc8f547c"
-  integrity sha512-QqgnulN9uQstVjxYTF9+gcNk01kBUQA4xXy2abyPOgxh8Wio9iiSGftQa12KkFfWLZKkZD1sL03KvQ2ievL05g==
   dependencies:
     babel-runtime "^6.26.0"
     events "^1.1.1"

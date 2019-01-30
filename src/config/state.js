@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 const types = {
     state: PropTypes.exact({
         transport: PropTypes.exact({
-            toBeUsed: PropTypes.string,
             actual: PropTypes.exact({
                 type: PropTypes.string,
                 version: PropTypes.string,
             }),
+            error: PropTypes.object, // todo: better;
         }),
         device: PropTypes.object, // todo: better
         selectedModel: PropTypes.number,
@@ -26,18 +26,24 @@ const types = {
         handleError: PropTypes.func,
         applyFlags: PropTypes.func,
         applySettings: PropTypes.func,
+        startBackup: PropTypes.func,
+        changePin: PropTypes.func,
+        submitNewPin: PropTypes.func,
+        initConnect: PropTypes.func,
+        firmwareErase: PropTypes.func,
+        firmwareUpload: PropTypes.func,
     }),
 };
 
 const state = {
     transport: {
-        toBeUsed: null,
         actual: {
             type: '',
             version: '',
         },
+        error: null,
     },
-    device: {},
+    device: null,
     selectedModel: null,
     activeStep: 0,
     Connect: null,

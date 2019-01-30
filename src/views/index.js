@@ -7,10 +7,7 @@ import { state } from 'config/state';
 import Onboarding from 'components/onboarding';
 
 window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
-
-
 console.log(Connect);
-
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -36,16 +33,61 @@ class App extends React.Component {
             previousStep: () => {
                 this.setState(prevState => ({ activeStep: prevState.activeStep - 1 }));
             },
-            resetDevice: () => Connect.default.resetDevice({
+            resetDevice: () => this.state.Connect.default.resetDevice({
                 label: 'My fancy Trezor',
                 skipBackup: true,
             }),
-            applyFlags: () => Connect.default.applyFlags({
+            applyFlags: () => this.state.Connect.default.applyFlags({
                 flags: 1,
             }),
-            applySettings: ({ label }) => Connect.default.applySettings({
+            applySettings: ({ label }) => this.state.Connect.default.applySettings({
                 label,
             }),
+            startBackup: () => this.state.Connect.default.backupDevice(),
+            changePin: () => this.state.Connect.default.changePin(),
+            submitNewPin: () => this.state.Connect.default.uiResponse({ type: this.state.Connect.UI.RECEIVE_PIN, payload: '12345' }),
+
+            firmwareErase: () => this.state.Connect.default.firmwareErase({ keepSession: true }),
+            firmwareUpload: firmware => this.state.Connect.default.firmwareUpload(firmware),
+            initConnect: async () => {
+                await Connect.default.init({
+                    transportReconnect: true,
+                    debug: true,
+                    popup: false,
+                    webusb: this.state.usbAvailable,
+                });
+                this.setState({ Connect });
+                this.state.Connect.default.on(Connect.TRANSPORT_EVENT, (event) => {
+                    console.warn('event', event);
+                    if (event.type === 'transport-start') {
+                        this.setState({
+                            transport: {
+                                actual: {
+                                    type: event.payload.type,
+                                    version: event.payload.version,
+                                },
+                                error: null,
+                            },
+                        });
+                    } else if (event.type === 'transport-error') {
+                        this.setState(prevState => ({ transport: Object.assign({}, prevState.transport, { error: event.payload }) }));
+                    }
+                });
+
+                const onDeviceEvent = (event) => {
+                    console.log('DEVICE_EVENT', event);
+                    if (event.type === 'device-connected' || event.type === 'device-changed') {
+                        this.setState({ device: event.payload });
+                    // not sure about this
+                    } else if (event.type === 'button') {
+                        this.setState({ device: event.payload.device });
+                    } else if (event.type === 'device-disconnect') {
+                        this.setState({ device: null });
+                    }
+                };
+
+                this.state.Connect.default.on(Connect.DEVICE_EVENT, onDeviceEvent);
+            },
             handleError: (error) => {
                 console.log('handling Error');
                 this.setState({ error });
@@ -54,72 +96,13 @@ class App extends React.Component {
     }
 
     async componentDidMount() {
-        Connect.default.on(Connect.TRANSPORT_EVENT, (event) => {
-            if (event.type === 'transport-start') {
-                if (event.payload.type === 'ParallelTransport') {
-                    this.setState({
-                        transport: {
-                            toBeUsed: 'webUSB',
-                            actual: {
-                                type: 'webUSB',
-                                version: event.payload.version,
-                            },
-                        },
-                    });
-                } else if (event.payload.type === 'bridge') {
-                    this.setState({
-                        transport: {
-                            toBeUsed: 'bridge',
-                            actual: {
-                                type: 'bridge',
-                                version: event.payload.version,
-                            },
-                        },
-                    });
-                } else {
-                    throw new Error('Unexpected transport type ', event.payload.type);
-                }
-            } else if (event.type === 'transport-error') {
-                if (event.payload.error === 'WebUSB is not available on this browser.') {
-                    this.setState({
-                        transport: {
-                            toBeUsed: 'bridge',
-                        },
-                    });
-                } else {
-                    // hmm?
-                    throw new Error('Unexpected error ', event.payload.error);
-                }
-            }
-        });
-
-
-        const onDeviceEvent = (event) => {
-            console.log('DEVICE_EVENT', event);
-            if (event.type === 'device-connect') {
-                this.setState({ device: event.payload });
-            } else if (event.type === 'device-disconnect') {
-                this.setState({ device: null });
-            }
-        };
-
-        Connect.default.on(Connect.DEVICE_EVENT, onDeviceEvent);
-
-        // how to turn it off ->
-        // TrezorConnect.off(DEVICE_EVENT, onDeviceEvent);
-
-        this.setState({ Connect });
-
         try {
-            await Connect.default.init({
-                transportReconnect: true,
-                debug: true,
-                popup: false,
-                webusb: this.state.usbAvailable,
-            });
+            await this.actions.initConnect();
         } catch (err) {
             console.warn('err', err);
         }
+
+        this.setState({ Connect });
     }
 
     componentDidCatch(error, info) {

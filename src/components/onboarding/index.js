@@ -1,8 +1,12 @@
-import Button from 'components/button';
-import ProgressSteps from 'components/progress-steps';
-import { types } from 'config/state';
 import React from 'react';
 import styled from 'styled-components';
+
+import { types } from 'config/state';
+import { USER_MANUAL_URL } from 'config/constants';
+
+import Button from 'components/button';
+import ProgressSteps from 'components/progress-steps';
+
 import BackupStep from './steps/BackupStep';
 import BookmarkStep from './steps/BookmarkStep';
 import BridgeStep from './steps/BridgeStep';
@@ -49,6 +53,7 @@ const resolveCommunicationStep = (state) => {
     }
     return BridgeStep;
 };
+
 class Onboarding extends React.Component {
     static propTypes = {
         state: types.state,
@@ -94,7 +99,8 @@ class Onboarding extends React.Component {
                 dot: 'Firmware',
                 showProgressSteps: true,
                 showControls: true,
-                nextDisabled: state => state.device.firmware !== 'valid',
+                // enable when firmware flashing finished
+                // nextDisabled: state => state.device.firmware !== 'valid',
             }, {
                 name: 'Start',
                 component: StartStep,
@@ -164,7 +170,8 @@ class Onboarding extends React.Component {
                     && (
                         <ControlsWrapper>
                             <Button text="Back" onClick={this.props.actions.previousStep} />
-                            <div>Dont know what to do? Read user manual</div>
+                            <div>Dont know what to do? <a href={USER_MANUAL_URL} target="_blank" rel="noopener noreferrer"> Read user manual</a>
+                            </div>
                             <button
                                 type="button"
                                 onClick={this.props.actions.nextStep}
