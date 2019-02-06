@@ -1,4 +1,5 @@
 import React from 'react';
+import { TREZOR_FLAG_KEYS, Flags } from 'trezor-flags';
 
 import { Heading1 } from 'components/headings';
 

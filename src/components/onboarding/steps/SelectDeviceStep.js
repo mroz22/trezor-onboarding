@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { types } from 'config/state';
+import { types } from 'config/types';
 
 import { OptionsList } from 'components/options';
 import { Heading1 } from 'components/headings';
@@ -15,10 +15,10 @@ class SelectDeviceStep extends React.Component {
         this.state = {
             options: [{
                 text: 'Model One',
-                value: 1,
+                value: '1',
             }, {
                 text: 'Model T',
-                value: 2,
+                value: '2',
             }],
         };
     }

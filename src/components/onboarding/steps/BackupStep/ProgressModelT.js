@@ -3,12 +3,12 @@ import React from 'react';
 import { OrderedList } from 'components/lists';
 
 class BackupProgressModelT extends React.Component {
-    constructor() {
-        super();
-    }
+    // constructor() {
+    //     super();
+    // }
 
     componentDidMount() {
-        // this.startBackup();
+        this.startBackup();
     }
 
     // startBackup = () => {

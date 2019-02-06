@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-import { types } from 'config/state';
+import { types } from 'config/types';
 import colors from 'config/colors';
 import { Heading1 } from 'components/headings';
+import { Device } from 'components/device';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
@@ -35,37 +35,21 @@ class WebUSBButton extends React.Component {
     }
 }
 
-class WebUSBStep extends React.Component {
-    render() {
-        console.log(this.props.state.device);
-        return (
-            <StepWrapper>
-                <StepHeadingWrapper>
-                    <Heading1>Establish connection with your device</Heading1>
-                </StepHeadingWrapper>
-                <StepBodyWrapper>
-                    <h1>
-                        Check for devices
-                    </h1>
-                    Your browser supports WebUSB functionality. You might proceed to next step now.
-                    <br /><br />
-                    <WebUSBButton renderWebUSBFn={this.props.state.Connect.default.renderWebUSBButton} />
-                    <br />
-                    {
-                        this.props.state.device && this.props.state.device.path
-                            ? (
-                                <div>
-                                Conected device <br />
-                                    { this.props.state.device.path }
-                                </div>
-                            )
-                            : <div>No device connected</div>
-                    }
+const WebUSBStep = ({ state }) => (
+    <StepWrapper>
+        <StepHeadingWrapper>
+            <Heading1>Establish connection with your device</Heading1>
+        </StepHeadingWrapper>
+        <StepBodyWrapper>
+            <WebUSBButton renderWebUSBFn={state.Connect.default.renderWebUSBButton} />
+            <Device device={state.device} />
+        </StepBodyWrapper>
+    </StepWrapper>
+);
 
-                </StepBodyWrapper>
-            </StepWrapper>
-        );
-    }
-}
+
+WebUSBStep.propTypes = {
+    state: types.state,
+};
 
 export default WebUSBStep;

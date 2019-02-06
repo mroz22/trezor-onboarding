@@ -2,12 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { types } from 'config/state';
+import { types } from 'config/types';
 import colors from 'config/colors';
 import { Heading1 } from 'components/headings';
 import { Device } from 'components/device';
 
-import { ReplaySubject } from 'rxjs';
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
 const VersionBadgeWrapper = styled.div`
@@ -95,5 +94,10 @@ class BridgeStep extends React.Component {
         );
     }
 }
+
+BridgeStep.propTypes = {
+    // actions: types.actions,
+    state: types.state,
+};
 
 export default BridgeStep;

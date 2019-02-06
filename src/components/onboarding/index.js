@@ -1,13 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Flags } from 'trezor-flags';
 
-import { types } from 'config/state';
+import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/constants';
 
 import Button from 'components/button';
 import ProgressSteps from 'components/progress-steps';
 
-import BackupStep from './steps/BackupStep';
+import Reconnect from './components/Reconnect';
+
+import BackupStepIntro from './steps/BackupStep/BackupIntro';
+import BackupModelOne from './steps/BackupStep/BackupModelOne';
+import BackupOutro from './steps/BackupStep/BackupOutro';
 import BookmarkStep from './steps/BookmarkStep';
 import BridgeStep from './steps/BridgeStep';
 import FinalStep from './steps/FinalStep';
@@ -16,11 +21,12 @@ import HologramStep from './steps/HologramStep/HologramStep';
 import NewsletterStep from './steps/NewsletterStep';
 import SelectDeviceStep from './steps/SelectDeviceStep';
 import SetPinStep from './steps/SetPinStep';
-import StartStep from './steps/StartStep';
+import StartStep from './steps/StartStep/index'; // i dont get this..
 import WelcomeStep from './steps/WelcomeStep';
-import WebUSBStep from './steps/WebUSBStep';
 import NameStep from './steps/NameStep';
 import ConnectStep from './steps/ConnectStep';
+
+import StartStepError from './steps/StartStep/Error';
 
 const Wrapper = styled.div`
     display: grid;
@@ -38,6 +44,8 @@ const ProgressStepsWrapper = styled.div`
 
 const ComponentWrapper = styled.div`
     grid-area: main;
+    display: flex;
+    flex-direction: column;
 `;
 
 const ControlsWrapper = styled.div`
@@ -46,13 +54,6 @@ const ControlsWrapper = styled.div`
     justify-content: space-around;
     padding: 0px 50px 50px 50px;
 `;
-
-const resolveCommunicationStep = (state) => {
-    if (state.usbAvailable) {
-        return WebUSBStep;
-    }
-    return BridgeStep;
-};
 
 class Onboarding extends React.Component {
     static propTypes = {
@@ -68,80 +69,115 @@ class Onboarding extends React.Component {
                 component: WelcomeStep,
                 showProgressSteps: false,
                 showControls: false,
+                needsDevice: false,
             }, {
                 name: 'Select device',
                 component: SelectDeviceStep,
                 dot: 'Select device',
                 showProgressSteps: true,
                 showControls: false,
+                needsDevice: false,
             }, {
                 name: 'Unboxing',
                 component: HologramStep,
                 dot: 'Unboxing',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: false,
             }, {
                 name: 'Connect',
                 component: ConnectStep,
                 dot: 'Connect device',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: false,
             }, {
                 name: 'Bridge',
-                component: resolveCommunicationStep(props.state),
+                component: BridgeStep,
                 dot: 'Connect device',
                 showProgressSteps: true,
                 showControls: true,
-                nextDisabled: state => state.device === null,
+                needsDevice: false,
+                nextDisabled: state => !state.device || !state.device.isFresh(),
             }, {
                 name: 'Firmware',
                 component: FirmwareStep,
                 dot: 'Firmware',
                 showProgressSteps: true,
                 showControls: true,
-                // enable when firmware flashing finished
-                // nextDisabled: state => state.device.firmware !== 'valid',
+                needsDevice: false, // is handled internally by FirwmareStep component
+                nextDisabled: state => !state.device || state.device.firmware !== 'valid',
             }, {
                 name: 'Start',
                 component: StartStep,
+                error: StartStepError,
                 dot: 'Start',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: true,
             }, {
                 name: 'Backup',
-                component: BackupStep,
+                component: BackupStepIntro,
                 dot: 'Security',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: true,
+            }, {
+                name: 'Backup model one',
+                component: BackupModelOne,
+                dot: 'Security',
+                showProgressSteps: true,
+                showControls: false,
+                needsDevice: true,
+            }, {
+                name: 'Backup outro',
+                component: BackupOutro,
+                dot: 'Security',
+                showProgressSteps: true,
+                showControls: true,
+                needsDevice: true,
             }, {
                 name: 'Pin',
                 component: SetPinStep,
                 dot: 'Security',
                 showProgressSteps: true,
                 showControls: true,
-            }, {
-                name: 'Bookmark',
-                component: BookmarkStep,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
+                needsDevice: true,
             }, {
                 name: 'Name',
                 component: NameStep,
                 dot: 'Security',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: true,
+            }, {
+                name: 'Bookmark',
+                component: BookmarkStep,
+                dot: 'Security',
+                showProgressSteps: true,
+                showControls: true,
+                needsDevice: true,
+                onNextFn: () => {
+                    const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
+                    return this.props.actions.applyFlags(flags);
+                },
             }, {
                 name: 'Newsletter',
                 component: NewsletterStep,
                 dot: 'Security',
                 showProgressSteps: true,
                 showControls: true,
+                needsDevice: true,
+                onNextFn: () => {
+                    const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
+                    return this.props.actions.applyFlags(flags);
+                },
             }, {
                 name: 'Final',
                 component: FinalStep,
                 showProgressSteps: false,
-                showControls: false,
+                showControls: true,
+                needsDevice: false,
             }],
         };
     }
@@ -149,9 +185,18 @@ class Onboarding extends React.Component {
     getCurrentStep = () => this.state.steps[this.props.state.activeStep]
 
     render() {
-        const StepTag = this.getCurrentStep().component;
         const { activeStep } = this.props.state;
         const { steps } = this.state;
+
+        const shouldDisplayReconnect = this.getCurrentStep().needsDevice && !this.props.state.device;
+        const shouldDisplayStepErr = !!this.props.state.error;
+
+        let Component;
+        if (shouldDisplayStepErr) {
+            Component = this.getCurrentStep().error;
+        } else {
+            Component = this.getCurrentStep().component;
+        }
         return (
             <Wrapper>
                 <ProgressStepsWrapper>
@@ -162,25 +207,40 @@ class Onboarding extends React.Component {
                 </ProgressStepsWrapper>
 
                 <ComponentWrapper>
-                    <StepTag state={this.props.state} actions={this.props.actions} />
+                    {
+                        shouldDisplayReconnect
+                            ? <Reconnect model={this.props.state.selectedModel} />
+                            : <Component state={this.props.state} actions={this.props.actions} />
+                    }
                 </ComponentWrapper>
 
-                {
-                    this.getCurrentStep().showControls
+                <ControlsWrapper>
+                    {
+                        (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
                     && (
-                        <ControlsWrapper>
+                        <React.Fragment>
                             <Button text="Back" onClick={this.props.actions.previousStep} />
-                            <div>Dont know what to do? <a href={USER_MANUAL_URL} target="_blank" rel="noopener noreferrer"> Read user manual</a>
+                            <div>
+                            Dont know what to do? <a href={USER_MANUAL_URL} target="_blank" rel="noopener noreferrer"> Read user manual</a>
                             </div>
                             <button
                                 type="button"
-                                onClick={this.props.actions.nextStep}
+                                onClick={
+                                    () => {
+                                        if (this.getCurrentStep().onNextFn) {
+                                            this.getCurrentStep().onNextFn();
+                                        }
+                                        this.props.actions.nextStep();
+                                    }
+                                }
                                 disabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
-                            >Continue
+                            >
+                                Continue
                             </button>
-                        </ControlsWrapper>
+                        </React.Fragment>
                     )
-                }
+                    }
+                </ControlsWrapper>
             </Wrapper>
         );
     }

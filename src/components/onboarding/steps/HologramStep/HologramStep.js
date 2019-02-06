@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { types } from 'config/state';
+import { types } from 'config/types';
 import { SUPPORT_URL } from 'config/constants';
 
 import { Heading1 } from 'components/headings';

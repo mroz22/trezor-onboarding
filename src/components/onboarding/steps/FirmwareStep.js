@@ -1,15 +1,19 @@
 import React from 'react';
+
+import { types } from 'config/types';
+import { DONUT_STROKE, DONUT_RADIUS } from 'config/constants';
+
 import { Heading1 } from 'components/headings';
-import Progress from 'components/loaders';
+import { Donut } from 'components/loaders';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
 class FirmwareStep extends React.Component {
-    constructor() {
+    constructor({ state }) {
         super();
         this.state = {
-            progress: 0,
-            status: 'initial',
+            progress: state.device.firmware === 'outdated' ? 0 : 100,
+            status: state.device.firmware === 'outdated' ? 'initial' : 'finished',
         };
     }
 
@@ -25,6 +29,13 @@ class FirmwareStep extends React.Component {
         });
     }
 
+    // componentDidUpdate() {
+    //     this.setState({
+    //         progress: this.props.state.device.firmware === 'outdated' ? 0 : 100,
+    //         status: this.props.state.device.firmware === 'outdated' ? 'initial' : 'finished',
+    //     });
+    // }
+
     download = async () => {
         this.setState({ status: 'downloading' });
         const response = await fetch('src/trezor-1.7.3.bin');
@@ -38,8 +49,8 @@ class FirmwareStep extends React.Component {
         const tresholds = {
             downloading: 10,
             erasing: 40,
-            uploading: 80,
-            reconnect: 90,
+            uploading: 90,
+            reconnect: 95,
             finished: 100,
         };
         const interval = setInterval(() => {
@@ -50,12 +61,12 @@ class FirmwareStep extends React.Component {
                 return;
             }
             progressFn();
-        }, 150);
+        }, 170);
 
         const firmware = await this.download();
         // imitate wait of download
         setTimeout(async () => {
-            this.setState({ status: 'erasing' });
+            this.setState({ status: 'preparing' });
             await this.props.actions.firmwareErase();
             this.setState({ status: 'uploading' });
             await this.props.actions.firmwareUpload({ payload: firmware });
@@ -85,19 +96,26 @@ class FirmwareStep extends React.Component {
                     }
 
                     {
-                        connectedDevice ? connectedDevice.firmware === 'valid'
-                        && (<div>Perfect. The newest firwmare is installed. Time to continue</div>) : null
+                        connectedDevice && connectedDevice.firmware === 'valid'
+                        && (
+                            <React.Fragment>
+                                Perfect. The newest firwmare is installed. Time to continue
+                            </React.Fragment>
+                        )
                     }
 
-                    <Progress progress={this.state.progress} radius={60} stroke={20} />
-                    status: { this.state.status }
-
-
+                    <Donut progress={this.state.progress} radius={DONUT_RADIUS} stroke={DONUT_STROKE} />
+                    { this.state.status }
                 </StepBodyWrapper>
             </StepWrapper>
         );
     }
 }
+
+FirmwareStep.propTypes = {
+    actions: types.actions,
+    state: types.state,
+};
 
 
 export default FirmwareStep;

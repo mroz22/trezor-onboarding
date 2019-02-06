@@ -4,7 +4,7 @@ const StepBodyWrapper = styled.div`
     grid-area: body;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     padding-left: 30px;
     padding-right: 30px;

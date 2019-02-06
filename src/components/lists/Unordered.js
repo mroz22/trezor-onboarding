@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import colors from 'config/colors';
 
@@ -23,5 +24,9 @@ const UnorderedList = ({ items }) => (
         }
     </UnorderedListWrapper>
 );
+
+UnorderedList.propTypes = {
+    items: PropTypes.arrayOf(PropTypes.string),
+};
 
 export default UnorderedList;

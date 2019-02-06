@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { types } from 'config/types';
+
 import { Heading1 } from 'components/headings';
-import { CallToAction } from 'components/prompts';
+import { TrezorAction } from 'components/prompts';
 
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
@@ -43,7 +45,6 @@ class NameStep extends React.Component {
         super();
         this.state = {
             label: 'Hodl-nator',
-            callToActionVisible: false,
             labelChanged: false,
         };
     }
@@ -52,7 +53,7 @@ class NameStep extends React.Component {
         const { Connect, device } = this.props.state;
         const onCreateNewHandler = (event) => {
             if (event.type === 'button') {
-                this.setState({ callToActionVisible: true });
+                this.props.actions.toggleDeviceInteraction(true);
                 console.log('onCreateNewHandle', event);
             }
         };
@@ -64,6 +65,7 @@ class NameStep extends React.Component {
             if (!response.success) {
                 return this.props.actions.handleError(response.payload.error);
             }
+            this.props.actions.toggleDeviceInteraction(false);
             this.setState({ labelChanged: true });
         }).catch((err) => {
             console.log('err', err);
@@ -71,6 +73,22 @@ class NameStep extends React.Component {
     }
 
     render() {
+        const { deviceInteraction } = this.props.state;
+        if (deviceInteraction) {
+            return (
+                <div style={{
+                    marginTop: 'auto',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '35%',
+                    right: '35%',
+                }}
+                >
+                    <TrezorAction />
+                </div>
+
+            );
+        }
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
@@ -85,7 +103,6 @@ class NameStep extends React.Component {
                             : (
                                 <React.Fragment><div>Personalize your device with your own name.</div>
                                     <NameForm value={this.state.label} onSubmit={(label) => { this.changeLabel(label); }} />
-                                    <CallToAction visible={this.state.callToActionVisible} />
                                 </React.Fragment>
                             )
                     }
@@ -94,5 +111,10 @@ class NameStep extends React.Component {
         );
     }
 }
+
+NameStep.propTypes = {
+    actions: types.actions,
+    state: types.state,
+};
 
 export default NameStep;

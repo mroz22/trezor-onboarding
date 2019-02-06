@@ -3,11 +3,15 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import * as Connect from 'trezor-connect';
 
-import { state } from 'config/state';
 import Onboarding from 'components/onboarding';
+import ErrorBoundary from 'components/onboarding/components/Error';
+import Device from 'utils/Device';
+
 
 window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
+
 console.log(Connect);
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -15,15 +19,29 @@ const Wrapper = styled.div`
     padding-top: 40px;
 `;
 
-const Error = ({ error }) => (
-    <div>Error: { error } </div>
-);
-
 class App extends React.Component {
     constructor() {
         super();
-        this.state = state;
+        this.state = {
+            transport: {
+                actual: {
+                    type: '',
+                    version: '',
+                },
+                error: null,
+            },
+            device: null,
+            selectedModel: null,
+            activeStep: 0,
+            Connect: null,
+            error: null,
+            backupUnderstood: true,
+            deviceInteraction: false,
+        };
         this.actions = {
+            toggleDeviceInteraction: (state) => {
+                this.setState({ deviceInteraction: state });
+            },
             selectedModel: (selectedModel) => {
                 this.setState({ selectedModel });
             },
@@ -33,12 +51,29 @@ class App extends React.Component {
             previousStep: () => {
                 this.setState(prevState => ({ activeStep: prevState.activeStep - 1 }));
             },
-            resetDevice: () => this.state.Connect.default.resetDevice({
-                label: 'My fancy Trezor',
-                skipBackup: true,
-            }),
-            applyFlags: () => this.state.Connect.default.applyFlags({
-                flags: 1,
+            // initialize new wallet with default name and skip backup
+            resetDevice: async () => {
+                try {
+                    // throw new Error('error');
+                    const response = await this.state.Connect.default.resetDevice({
+                        label: 'My Trezor',
+                        skipBackup: true,
+                    });
+                    console.log('response', response);
+                    if (!response.success && response.payload.code !== 'Failure_ActionCancelled') {
+                        this.setState({ error: 'reset-device-err' });
+                    }
+                    return response;
+                } catch (err) {
+                    console.log(err);
+                    console.log('err.message', err.message);
+                    console.log('err.name', err.name);
+                    this.setState({ error: 'reset-device-err' });
+                    throw (err);
+                }
+            },
+            applyFlags: flags => this.state.Connect.default.applyFlags({
+                flags,
             }),
             applySettings: ({ label }) => this.state.Connect.default.applySettings({
                 label,
@@ -52,9 +87,9 @@ class App extends React.Component {
             initConnect: async () => {
                 await Connect.default.init({
                     transportReconnect: true,
-                    debug: true,
+                    // debug: true,
                     popup: false,
-                    webusb: this.state.usbAvailable,
+                    webusb: false,
                 });
                 this.setState({ Connect });
                 this.state.Connect.default.on(Connect.TRANSPORT_EVENT, (event) => {
@@ -77,10 +112,10 @@ class App extends React.Component {
                 const onDeviceEvent = (event) => {
                     console.log('DEVICE_EVENT', event);
                     if (event.type === 'device-connected' || event.type === 'device-changed') {
-                        this.setState({ device: event.payload });
+                        this.setState({ device: new Device(event.payload) });
                     // not sure about this
                     } else if (event.type === 'button') {
-                        this.setState({ device: event.payload.device });
+                        this.setState({ device: new Device(event.payload.device) });
                     } else if (event.type === 'device-disconnect') {
                         this.setState({ device: null });
                     }
@@ -105,25 +140,12 @@ class App extends React.Component {
         this.setState({ Connect });
     }
 
-    componentDidCatch(error, info) {
-        console.log('component did catch');
-        console.error('TODO: log this error to logging service', error, info);
-    }
-
     render() {
         return (
             <Wrapper>
-                <Onboarding state={this.state} actions={this.actions} />
-                <Error error={this.state.error} />
-                <div>
-                    debug <br />
-                    device: { this.state.device ? this.state.device.path : 'no device' } <br />
-                    actual transport: {this.state.transport.actual.type} <br />
-                    to be used transport: {this.state.transport.toBeUsed} <br />
-                    activeStep: {this.state.activeStep} <br />
-                    usbAvailable: {this.state.usbAvailable ? 'true' : 'false'}
-
-                </div>
+                <ErrorBoundary>
+                    <Onboarding state={this.state} actions={this.actions} />
+                </ErrorBoundary>
             </Wrapper>
         );
     }

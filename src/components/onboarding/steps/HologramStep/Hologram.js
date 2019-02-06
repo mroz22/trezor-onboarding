@@ -16,7 +16,7 @@ const Hologram = (props) => {
 };
 
 Hologram.propTypes = {
-    model: PropTypes.number.isRequired,
+    model: PropTypes.string.isRequired,
 };
 
 export default Hologram;

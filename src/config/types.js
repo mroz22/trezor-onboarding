@@ -10,15 +10,16 @@ const types = {
             error: PropTypes.object, // todo: better;
         }),
         device: PropTypes.object, // todo: better
-        selectedModel: PropTypes.number,
+        selectedModel: PropTypes.string,
         activeStep: PropTypes.number,
         Connect: PropTypes.object, // todo: better
         error: PropTypes.any, // todo: better
         backupUnderstood: PropTypes.bool,
-        usbAvailable: PropTypes.bool,
+        deviceInteraction: PropTypes.bool,
     }),
 
     actions: PropTypes.exact({
+        toggleDeviceInteraction: PropTypes.func,
         selectedModel: PropTypes.func,
         nextStep: PropTypes.func,
         previousStep: PropTypes.func,
@@ -35,24 +36,6 @@ const types = {
     }),
 };
 
-const state = {
-    transport: {
-        actual: {
-            type: '',
-            version: '',
-        },
-        error: null,
-    },
-    device: null,
-    selectedModel: null,
-    activeStep: 0,
-    Connect: null,
-    error: null,
-    backupUnderstood: true,
-    usbAvailable: !!navigator.usb,
-};
-
 export {
     types,
-    state,
 };
