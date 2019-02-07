@@ -28,6 +28,10 @@ class App extends React.Component {
                     type: '',
                     version: '',
                 },
+                new: {
+                    installers: [],
+                    version: [],
+                },
                 error: null,
             },
             device: null,
@@ -87,7 +91,7 @@ class App extends React.Component {
             initConnect: async () => {
                 await Connect.default.init({
                     transportReconnect: true,
-                    // debug: true,
+                    debug: true,
                     popup: false,
                     webusb: false,
                 });
@@ -100,6 +104,10 @@ class App extends React.Component {
                                 actual: {
                                     type: event.payload.type,
                                     version: event.payload.version,
+                                },
+                                new: {
+                                    installers: event.payload.bridge.packages,
+                                    version: event.payload.bridge.version,
                                 },
                                 error: null,
                             },

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flags } from 'trezor-flags';
-
+import { ButtonText, P } from 'trezor-ui-components';
 import { types } from 'config/types';
-import { USER_MANUAL_URL } from 'config/constants';
+import { USER_MANUAL_URL } from 'config/urls';
 
 import Button from 'components/button';
 import ProgressSteps from 'components/progress-steps';
@@ -52,6 +52,7 @@ const ControlsWrapper = styled.div`
     grid-area: controls;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     padding: 0px 50px 50px 50px;
 `;
 
@@ -176,7 +177,7 @@ class Onboarding extends React.Component {
                 name: 'Final',
                 component: FinalStep,
                 showProgressSteps: false,
-                showControls: true,
+                showControls: false,
                 needsDevice: false,
             }],
         };
@@ -219,12 +220,11 @@ class Onboarding extends React.Component {
                         (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
                     && (
                         <React.Fragment>
-                            <Button text="Back" onClick={this.props.actions.previousStep} />
-                            <div>
+                            <ButtonText onClick={this.props.actions.previousStep}>Back</ButtonText>
+                            <P>
                             Dont know what to do? <a href={USER_MANUAL_URL} target="_blank" rel="noopener noreferrer"> Read user manual</a>
-                            </div>
-                            <button
-                                type="button"
+                            </P>
+                            <ButtonText
                                 onClick={
                                     () => {
                                         if (this.getCurrentStep().onNextFn) {
@@ -233,10 +233,10 @@ class Onboarding extends React.Component {
                                         this.props.actions.nextStep();
                                     }
                                 }
-                                disabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
+                                isDisabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
                             >
                                 Continue
-                            </button>
+                            </ButtonText>
                         </React.Fragment>
                     )
                     }

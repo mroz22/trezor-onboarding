@@ -1,4 +1,5 @@
 import React from 'react';
+import { P } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 
@@ -14,7 +15,7 @@ const ConnectStep = ({ state }) => (
         </StepHeadingWrapper>
         <StepBodyWrapper>
             <TrezorConnect model={state.selectedModel} />
-            <div>Just make sure its well connected to avoid communication failures</div>
+            <P>Just make sure its well connected to avoid communication failures</P>
         </StepBodyWrapper>
     </StepWrapper>
 );

@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import colors from 'config/colors';
-
-import { Heading1 } from 'components/headings';
+import { P } from 'trezor-ui-components';
 
 const ErrorWrapper = styled.div`
     margin-top: auto;
@@ -12,8 +10,6 @@ const ErrorWrapper = styled.div`
 const Attribution = styled.div`
     margin-top: auto;
     text-align: center;
-    color: ${colors.grayDark};
-    size: 0.5em;
 `;
 
 const Bug = styled.div`
@@ -58,21 +54,25 @@ class ErrorBoundary extends React.Component {
                     <ErrorWrapper>
                         <Bug />
                         <Message>
-                            <Heading1>
-                        Unfortunately, a bug occured. While you read this, our developers are already being tortured by their masters and are working hard to fix this.
-                            </Heading1>
+                            <P>
+                            Unfortunately, a bug occured. While you read this, our developers are already being tortured by their masters and are working hard to fix this.
+                            </P>
+
                         </Message>
 
                     </ErrorWrapper>
 
                     <Attribution>
+                        <P isSmaller>
                         Fancy bug icon by Font Awesome Free 5.2.0 by @fontawesome - https://fontawesome.com
+                        </P>
                     </Attribution>
                 </React.Fragment>
 
             );
         }
 
+        // todo: do we want that?
         return this.props.children;
     }
 }

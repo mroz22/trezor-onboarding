@@ -29,13 +29,6 @@ class FirmwareStep extends React.Component {
         });
     }
 
-    // componentDidUpdate() {
-    //     this.setState({
-    //         progress: this.props.state.device.firmware === 'outdated' ? 0 : 100,
-    //         status: this.props.state.device.firmware === 'outdated' ? 'initial' : 'finished',
-    //     });
-    // }
-
     download = async () => {
         this.setState({ status: 'downloading' });
         const response = await fetch('src/trezor-1.7.3.bin');

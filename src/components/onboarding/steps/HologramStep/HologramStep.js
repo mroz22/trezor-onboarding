@@ -1,7 +1,8 @@
 import React from 'react';
+import { P, Link } from 'trezor-ui-components';
 
 import { types } from 'config/types';
-import { SUPPORT_URL } from 'config/constants';
+import { SUPPORT_URL } from 'config/urls';
 
 import { Heading1 } from 'components/headings';
 
@@ -15,7 +16,8 @@ const HologramStep = ({ state }) => (
         </StepHeadingWrapper>
         <StepBodyWrapper>
             <Hologram model={state.selectedModel} />
-            <p>My hologram is not the same. <a href={SUPPORT_URL} rel="noopener noreferrer">Contact our support.</a></p>
+            <P>My hologram is not the same.</P>
+            <Link href={SUPPORT_URL} rel="noopener noreferrer">Contact our support.</Link>
         </StepBodyWrapper>
     </StepWrapper>
 );

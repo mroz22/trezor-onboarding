@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { types } from 'config/types';
-import { DONUT_RADIUS, DONUT_STROKE, TOS_URL } from 'config/constants';
+import { DONUT_RADIUS, DONUT_STROKE } from 'config/constants';
 
 import { Heading1 } from 'components/headings';
 import { Donut } from 'components/loaders';

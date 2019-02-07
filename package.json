@@ -25,7 +25,8 @@
     "styled-normalize": "^8.0.4",
     "styled-reset": "^1.6.4",
     "trezor-connect": "../connect/npm",
-    "trezor-flags": "../trezor-flags"
+    "trezor-flags": "../trezor-flags",
+    "trezor-ui-components": "/home/martinvarmuza/repos/trezor-ui-components/npm"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
