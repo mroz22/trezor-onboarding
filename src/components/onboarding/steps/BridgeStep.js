@@ -155,20 +155,7 @@ class InstallBridge extends PureComponent {
                             </DownloadBridgeButton>
                         </Link>
                     </Download>
-                    <H2>Changelog</H2>
-                    <Ol>
-                        {/* {this.props.transport.bridge.changelog.map(entry => (
-                            <Li key={entry}>{entry}</Li>
-                        ))} */}
-                    </Ol>
-                    <P isSmaller>
-                        <LearnMoreText>Learn more about latest versions in</LearnMoreText>
-                        <Link
-                            href="https://github.com/trezor/trezord-go/blob/master/CHANGELOG.md"
-                            isGreen
-                        >Changelog
-                        </Link>
-                    </P>
+
                     <P>
                         {target.signature && (
                             <Link

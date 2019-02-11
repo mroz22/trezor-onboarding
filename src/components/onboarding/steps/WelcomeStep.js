@@ -2,17 +2,13 @@ import React from 'react';
 
 import { types } from 'config/types';
 
-import { Heading1 } from 'components/headings';
-
-import { ButtonText, P, H1 } from 'trezor-ui-components';
+import { ButtonText, H1 } from 'trezor-ui-components';
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
 const WelcomeStep = ({ actions }) => (
     <StepWrapper>
         <StepHeadingWrapper>
-            <Heading1>Thank you for choosing Trezor</Heading1>
-            <H1>Heading 1</H1>
-            <P>Paragraph</P>
+            <H1>Thank you for choosing Trezor</H1>
         </StepHeadingWrapper>
         <StepBodyWrapper>
             <ButtonText onClick={actions.nextStep}>Get started (7 minutes)</ButtonText>

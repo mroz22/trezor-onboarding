@@ -7,7 +7,6 @@ import Onboarding from 'components/onboarding';
 import ErrorBoundary from 'components/onboarding/components/Error';
 import Device from 'utils/Device';
 
-
 window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
 
 console.log(Connect);
@@ -83,12 +82,33 @@ class App extends React.Component {
                 label,
             }),
             startBackup: () => this.state.Connect.default.backupDevice(),
-            changePin: () => this.state.Connect.default.changePin(),
-            submitNewPin: () => this.state.Connect.default.uiResponse({ type: this.state.Connect.UI.RECEIVE_PIN, payload: '12345' }),
+            changePin: () => {
+                const onDeviceEvent = (event) => {
+                    console.warn('onDeviceEvent in changePin', event);
+                    if (event.type === 'button' /* payload.code ButtonRequest_ProtectCall*/) {
+                        this.actions.toggleDeviceInteraction(true);
+                    }
+                };
+                const onUIEvent = (event) => {
+                    console.warn('onUIEvent in changePin', event);
+                    if (event.type === 'ui-request_pin' || event.type === 'ui-close_window') {
+                        this.actions.toggleDeviceInteraction(false);
+                    }
+                };
+                this.state.Connect.default.on(this.state.Connect.DEVICE_EVENT, onDeviceEvent);
+                this.state.Connect.default.on(this.state.Connect.UI_EVENT, onUIEvent);
+
+                return this.state.Connect.default.changePin();
+            },
+            submitNewPin: (pin) => {
+                console.log(pin);
+                this.state.Connect.default.uiResponse({ type: this.state.Connect.UI.RECEIVE_PIN, payload: pin });
+            },
 
             firmwareErase: () => this.state.Connect.default.firmwareErase({ keepSession: true }),
             firmwareUpload: firmware => this.state.Connect.default.firmwareUpload(firmware),
             initConnect: async () => {
+                console.log('init');
                 await Connect.default.init({
                     transportReconnect: true,
                     debug: true,
@@ -130,6 +150,9 @@ class App extends React.Component {
                 };
 
                 this.state.Connect.default.on(Connect.DEVICE_EVENT, onDeviceEvent);
+                this.state.Connect.default.on(Connect.UI_EVENT, (event) => {
+                    console.log('UI_EVENT', event);
+                });
             },
             handleError: (error) => {
                 console.log('handling Error');

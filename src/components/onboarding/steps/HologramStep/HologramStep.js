@@ -17,7 +17,7 @@ const HologramStep = ({ state }) => (
         <StepBodyWrapper>
             <Hologram model={state.selectedModel} />
             <P>My hologram is not the same.</P>
-            <Link href={SUPPORT_URL} rel="noopener noreferrer">Contact our support.</Link>
+            <Link href={SUPPORT_URL}>Contact our support.</Link>
         </StepBodyWrapper>
     </StepWrapper>
 );

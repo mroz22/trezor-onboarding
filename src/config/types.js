@@ -7,10 +7,10 @@ const types = {
                 type: PropTypes.string,
                 version: PropTypes.string,
             }),
-            new: {
+            new: PropTypes.exact({
                 installers: PropTypes.array,
                 version: PropTypes.array,
-            },
+            }),
             error: PropTypes.object, // todo: better;
         }),
         device: PropTypes.object, // todo: better

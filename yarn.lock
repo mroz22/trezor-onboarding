@@ -7223,7 +7223,7 @@ trezor-connect@../connect/npm:
 trezor-flags@../trezor-flags:
   version "1.0.2"
 
-trezor-ui-components@/home/martinvarmuza/repos/trezor-ui-components/npm:
+"trezor-ui-components@file:../trezor-ui-components/npm":
   version "1.0.0"
   dependencies:
     babel-runtime "^6.26.0"

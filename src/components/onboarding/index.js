@@ -5,9 +5,7 @@ import { ButtonText, P } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 
-import Button from 'components/button';
 import ProgressSteps from 'components/progress-steps';
-
 import Reconnect from './components/Reconnect';
 
 import BackupStepIntro from './steps/BackupStep/BackupIntro';
@@ -20,7 +18,7 @@ import FirmwareStep from './steps/FirmwareStep';
 import HologramStep from './steps/HologramStep/HologramStep';
 import NewsletterStep from './steps/NewsletterStep';
 import SelectDeviceStep from './steps/SelectDeviceStep';
-import SetPinStep from './steps/SetPinStep';
+import SetPinStep from './steps/Pin/SetPinStep';
 import StartStep from './steps/StartStep/index'; // i dont get this..
 import WelcomeStep from './steps/WelcomeStep';
 import NameStep from './steps/NameStep';
@@ -65,121 +63,123 @@ class Onboarding extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            steps: [{
-                name: 'Welcome',
-                component: WelcomeStep,
-                showProgressSteps: false,
-                showControls: false,
-                needsDevice: false,
-            }, {
-                name: 'Select device',
-                component: SelectDeviceStep,
-                dot: 'Select device',
-                showProgressSteps: true,
-                showControls: false,
-                needsDevice: false,
-            }, {
-                name: 'Unboxing',
-                component: HologramStep,
-                dot: 'Unboxing',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: false,
-            }, {
-                name: 'Connect',
-                component: ConnectStep,
-                dot: 'Connect device',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: false,
-            }, {
-                name: 'Bridge',
-                component: BridgeStep,
-                dot: 'Connect device',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: false,
-                nextDisabled: state => !state.device || !state.device.isFresh(),
-            }, {
-                name: 'Firmware',
-                component: FirmwareStep,
-                dot: 'Firmware',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: false, // is handled internally by FirwmareStep component
-                nextDisabled: state => !state.device || state.device.firmware !== 'valid',
-            }, {
-                name: 'Start',
-                component: StartStep,
-                error: StartStepError,
-                dot: 'Start',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-            }, {
-                name: 'Backup',
-                component: BackupStepIntro,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-            }, {
-                name: 'Backup model one',
-                component: BackupModelOne,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: false,
-                needsDevice: true,
-            }, {
-                name: 'Backup outro',
-                component: BackupOutro,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-            }, {
-                name: 'Pin',
-                component: SetPinStep,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-            }, {
-                name: 'Name',
-                component: NameStep,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-            }, {
-                name: 'Bookmark',
-                component: BookmarkStep,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-                onNextFn: () => {
-                    const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
-                    return this.props.actions.applyFlags(flags);
-                },
-            }, {
-                name: 'Newsletter',
-                component: NewsletterStep,
-                dot: 'Security',
-                showProgressSteps: true,
-                showControls: true,
-                needsDevice: true,
-                onNextFn: () => {
-                    const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
-                    return this.props.actions.applyFlags(flags);
-                },
-            }, {
-                name: 'Final',
-                component: FinalStep,
-                showProgressSteps: false,
-                showControls: false,
-                needsDevice: false,
-            }],
+            steps: [
+                {
+                    name: 'Welcome',
+                    component: WelcomeStep,
+                    showProgressSteps: false,
+                    showControls: false,
+                    needsDevice: false,
+                }, {
+                    name: 'Select device',
+                    component: SelectDeviceStep,
+                    dot: 'Select device',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false,
+                }, {
+                    name: 'Unboxing',
+                    component: HologramStep,
+                    dot: 'Unboxing',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: false,
+                    nextDisabled: state => state.transport.actual.type !== 'bridge',
+                }, {
+                    name: 'Bridge',
+                    component: BridgeStep,
+                    dot: 'Connect device',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: false,
+                }, {
+                    name: 'Connect',
+                    component: ConnectStep,
+                    dot: 'Connect device',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: false,
+                    nextDisabled: state => !state.device || !state.device.isFresh(),
+                }, {
+                    name: 'Firmware',
+                    component: FirmwareStep,
+                    dot: 'Firmware',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: false, // is handled internally by FirwmareStep component
+                    nextDisabled: state => !state.device || state.device.firmware !== 'valid',
+                }, {
+                    name: 'Start',
+                    component: StartStep,
+                    error: StartStepError,
+                    dot: 'Start',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                }, {
+                    name: 'Backup',
+                    component: BackupStepIntro,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                }, {
+                    name: 'Backup model one',
+                    component: BackupModelOne,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Backup outro',
+                    component: BackupOutro,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                }, {
+                    name: 'Pin',
+                    component: SetPinStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                }, {
+                    name: 'Name',
+                    component: NameStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                }, {
+                    name: 'Bookmark',
+                    component: BookmarkStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                    onNextFn: () => {
+                        const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
+                        return this.props.actions.applyFlags(flags);
+                    },
+                }, {
+                    name: 'Newsletter',
+                    component: NewsletterStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: true,
+                    needsDevice: true,
+                    onNextFn: () => {
+                        const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
+                        return this.props.actions.applyFlags(flags);
+                    },
+                }, {
+                    name: 'Final',
+                    component: FinalStep,
+                    showProgressSteps: false,
+                    showControls: false,
+                    needsDevice: false,
+                }],
         };
     }
 
