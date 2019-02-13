@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flags } from 'trezor-flags';
-import { ButtonText, P } from 'trezor-ui-components';
+import { ButtonText, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 
@@ -60,134 +60,10 @@ class Onboarding extends React.Component {
         actions: types.actions,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            steps: [
-                {
-                    name: 'Welcome',
-                    component: WelcomeStep,
-                    showProgressSteps: false,
-                    showControls: false,
-                    needsDevice: false,
-                }, {
-                    name: 'Select device',
-                    component: SelectDeviceStep,
-                    dot: 'Select device',
-                    showProgressSteps: true,
-                    showControls: false,
-                    needsDevice: false,
-                }, {
-                    name: 'Unboxing',
-                    component: HologramStep,
-                    dot: 'Unboxing',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: false,
-                    nextDisabled: state => state.transport.actual.type !== 'bridge',
-                }, {
-                    name: 'Bridge',
-                    component: BridgeStep,
-                    dot: 'Connect device',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: false,
-                }, {
-                    name: 'Connect',
-                    component: ConnectStep,
-                    dot: 'Connect device',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: false,
-                    nextDisabled: state => !state.device || !state.device.isFresh(),
-                }, {
-                    name: 'Firmware',
-                    component: FirmwareStep,
-                    dot: 'Firmware',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: false, // is handled internally by FirwmareStep component
-                    nextDisabled: state => !state.device || state.device.firmware !== 'valid',
-                }, {
-                    name: 'Start',
-                    component: StartStep,
-                    error: StartStepError,
-                    dot: 'Start',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                }, {
-                    name: 'Backup',
-                    component: BackupStepIntro,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                }, {
-                    name: 'Backup model one',
-                    component: BackupModelOne,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    needsDevice: true,
-                }, {
-                    name: 'Backup outro',
-                    component: BackupOutro,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                }, {
-                    name: 'Pin',
-                    component: SetPinStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                }, {
-                    name: 'Name',
-                    component: NameStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                }, {
-                    name: 'Bookmark',
-                    component: BookmarkStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                    onNextFn: () => {
-                        const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
-                        return this.props.actions.applyFlags(flags);
-                    },
-                }, {
-                    name: 'Newsletter',
-                    component: NewsletterStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: true,
-                    needsDevice: true,
-                    onNextFn: () => {
-                        const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
-                        return this.props.actions.applyFlags(flags);
-                    },
-                }, {
-                    name: 'Final',
-                    component: FinalStep,
-                    showProgressSteps: false,
-                    showControls: false,
-                    needsDevice: false,
-                }],
-        };
-    }
-
-    getCurrentStep = () => this.state.steps[this.props.state.activeStep]
+    getCurrentStep = () => this.props.state.steps[this.props.state.activeStep]
 
     render() {
-        const { activeStep } = this.props.state;
-        const { steps } = this.state;
+        const { activeStep, steps } = this.props.state;
 
         const shouldDisplayReconnect = this.getCurrentStep().needsDevice && !this.props.state.device;
         const shouldDisplayStepErr = !!this.props.state.error;
@@ -221,8 +97,9 @@ class Onboarding extends React.Component {
                     && (
                         <React.Fragment>
                             <ButtonText onClick={this.props.actions.previousStep}>Back</ButtonText>
+
                             <P>
-                            Dont know what to do? <a href={USER_MANUAL_URL} target="_blank" rel="noopener noreferrer"> Read user manual</a>
+                            Dont know what to do? <Link href={USER_MANUAL_URL}> Read user manual</Link>
                             </P>
                             <ButtonText
                                 onClick={

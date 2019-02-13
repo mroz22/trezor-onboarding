@@ -5,7 +5,9 @@ import {
 
 import { PIN_MANUAL_URL } from 'config/urls';
 import { TrezorAction } from 'components/prompts';
-import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../components/Wrapper';
+import {
+    StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
+} from '../../components/Wrapper';
 
 class SetPinStep extends React.Component {
     constructor() {
@@ -71,14 +73,16 @@ class SetPinStep extends React.Component {
                         this.state.status === 'initial' && (
                             <React.Fragment>
                                 <P>Protect device from unauthorized access by using a strong pin.</P>
-                                <ButtonText onClick={
-                                    () => {
-                                        this.changePin();
+                                <ControlsWrapper>
+                                    <ButtonText onClick={
+                                        () => {
+                                            this.changePin();
+                                        }
                                     }
-                                }
-                                >
-                                Set pin
-                                </ButtonText>
+                                    >
+                                    Set pin
+                                    </ButtonText>
+                                </ControlsWrapper>
                             </React.Fragment>
                         )
                     }
@@ -108,19 +112,22 @@ class SetPinStep extends React.Component {
 
                     {
                         this.state.status === 'newPin' && (
-                            <Pin
-                                header={<P>Enter your new PIN</P>}
-                                device={{
-                                    label: this.props.state.device.label,
-                                    path: this.props.state.device.path,
-                                }}
-                                onPinSubmit={
-                                    (pin) => {
-                                        this.setState({ status: 'newPinEntered' });
-                                        this.props.actions.submitNewPin(pin);
+                            <React.Fragment>
+                                <Pin
+                                    header={<P>Enter your new PIN</P>}
+                                    device={{
+                                        label: this.props.state.device.label,
+                                        path: this.props.state.device.path,
+                                    }}
+                                    onPinSubmit={
+                                        (pin) => {
+                                            this.setState({ status: 'newPinEntered' });
+                                            this.props.actions.submitNewPin(pin);
+                                        }
                                     }
-                                }
-                            />
+                                />
+                            </React.Fragment>
+
                         )
                     }
 

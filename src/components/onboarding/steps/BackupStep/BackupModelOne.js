@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { P, H1, ButtonText } from 'trezor-ui-components';
 
-import { Heading1 } from 'components/headings';
-
-import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../components/Wrapper';
+import {
+    StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
+} from '../../components/Wrapper';
 
 import NthWord from './NthWord';
 
 const Wrapper = styled.div`
-    margin-left: 55px;
+    /* margin-left: 55px; */
     font-size: xx-large;
 `;
 
@@ -23,11 +24,7 @@ class BackupProgressModelOne extends React.Component {
         };
     }
 
-    componentDidMount() {
-        setTimeout(() => {
-            this.startBackup();
-        }, 5000);
-    }
+    componentDidMount() {}
 
     startBackup = async () => {
         const { Connect } = this.props.state;
@@ -49,42 +46,62 @@ class BackupProgressModelOne extends React.Component {
             //todo: //
         }
         Connect.default.off(Connect.DEVICE_EVENT, onStartBackupHandler);
-        this.props.actions.nextStep();
+        this.setState({ status: 'finished' });
     }
 
     render() {
-        if (this.state.status === 'initial') {
-            return (
-                <StepWrapper>
-                    <StepHeadingWrapper />
-                    <StepBodyWrapper>
-                        <Heading1>
-                    Now your device is going to show you 24 words to backup your wallet. Write them down.
-                        </Heading1>
-                    </StepBodyWrapper>
-                </StepWrapper>
-
-            );
-        }
-        if (this.state.checkingWords) {
-            return (
-                <StepWrapper>
-                    <StepHeadingWrapper />
-                    <Wrapper>
-                    Check <br />
-                        <NthWord number={this.state.nthWord - 24} /> <br />
-                    </Wrapper>
-                </StepWrapper>
-            );
-        }
+        const { status, checkingWords } = this.state;
         return (
             <StepWrapper>
                 <StepHeadingWrapper />
-                <Wrapper>
-                Write down <br />
-                    <NthWord number={this.state.nthWord} /> <br />
-                From your device to your recovery seed card.
-                </Wrapper>
+                <StepBodyWrapper>
+                    {
+                        status === 'initial' && (
+                            <React.Fragment>
+                                <H1>
+                                Now your device is going to show you 24 words to backup your wallet. Write them down.
+                                </H1>
+                                <ControlsWrapper>
+                                    <ButtonText onClick={this.startBackup}>Okey</ButtonText>
+                                </ControlsWrapper>
+                            </React.Fragment>
+
+                        )
+                    }
+
+                    {
+                        checkingWords && status === 'started' && (
+                            <Wrapper>
+                            Check <br />
+                                <NthWord number={this.state.nthWord - 24} /> <br />
+                            </Wrapper>
+                        )
+                    }
+
+                    {
+                        !this.state.checkingWords && status === 'started' && (
+                            <Wrapper>
+                                Write down <br />
+                                <NthWord number={this.state.nthWord} /> <br />
+                                From your device to your recovery seed card.
+                            </Wrapper>
+                        )
+                    }
+
+                    {
+                        this.state.status === 'finished' && (
+                            <React.Fragment>
+                                <H1>
+                                Good job.<br />
+                                Backup is now on your recovery seed card. Once again dont lose it and keep it private!
+                                </H1>
+                                <ControlsWrapper>
+                                    <ButtonText onClick={this.props.actions.nextStep}>My recovery card is safe</ButtonText>
+                                </ControlsWrapper>
+                            </React.Fragment>
+                        )
+                    }
+                </StepBodyWrapper>
             </StepWrapper>
         );
     }

@@ -7,6 +7,22 @@ import Onboarding from 'components/onboarding';
 import ErrorBoundary from 'components/onboarding/components/Error';
 import Device from 'utils/Device';
 
+import BackupStepIntro from 'components/onboarding/steps/BackupStep/BackupIntro';
+import BackupModelOne from 'components/onboarding/steps/BackupStep/BackupModelOne';
+import BackupOutro from 'components/onboarding/steps/BackupStep/BackupOutro';
+import BookmarkStep from 'components/onboarding/steps/BookmarkStep';
+import BridgeStep from 'components/onboarding/steps/BridgeStep';
+import FinalStep from 'components/onboarding/steps/FinalStep';
+import FirmwareStep from 'components/onboarding/steps/FirmwareStep';
+import HologramStep from 'components/onboarding/steps/HologramStep/HologramStep';
+import NewsletterStep from 'components/onboarding/steps/NewsletterStep';
+import SelectDeviceStep from 'components/onboarding/steps/SelectDeviceStep';
+import SetPinStep from 'components/onboarding/steps/Pin/SetPinStep';
+import StartStep from 'components/onboarding/steps/StartStep/index'; // i dont get this..
+import WelcomeStep from 'components/onboarding/steps/WelcomeStep';
+import NameStep from 'components/onboarding/steps/NameStep';
+import ConnectStep from 'components/onboarding/steps/ConnectStep';
+
 window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
 
 console.log(Connect);
@@ -40,6 +56,116 @@ class App extends React.Component {
             error: null,
             backupUnderstood: true,
             deviceInteraction: false,
+            steps: [
+                {
+                    name: 'Welcome',
+                    component: WelcomeStep,
+                    showProgressSteps: false,
+                    showControls: false,
+                    needsDevice: false,
+                }, {
+                    name: 'Select device',
+                    component: SelectDeviceStep,
+                    dot: 'Select device',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false,
+                }, {
+                    name: 'Unboxing',
+                    component: HologramStep,
+                    dot: 'Unboxing',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false,
+                }, {
+                    name: 'Bridge',
+                    component: BridgeStep,
+                    dot: 'Connect device',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false,
+                    nextDisabled: state => state.transport.actual.type !== 'bridge', // ?
+                }, {
+                    name: 'Connect',
+                    component: ConnectStep,
+                    dot: 'Connect device',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false,
+                    nextDisabled: state => !state.device || !state.device.isFresh(),
+                }, {
+                    name: 'Firmware',
+                    component: FirmwareStep,
+                    dot: 'Firmware',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: false, // is handled internally by FirwmareStep component
+                    nextDisabled: state => !state.device || state.device.firmware !== 'valid',
+                }, {
+                    name: 'Start',
+                    component: StartStep,
+                    // error: StartStepError,
+                    dot: 'Start',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Backup',
+                    component: BackupStepIntro,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Backup model one',
+                    component: BackupModelOne,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Pin',
+                    component: SetPinStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Name',
+                    component: NameStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                }, {
+                    name: 'Bookmark',
+                    component: BookmarkStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                    onNextFn: () => {
+                        const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
+                        return this.props.actions.applyFlags(flags);
+                    },
+                }, {
+                    name: 'Newsletter',
+                    component: NewsletterStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    needsDevice: true,
+                    onNextFn: () => {
+                        const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
+                        return this.props.actions.applyFlags(flags);
+                    },
+                }, {
+                    name: 'Final',
+                    component: FinalStep,
+                    showProgressSteps: false,
+                    showControls: false,
+                    needsDevice: false,
+                }],
         };
         this.actions = {
             toggleDeviceInteraction: (state) => {
@@ -129,11 +255,23 @@ class App extends React.Component {
                                     installers: event.payload.bridge.packages,
                                     version: event.payload.bridge.version,
                                 },
-                                error: null,
+                                error: false,
                             },
                         });
                     } else if (event.type === 'transport-error') {
-                        this.setState(prevState => ({ transport: Object.assign({}, prevState.transport, { error: event.payload }) }));
+                        this.setState({
+                            transport: {
+                                actual: {
+                                    type: '',
+                                    version: '',
+                                },
+                                new: {
+                                    installers: event.payload.bridge.packages,
+                                    version: event.payload.bridge.version,
+                                },
+                                error: true,
+                            },
+                        });
                     }
                 });
 
@@ -157,6 +295,22 @@ class App extends React.Component {
             handleError: (error) => {
                 console.log('handling Error');
                 this.setState({ error });
+            },
+
+            reorganizeSteps: () => {
+                this.setState((prevState) => {
+                    const { steps } = prevState;
+                    const newSteps = steps.map((step) => {
+                        if (step.dot !== 'Security') {
+                            step.dot = 'Setup';
+                        } else if (step.dot) {
+                            step.dot = step.name;
+                        }
+                        return step;
+                    });
+                    console.warn('newSteps', newSteps);
+                    return { steps: newSteps };
+                });
             },
         };
     }

@@ -5,9 +5,12 @@ import { DONUT_RADIUS, DONUT_STROKE } from 'config/constants';
 
 import { Donut } from 'components/loaders';
 import { TrezorAction } from 'components/prompts';
+import { OptionsList } from 'components/options';
 
 import { ButtonText, P, H1 } from 'trezor-ui-components';
-import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../components/Wrapper';
+import {
+    StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
+} from '../../components/Wrapper';
 
 class StartStep extends React.Component {
     constructor() {
@@ -15,7 +18,18 @@ class StartStep extends React.Component {
         this.state = {
             status: 'initial',
             progress: 0,
+            options: [{
+                text: 'Start from scratch',
+                value: 1, // todo
+            }, {
+                text: 'Recover',
+                value: 2, // todo
+            }],
         };
+    }
+
+    componentWillUnmount() {
+        this.props.actions.reorganizeSteps();
     }
 
     createNew = async () => {
@@ -110,10 +124,16 @@ class StartStep extends React.Component {
                         status === 'initial'
                             && (
                                 <React.Fragment>
-                                    <P>Are you new to crypto or have not used Trezor before? </P>
+                                    <OptionsList
+                                        options={this.state.options}
+                                        selected={this.props.state.selectedModel}
+                                        selectedAccessor="value"
+                                        onSelect={() => { this.createNew(); }}
+                                    />
+                                    {/* <P>Are you new to crypto or have not used Trezor before? </P>
                                     <ButtonText onClick={this.createNew}>Create new wallet</ButtonText>
                                     <P>Do you have recovery seed? You might use it to recovery your wallet</P>
-                                    <ButtonText onClick={this.createNew}>Recover wallet</ButtonText>
+                                    <ButtonText onClick={this.createNew}>Recover wallet</ButtonText> */}
                                 </React.Fragment>
                             )
                     }
@@ -123,7 +143,19 @@ class StartStep extends React.Component {
                     }
 
                     {
-                        status === 'finished' && <P>Good job, your wallet is ready. But we strongly recommend you to spend few more minutes and improve your security</P>
+                        status === 'finished'
+                            && (
+                                <React.Fragment>
+                                    <P>Good job, your wallet is ready. But we strongly recommend you to spend few more minutes and improve your security</P>
+                                    <ControlsWrapper>
+                                        <ButtonText onClick={this.props.actions.nextStep}>
+                                        Take me to security <br />
+                                        (5 minutes)
+                                        </ButtonText>
+                                        <ButtonText isWhite>Skip for now</ButtonText>
+                                    </ControlsWrapper>
+                                </React.Fragment>
+                            )
                     }
                 </StepBodyWrapper>
             </StepWrapper>

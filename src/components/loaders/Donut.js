@@ -39,7 +39,7 @@ class Donut extends React.Component {
                 if (this.isMounted) {
                     this.setState({ showCheck: true });
                 }
-            }, 1000);
+            }, 2000);
         }
     }
 
@@ -85,7 +85,6 @@ class Donut extends React.Component {
                         </DonutContent>
                     )
                 }
-
             </DonutWrapper>
 
         );

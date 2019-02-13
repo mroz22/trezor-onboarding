@@ -11,7 +11,7 @@ const types = {
                 installers: PropTypes.array,
                 version: PropTypes.array,
             }),
-            error: PropTypes.object, // todo: better;
+            error: PropTypes.bool, // todo: better;
         }),
         device: PropTypes.object, // todo: better
         selectedModel: PropTypes.string,
@@ -20,6 +20,7 @@ const types = {
         error: PropTypes.any, // todo: better
         backupUnderstood: PropTypes.bool,
         deviceInteraction: PropTypes.bool,
+        steps: PropTypes.any, // better
     }),
 
     actions: PropTypes.exact({
@@ -37,6 +38,7 @@ const types = {
         initConnect: PropTypes.func,
         firmwareErase: PropTypes.func,
         firmwareUpload: PropTypes.func,
+        reorganizeSteps: PropTypes.func,
     }),
 };
 

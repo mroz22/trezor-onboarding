@@ -1,9 +1,9 @@
 import React from 'react';
+import { H1 } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 
 import { OptionsList } from 'components/options';
-import { Heading1 } from 'components/headings';
 
 import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
 
@@ -27,7 +27,7 @@ class SelectDeviceStep extends React.Component {
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
-                    <Heading1>Select your device</Heading1>
+                    <H1>Select your device</H1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     <OptionsList

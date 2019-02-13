@@ -5,13 +5,13 @@ import { types } from 'config/types';
 import { ButtonText, H1 } from 'trezor-ui-components';
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
-const WelcomeStep = ({ actions }) => (
+const WelcomeStep = ({ actions, state }) => (
     <StepWrapper>
         <StepHeadingWrapper>
             <H1>Thank you for choosing Trezor</H1>
         </StepHeadingWrapper>
         <StepBodyWrapper>
-            <ButtonText onClick={actions.nextStep}>Get started (7 minutes)</ButtonText>
+            <ButtonText isDisabled={state.transport.error === null} onClick={actions.nextStep}>Get started (5 minutes)</ButtonText>
         </StepBodyWrapper>
     </StepWrapper>
 );

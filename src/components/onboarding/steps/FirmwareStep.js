@@ -1,13 +1,16 @@
 import React from 'react';
+import { P, H1, ButtonText } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 import { DONUT_STROKE, DONUT_RADIUS } from 'config/constants';
 
-import { Heading1 } from 'components/headings';
 import { Donut } from 'components/loaders';
 
-import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from '../components/Wrapper';
+import {
+    StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,
+} from '../components/Wrapper';
 
+// todo: handle case when already has firmware, but it is outdated
 class FirmwareStep extends React.Component {
     constructor({ state }) {
         super();
@@ -20,7 +23,6 @@ class FirmwareStep extends React.Component {
     componentDidMount() {
         const { Connect } = this.props.state;
         Connect.default.on(Connect.DEVICE_EVENT, (event) => {
-            console.log('event after reconnect', event);
             // todo: what if different device connected?
             if (event.type === 'device-changed' && this.state.status === 'reconnect') {
                 this.setState({ status: 'finished' });
@@ -42,12 +44,10 @@ class FirmwareStep extends React.Component {
         const tresholds = {
             downloading: 10,
             erasing: 40,
-            uploading: 90,
-            reconnect: 95,
-            finished: 100,
+            uploading: 100,
         };
         const interval = setInterval(() => {
-            if (this.state.progress >= tresholds[this.state.status]) {
+            if (this.state.progress >= tresholds[this.state.status] || this.state.progress >= 100) {
                 if (this.state.status === 'finished') {
                     clearInterval(interval);
                 }
@@ -73,32 +73,43 @@ class FirmwareStep extends React.Component {
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
-                    <Heading1>Firmware</Heading1>
+                    <H1>Get the latest firmware</H1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     {
-                        !connectedDevice && <div>No device connected</div>
-                    }
-                    {
-                        connectedDevice ? this.state.progress === 0 && connectedDevice.firmware === 'outdated' && (
+                        this.state.progress === 0 && connectedDevice.firmware === 'outdated' && (
                             <React.Fragment>
-                                <div>Your device is shipped without firmware. Its time to install it.</div>
-                                <button type="button" onClick={this.install}>Install</button>
-                            </React.Fragment>
-                        ) : null
-                    }
-
-                    {
-                        connectedDevice && connectedDevice.firmware === 'valid'
-                        && (
-                            <React.Fragment>
-                                Perfect. The newest firwmare is installed. Time to continue
+                                <P>Device is shipped without firmware. Time to install it.</P>
+                                <ButtonText onClick={this.install}>Install</ButtonText>
                             </React.Fragment>
                         )
                     }
 
-                    <Donut progress={this.state.progress} radius={DONUT_RADIUS} stroke={DONUT_STROKE} />
-                    { this.state.status }
+                    {
+                        this.state.status !== 'finished' && this.state.progress > 0 && (
+                            <React.Fragment>
+                                <Donut progress={this.state.progress} radius={DONUT_RADIUS} stroke={DONUT_STROKE} />
+                                { connectedDevice && this.state.status === 'reconnect' && <H1>Disconnect your device now</H1> }
+                                { !connectedDevice && this.state.status === 'reconnect' && <H1>And connect it again</H1> }
+                            </React.Fragment>
+                        )
+                    }
+
+                    {
+                        this.state.status === 'finished' && connectedDevice.firmware === 'valid'
+                        && (
+                            <React.Fragment>
+                                <H1>
+                                    Perfect. The newest firwmare is installed. Time to continue
+                                </H1>
+                                <ControlsWrapper>
+                                    <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                                </ControlsWrapper>
+                            </React.Fragment>
+                        )
+                    }
+
+
                 </StepBodyWrapper>
             </StepWrapper>
         );

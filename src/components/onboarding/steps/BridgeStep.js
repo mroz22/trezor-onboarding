@@ -2,45 +2,18 @@
 
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import {
+    Select, Link, H1, ButtonText, P, Icon,
+} from 'trezor-ui-components';
 
 import colors from 'config/colors';
 import { FONT_SIZE, FONT_WEIGHT } from 'config/constants';
 // import ICONS from 'config/icons';
 
+import { UnorderedList } from 'components/lists';
 import {
-    Select, Link, H1, H2, ButtonText, P, Icon,
-} from 'trezor-ui-components';
-
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 500px;
-    padding: 0 24px;
-`;
-
-const Top = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 500px;
-    flex: 1;
-    padding-top: 30px;
-`;
-
-const Bottom = styled.div`
-    padding-bottom: 20px;
-`;
-
-const TitleHeader = styled(H1)`
-    display: flex;
-    font-size: ${FONT_SIZE.HUGE};
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-`;
+ StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper 
+} from 'components/onboarding/components/Wrapper';
 
 const Version = styled.span`
     color: ${colors.GREEN_PRIMARY};
@@ -50,10 +23,6 @@ const Version = styled.span`
     font-size: ${FONT_SIZE.BASE};
     font-weight: ${FONT_WEIGHT.LIGHT};
     margin-left: 24px;
-`;
-
-const LearnMoreText = styled.span`
-    margin-right: 4px;
 `;
 
 const SelectWrapper = styled(Select)`
@@ -78,46 +47,22 @@ const DownloadBridgeButton = styled(ButtonText)`
     margin-bottom: 5px;
 `;
 
-const GoBack = styled.span`
-    color: ${colors.GREEN_PRIMARY};
-    text-decoration: underline;
-    &:hover {
-        cursor: pointer;
-        text-decoration: none;
-    }
-`;
-
-const Ol = styled.ul`
-    margin: 0 auto;
-    color: ${colors.TEXT_SECONDARY};
-    font-size: ${FONT_SIZE.BIG};
-    padding: 0px 0 15px 25px;
-    text-align: left;
-`;
-
-const Li = styled.li`
-    text-align: justify;
-`;
-
 class InstallBridge extends PureComponent {
     constructor(props) {
         super(props);
-
-        const installers = props.state.transport.new.installers.map(p => ({
-            label: p.name,
-            value: p.url,
-            signature: p.signature,
-            preferred: p.preferred,
-        }));
-
-        const currentTarget = installers.find(i => i.preferred === true);
+        const installers = this.getInstallers();
         this.state = {
-            currentVersion: props.state.transport.actual.type === 'bridge' ? `Your version ${props.state.transport.actual.version}` : 'Not installed',
-            latestVersion: props.state.transport.new.version.join('.'),
-            installers,
-            target: currentTarget || installers[0],
+            target: installers.find(i => i.preferred === true) || installers[0],
             uri: 'https://data.trezor.io/',
+            installers,
+            status: 'initial',
         };
+    }
+
+    componentDidMount() {
+        // setInterval(() => {
+
+        // })
     }
 
     onChange(value) {
@@ -126,55 +71,98 @@ class InstallBridge extends PureComponent {
         });
     }
 
-    render() {
-        const { target } = this.state;
+    getStatus() {
+        if (this.props.state.transport.error === false && this.props.state.transport.actual.type === 'bridge') {
+            return 'installed';
+        }
+        return this.state.status;
+    }
 
+    getInstallers() {
+        return this.props.state.transport.new.installers.map(p => ({
+            label: p.name,
+            value: p.url,
+            signature: p.signature,
+            preferred: p.preferred,
+        }));
+    }
+
+    render() {
+        const { target, uri, installers } = this.state;
+        const status = this.getStatus();
         return (
-            <Wrapper>
-                <Top>
-                    <TitleHeader>
-                    Trezor Bridge<Version>2.xx</Version>
-                    </TitleHeader>
-                    <P>New communication tool to facilitate the connection between your Trezor and your internet browser.</P>
-                    <Download>
-                        <SelectWrapper
-                            isSearchable={false}
-                            isClearable={false}
-                            value={target}
-                            onChange={v => this.onChange(v)}
-                            options={this.state.installers}
-                        />
-                        <Link href={`${this.state.uri}${target.value}`}>
-                            <DownloadBridgeButton>
-                                {/* <Icon
-                                    icon={ICONS.DOWNLOAD}
-                                    color={colors.WHITE}
-                                    size={30}
-                                /> */}
-                                Download latest Bridge {this.state.latestVersion}
-                            </DownloadBridgeButton>
-                        </Link>
-                    </Download>
+            <StepWrapper>
+                <StepHeadingWrapper>
+                    <H1>
+                        Trezor Bridge<Version>{ status === 'installed' ? this.props.state.transport.actual.version : 'not installed' }</Version>
+                    </H1>
+                </StepHeadingWrapper>
+                <StepBodyWrapper>
+                    {
+                        status === 'initial' && (
+                            <React.Fragment>
+                                <P>Trezor Bridge is a communication tool to facilitate the connection between your Trezor and your internet browser.</P>
+                                <Download>
+                                    <SelectWrapper
+                                        isSearchable={false}
+                                        isClearable={false}
+                                        value={target}
+                                        onChange={v => this.onChange(v)}
+                                        options={installers}
+                                    />
+                                    <Link href={`${uri}${target.value}`}>
+                                        <DownloadBridgeButton onClick={() => this.setState({ status: 'downloading' })}>
+                                            {/* <Icon
+                                            icon={ICONS.DOWNLOAD}
+                                            color={colors.WHITE}
+                                            size={30}
+                                            /> */}
+                                            Download latest Bridge {this.props.state.transport.new.version.join('.')}
+                                        </DownloadBridgeButton>
+                                    </Link>
+                                </Download>
+                            </React.Fragment>
+                        )
+                    }
+
+                    {
+                        status === 'downloading' && (
+                            <React.Fragment>
+                                <UnorderedList items={[
+                                    'Wait for file to download',
+                                    'Double click it to run installer',
+                                ]}
+                                />
+                                <br />
+                                <P>Detecting Trezor Bridge instalation</P>
+                            </React.Fragment>
+                        )
+                    }
 
                     <P>
                         {target.signature && (
                             <Link
-                                href={this.state.uri + target.signature}
+                                href={uri + target.signature}
                                 isGreen
                             >Check PGP signature
                             </Link>
                         )}
                     </P>
-                </Top>
-                <Bottom>
-                    {/* {this.props.transport.type && (
-                        <P>
-                                No, i dont want to upgrade Bridge now<br />
-                                Take me <GoBack onClick={() => this.props.selectFirstAvailableDevice()}>back to the wallet</GoBack>
-                        </P>
-                    )} */}
-                </Bottom>
-            </Wrapper>
+
+                    {
+                        status === 'installed' && (
+                            <React.Fragment>
+                                <H1>Trezor bridge was successfully installed</H1>
+                                <ControlsWrapper>
+                                    <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                                </ControlsWrapper>
+                            </React.Fragment>
+                        )
+                    }
+
+
+                </StepBodyWrapper>
+            </StepWrapper>
         );
     }
 }

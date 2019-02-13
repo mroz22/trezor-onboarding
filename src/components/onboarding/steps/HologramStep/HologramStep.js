@@ -1,23 +1,29 @@
 import React from 'react';
-import { P, Link } from 'trezor-ui-components';
+import styled from 'styled-components';
+
+import {
+    H1, ButtonText,
+} from 'trezor-ui-components';
 
 import { types } from 'config/types';
-import { SUPPORT_URL } from 'config/urls';
+// import { SUPPORT_URL } from 'config/urls';
 
-import { Heading1 } from 'components/headings';
-
-import { StepWrapper, StepHeadingWrapper, StepBodyWrapper } from 'components/onboarding/components/Wrapper';
+import {
+    StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,
+} from 'components/onboarding/components/Wrapper';
 import Hologram from './Hologram';
 
-const HologramStep = ({ state }) => (
+const HologramStep = ({ state, actions }) => (
     <StepWrapper>
         <StepHeadingWrapper>
-            <Heading1>Please make sure the hologram on the box is authentic</Heading1>
+            <H1>Please make sure the hologram on the box is authentic</H1>
         </StepHeadingWrapper>
         <StepBodyWrapper>
             <Hologram model={state.selectedModel} />
-            <P>My hologram is not the same.</P>
-            <Link href={SUPPORT_URL}>Contact our support.</Link>
+            <ControlsWrapper>
+                <ButtonText onClick={actions.nextStep}>My hologram is OK</ButtonText>
+                <ButtonText isWhite>My hologram looks different</ButtonText>
+            </ControlsWrapper>
         </StepBodyWrapper>
     </StepWrapper>
 );
