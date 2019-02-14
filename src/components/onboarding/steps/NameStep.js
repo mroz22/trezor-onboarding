@@ -1,11 +1,12 @@
 import React from 'react';
-
+import { H1, P, ButtonText } from 'trezor-ui-components';
 import { types } from 'config/types';
 
-import { Heading1 } from 'components/headings';
 import { TrezorAction } from 'components/prompts';
 
-import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
+import {
+ StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper 
+} from '../components/Wrapper';
 
 class NameForm extends React.Component {
     constructor(props) {
@@ -93,18 +94,24 @@ class NameStep extends React.Component {
             <StepWrapper>
                 <StepHeadingWrapper>
                     {
-                        !this.state.labelChanged && <Heading1>Name your device</Heading1>
+                        !this.state.labelChanged && <H1>Name your device</H1>
                     }
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     {
-                        this.state.labelChanged
-                            ? <div><Heading1>Excellent, your device has a custom name now. It will be visible on your device display from now on.</Heading1></div>
-                            : (
-                                <React.Fragment><div>Personalize your device with your own name.</div>
-                                    <NameForm value={this.state.label} onSubmit={(label) => { this.changeLabel(label); }} />
-                                </React.Fragment>
-                            )
+                        this.state.labelChanged && (
+                            <React.Fragment>
+                                <H1>Excellent, your device has a custom name now. It will be visible on your device display from now on.</H1>
+                                <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                            </React.Fragment>
+                        )
+                    }
+                    {
+                        !this.state.labelChanged && (
+                            <React.Fragment><P>Personalize your device with your own name.</P>
+                                <NameForm value={this.state.label} onSubmit={(label) => { this.changeLabel(label); }} />
+                            </React.Fragment>
+                        )
                     }
                 </StepBodyWrapper>
             </StepWrapper>

@@ -8,8 +8,6 @@ import ErrorBoundary from 'components/onboarding/components/Error';
 import Device from 'utils/Device';
 
 import BackupStepIntro from 'components/onboarding/steps/BackupStep/BackupIntro';
-import BackupModelOne from 'components/onboarding/steps/BackupStep/BackupModelOne';
-import BackupOutro from 'components/onboarding/steps/BackupStep/BackupOutro';
 import BookmarkStep from 'components/onboarding/steps/BookmarkStep';
 import BridgeStep from 'components/onboarding/steps/BridgeStep';
 import FinalStep from 'components/onboarding/steps/FinalStep';
@@ -117,13 +115,6 @@ class App extends React.Component {
                     showControls: false,
                     needsDevice: true,
                 }, {
-                    name: 'Backup model one',
-                    component: BackupModelOne,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    needsDevice: true,
-                }, {
                     name: 'Pin',
                     component: SetPinStep,
                     dot: 'Security',
@@ -144,10 +135,6 @@ class App extends React.Component {
                     showProgressSteps: true,
                     showControls: false,
                     needsDevice: true,
-                    onNextFn: () => {
-                        const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
-                        return this.props.actions.applyFlags(flags);
-                    },
                 }, {
                     name: 'Newsletter',
                     component: NewsletterStep,
@@ -155,10 +142,6 @@ class App extends React.Component {
                     showProgressSteps: true,
                     showControls: false,
                     needsDevice: true,
-                    onNextFn: () => {
-                        const flags = Flags.setFlag('hasEmail', this.props.state.device.features.flags);
-                        return this.props.actions.applyFlags(flags);
-                    },
                 }, {
                     name: 'Final',
                     component: FinalStep,

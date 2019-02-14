@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { H1, P } from 'trezor-ui-components';
 
 import { UnorderedList } from 'components/lists';
 import { TrezorConnect } from 'components/prompts';
@@ -14,16 +15,15 @@ const ReconnectWrapper = styled.div`
 
 const Reconnect = ({ model }) => (
     <ReconnectWrapper>
-        <div>Reconnect your device</div>
+        <H1>Reconnect your device</H1>
         <TrezorConnect model={model} />
-        <div>
+        <P>
             We lost connection with your device. This might mean:
-        </div>
+        </P>
         <UnorderedList items={[
-            'Device is not well connected to cable',
-            'Cable is wrong',
-            'If in chrome, usb might have been disabled in settings',
-            'Trezor bridge might have stopped working',
+            'Device is not well connected to the cable',
+            'Cable is broken, try another one',
+            'Trezor bridge might have stopped working, try restarting',
         ]}
         />
     </ReconnectWrapper>

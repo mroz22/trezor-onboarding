@@ -14,8 +14,8 @@ const OptionsList = props => (
         {props.options.map(opt => (
             <Option
                 onClick={() => props.onSelect(opt[props.selectedAccessor])}
-                key={opt.text}
-                text={opt.text}
+                key={opt.key}
+                content={opt.content}
                 isSelected={opt[props.selectedAccessor] === props.selected}
             />
         ))}

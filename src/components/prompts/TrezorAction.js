@@ -4,12 +4,6 @@ import PropTypes from 'prop-types';
 
 import colors from 'config/colors';
 
-const blink = keyframes`
-    0%   { opacity: 0; }
-    80%  { opacity: .8 }
-    100% { opacity: 1; }
-`;
-
 const ripple = keyframes`
     0%, 35% {
         background-color: ${colors.brandPrimary};

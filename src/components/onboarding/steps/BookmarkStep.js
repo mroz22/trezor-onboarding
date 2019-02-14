@@ -1,19 +1,34 @@
 import React from 'react';
-import { TREZOR_FLAG_KEYS, Flags } from 'trezor-flags';
-
-import { Heading1 } from 'components/headings';
-
+import { Flags } from 'trezor-flags';
+import { H1, P, Link } from 'trezor-ui-components';
+import { PHISING_URL } from 'config/urls';
+import ButtonText from 'trezor-ui-components/lib/components/buttons/ButtonText';
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../components/Wrapper';
 
-const BookmarkStep = () => (
-    <StepWrapper>
-        <StepHeadingWrapper>
-            <Heading1>Bookmark</Heading1>
-        </StepHeadingWrapper>
-        <StepBodyWrapper>
-            <div>Protect yourself from phishing sites. Attacker might create a fake site and try to trick you into entering your seed in it. Bookmark wallet.trezor.io to always use genuine website.</div>
-        </StepBodyWrapper>
-    </StepWrapper>
-);
+
+class BookmarkStep extends React.Component {
+    async setBookmarkFlagAndContinue() {
+        const flags = Flags.setFlag('hasBookmark', this.props.state.device.features.flags);
+        await this.props.actions.applyFlags(flags);
+        this.props.actions.nextStep();
+    }
+
+    render() {
+        return (
+            <StepWrapper>
+                <StepHeadingWrapper>
+                    <H1>Bookmark</H1>
+                </StepHeadingWrapper>
+                <StepBodyWrapper>
+                    <P>
+                    Protect yourself against <Link isGreen href={PHISING_URL}>phishing attacks</Link>.
+                    Bookmark Trezor Wallet (wallet.trezor.io) to avoid visiting fake sites. Use the keyboard shortcut Ctrl / ⌘ + D
+                    </P>
+                    <ButtonText onClick={() => this.setBookmarkFlagAndContinue()}>Continue</ButtonText>
+                </StepBodyWrapper>
+            </StepWrapper>
+        );
+    }
+}
 
 export default BookmarkStep;

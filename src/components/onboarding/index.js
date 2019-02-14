@@ -8,24 +8,6 @@ import { USER_MANUAL_URL } from 'config/urls';
 import ProgressSteps from 'components/progress-steps';
 import Reconnect from './components/Reconnect';
 
-import BackupStepIntro from './steps/BackupStep/BackupIntro';
-import BackupModelOne from './steps/BackupStep/BackupModelOne';
-import BackupOutro from './steps/BackupStep/BackupOutro';
-import BookmarkStep from './steps/BookmarkStep';
-import BridgeStep from './steps/BridgeStep';
-import FinalStep from './steps/FinalStep';
-import FirmwareStep from './steps/FirmwareStep';
-import HologramStep from './steps/HologramStep/HologramStep';
-import NewsletterStep from './steps/NewsletterStep';
-import SelectDeviceStep from './steps/SelectDeviceStep';
-import SetPinStep from './steps/Pin/SetPinStep';
-import StartStep from './steps/StartStep/index'; // i dont get this..
-import WelcomeStep from './steps/WelcomeStep';
-import NameStep from './steps/NameStep';
-import ConnectStep from './steps/ConnectStep';
-
-import StartStepError from './steps/StartStep/Error';
-
 const Wrapper = styled.div`
     display: grid;
     grid-template-areas: 

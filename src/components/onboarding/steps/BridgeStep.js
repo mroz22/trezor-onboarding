@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import {
-    Select, Link, H1, ButtonText, P, Icon,
+    Select, Link, H1, ButtonText, P,
 } from 'trezor-ui-components';
 
 import colors from 'config/colors';
@@ -11,8 +11,10 @@ import { FONT_SIZE, FONT_WEIGHT } from 'config/constants';
 // import ICONS from 'config/icons';
 
 import { UnorderedList } from 'components/lists';
+import { Dots } from 'components/loaders';
+
 import {
- StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper 
+    StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,
 } from 'components/onboarding/components/Wrapper';
 
 const Version = styled.span`
@@ -94,10 +96,14 @@ class InstallBridge extends PureComponent {
             <StepWrapper>
                 <StepHeadingWrapper>
                     <H1>
-                        Trezor Bridge<Version>{ status === 'installed' ? this.props.state.transport.actual.version : 'not installed' }</Version>
+                        Trezor Bridge
+                        <Version>
+                            { status === 'installed' ? this.props.state.transport.actual.version : 'not installed' }
+                        </Version>
                     </H1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
+
                     {
                         status === 'initial' && (
                             <React.Fragment>
@@ -117,7 +123,7 @@ class InstallBridge extends PureComponent {
                                             color={colors.WHITE}
                                             size={30}
                                             /> */}
-                                            Download latest Bridge {this.props.state.transport.new.version.join('.')}
+                                            Download
                                         </DownloadBridgeButton>
                                     </Link>
                                 </Download>
@@ -135,6 +141,8 @@ class InstallBridge extends PureComponent {
                                 />
                                 <br />
                                 <P>Detecting Trezor Bridge instalation</P>
+                                <P><Dots maxCount={3} /></P>
+
                             </React.Fragment>
                         )
                     }

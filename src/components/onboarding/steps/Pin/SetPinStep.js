@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {
     P, H1, Pin, ButtonText, Link,
 } from 'trezor-ui-components';
@@ -9,6 +10,10 @@ import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../components/Wrapper';
 
+const NewPinWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 class SetPinStep extends React.Component {
     constructor() {
         super();
@@ -17,18 +22,24 @@ class SetPinStep extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        const { Connect } = this.props.state;
+        Connect.default.off(Connect.UI_EVENT, this.onEvent);
+    }
+
+    onEvent = (event) => {
+        if (event.type === 'ui-close_window' && this.state.status === 'started') {
+            console.warn('ui-close-window', event);
+            this.setState({ status: 'initial' });
+        } else if (event.type === 'ui-request_pin' && (this.state.status === 'initial' || this.state.status === 'mismatch')) {
+            this.setState({ status: 'started' });
+        }
+    };
+
     async changePin() {
         const { Connect } = this.props.state;
-        const onEvent = (event) => {
-            if (event.type === 'ui-close_window' && this.state.status === 'started') {
-                console.warn('ui-close-window', event);
-                this.setState({ status: 'initial' });
-            } else if (event.type === 'ui-request_pin' && this.state.status === 'initial') {
-                this.setState({ status: 'started' });
-            }
-        };
         // this.state.Connect.default.on(this.state.Connect.DEVICE_EVENT, onEvent);
-        Connect.default.on(Connect.UI_EVENT, onEvent);
+        Connect.default.on(Connect.UI_EVENT, this.onEvent);
 
         let response;
         try {
@@ -41,7 +52,7 @@ class SetPinStep extends React.Component {
                 console.warn('mimatcch@!!!');
                 this.setState({ status: 'mismatch' });
             }
-            Connect.default.off(Connect.UI_EVENT, onEvent);
+            Connect.default.off(Connect.UI_EVENT, this.onEvent);
         }
     }
 
@@ -74,12 +85,7 @@ class SetPinStep extends React.Component {
                             <React.Fragment>
                                 <P>Protect device from unauthorized access by using a strong pin.</P>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={
-                                        () => {
-                                            this.changePin();
-                                        }
-                                    }
-                                    >
+                                    <ButtonText onClick={() => { this.changePin(); }}>
                                     Set pin
                                     </ButtonText>
                                 </ControlsWrapper>
@@ -94,38 +100,26 @@ class SetPinStep extends React.Component {
                                 In order to secure maximum security, we do not display pin on your computer. We will just show
                                 a "blind matrix", real layout is displayed on your device.
                                 </P>
-                                <div>
-                                    <img src="src/components/onboarding/steps/Pin/videos/pin.gif" alt="How to enter pin" width="400px" />
-                                </div>
+                                <NewPinWrapper>
+                                    <div>
+                                        <img src="src/components/onboarding/steps/Pin/videos/pin.gif" alt="How to enter pin" width="200px" />
+                                    </div>
 
-                                <ButtonText onClick={
-                                    () => {
-                                        this.setState({ status: 'newPin' });
-                                    }
-                                }
-                                >I understand
-                                </ButtonText>
-                            </React.Fragment>
-
-                        )
-                    }
-
-                    {
-                        this.state.status === 'newPin' && (
-                            <React.Fragment>
-                                <Pin
-                                    header={<P>Enter your new PIN</P>}
-                                    device={{
-                                        label: this.props.state.device.label,
-                                        path: this.props.state.device.path,
-                                    }}
-                                    onPinSubmit={
-                                        (pin) => {
-                                            this.setState({ status: 'newPinEntered' });
-                                            this.props.actions.submitNewPin(pin);
+                                    <Pin
+                                        header={<P>Enter your new PIN</P>}
+                                        device={{
+                                            label: this.props.state.device.label,
+                                            path: this.props.state.device.path,
+                                        }}
+                                        onPinSubmit={
+                                            (pin) => {
+                                                this.setState({ status: 'newPinEntered' });
+                                                this.props.actions.submitNewPin(pin);
+                                            }
                                         }
-                                    }
-                                />
+                                    />
+                                </NewPinWrapper>
+
                             </React.Fragment>
 
                         )
@@ -178,9 +172,9 @@ class SetPinStep extends React.Component {
                                 <P>Pin mismatch. </P>
                                 <P>
                                 Are you confused, how PIN works? You can always refer to our
-
-                                </P>  <Link href={PIN_MANUAL_URL}>documentation</Link>
-                                <ButtonText onClick={() => this.setState({ status: 'initial' })}>Start again</ButtonText>
+                                </P>
+                                <Link href={PIN_MANUAL_URL}>documentation</Link>
+                                <ButtonText onClick={() => { this.changePin(); }}>Start again</ButtonText>
                             </React.Fragment>
                         )
                     }

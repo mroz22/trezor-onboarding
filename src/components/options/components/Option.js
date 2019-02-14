@@ -18,9 +18,6 @@ const OptionWrapper = styled.div`
 
 `;
 
-const OptionText = styled.div`
-`;
-
 const Circle = styled.div`
     background-color: ${colors.brandPrimary};
     border-radius: 50%;
@@ -33,12 +30,12 @@ const Circle = styled.div`
 const Option = props => (
     <OptionWrapper onClick={props.onClick} style={{ borderColor: props.isSelected ? colors.brandPrimary : colors.gray }}>
         <Circle style={{ visibility: props.isSelected ? 'visible' : 'hidden' }} />
-        <OptionText>{props.text}</OptionText>
+        { props.content }
     </OptionWrapper>
 );
 
 Option.propTypes = {
-    text: PropTypes.string,
+    content: PropTypes.object, // todo probably required
     isSelected: PropTypes.bool,
     onClick: PropTypes.func,
 };

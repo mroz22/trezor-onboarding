@@ -1,5 +1,5 @@
 import React from 'react';
-import { H1 } from 'trezor-ui-components';
+import { H1, P } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 
@@ -14,11 +14,13 @@ class SelectDeviceStep extends React.Component {
         super(props);
         this.state = {
             options: [{
-                text: 'Model One',
+                content: <P>Model One</P>,
                 value: '1',
+                key: 1,
             }, {
-                text: 'Model T',
+                content: <P>Model T</P>,
                 value: '2',
+                key: 2,
             }],
         };
     }

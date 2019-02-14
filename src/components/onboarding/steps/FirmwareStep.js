@@ -77,7 +77,7 @@ class FirmwareStep extends React.Component {
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     {
-                        this.state.progress === 0 && connectedDevice.firmware === 'outdated' && (
+                        connectedDevice && this.state.progress === 0 && connectedDevice.firmware === 'outdated' && (
                             <React.Fragment>
                                 <P>Device is shipped without firmware. Time to install it.</P>
                                 <ButtonText onClick={this.install}>Install</ButtonText>
@@ -96,7 +96,7 @@ class FirmwareStep extends React.Component {
                     }
 
                     {
-                        this.state.status === 'finished' && connectedDevice.firmware === 'valid'
+                        connectedDevice && this.state.status === 'finished' && connectedDevice.firmware === 'valid'
                         && (
                             <React.Fragment>
                                 <H1>

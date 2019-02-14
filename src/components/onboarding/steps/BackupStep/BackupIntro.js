@@ -13,6 +13,7 @@ import { UnorderedList } from 'components/lists';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../components/Wrapper';
+import BackupModelOne from './BackupModelOne';
 
 const BackupStepWrapper = styled.div`
     display: flex;
@@ -38,11 +39,13 @@ class BackupStep extends React.Component {
         super(props);
         this.state = {
             userUnderstands: false,
+            status: 'initial',
         };
     }
 
     render() {
         const { device } = this.props.state;
+        const { status } = this.state;
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
@@ -50,46 +53,56 @@ class BackupStep extends React.Component {
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     <BackupStepWrapper>
-                        <P>
-                            Owning cryptocurrencies means having a secret and not sharing it with anyone! Now your device will
-                            tell you the secret. This will happen only once. Write it down and keep it safe. Never tell anyone!
-                        </P>
-                        <UnorderedList items={[
-                            'Do not upload words on the internet.',
-                            'Hide them somewhere safe.',
-                            'Your device can be lost or stolen but seed means access to your money.',
-                        ]}
-                        />
+                        {
+                            status === 'initial' && (
+                                <React.Fragment>
+                                    <P>
+                                        Owning cryptocurrencies means having a secret and not sharing it with anyone! Now your device will
+                                        tell you the secret. This will happen only once. Write it down and keep it safe. Never tell anyone!
+                                    </P>
+                                    <UnorderedList items={[
+                                        'Do not upload words on the internet.',
+                                        'Hide them somewhere safe.',
+                                        'Your device can be lost or stolen but seed means access to your money.',
+                                    ]}
+                                    />
 
-                        <Panel>
-                            <P>
-                            Trezor cannot be held responsible for security liabilities or financial losses resulting from not following these security instructions
-                            </P>
-                        </Panel>
-                        {/* TODO: checkbox - take it from UI components */}
-                        <CheckboxWrapper>
-                            <Checkbox
-                                isChecked={this.state.userUnderstands}
-                                onClick={() => this.setState(prevState => ({ userUnderstands: !prevState.userUnderstands }))}
-                                // onClick={}
-                            />
-                            <P>I have read the instructions and agree</P>
-                        </CheckboxWrapper>
+                                    <Panel>
+                                        <P>
+                                            Trezor cannot be held responsible for security liabilities or financial losses resulting from not following these security instructions
+                                        </P>
+                                    </Panel>
+                                    <CheckboxWrapper>
+                                        <Checkbox
+                                            isChecked={this.state.userUnderstands}
+                                            onClick={() => this.setState(prevState => ({ userUnderstands: !prevState.userUnderstands }))}
+                                            // onClick={}
+                                        />
+                                        <P>I have read the instructions and agree</P>
+                                    </CheckboxWrapper>
 
-                        <ControlsWrapper>
-                            <ButtonText
-                                onClick={this.props.actions.nextStep}
-                                isDisabled={!this.props.state.device || !this.state.userUnderstands}
-                            >
-                            Start backup
-                            </ButtonText>
-                        </ControlsWrapper>
+                                    <ControlsWrapper>
+                                        <ButtonText
+                                            onClick={() => { this.setState({ status: 'started' }); }}
+                                            isDisabled={!this.props.state.device || !this.state.userUnderstands}
+                                        >
+                                            Start backup
+                                        </ButtonText>
+                                    </ControlsWrapper>
+                                </React.Fragment>
+                            )
+                        }
+
+                        {
+                            status === 'started' && <BackupModelOne state={this.props.state} actions={this.props.actions} />
+                        }
+
 
                     </BackupStepWrapper>
 
-                    <div style={{ color: 'pink' }}>
+                    {/* <div style={{ color: 'pink' }}>
                         device.features.needs_backup: { `${device.features.needs_backup}`}
-                    </div>
+                    </div> */}
 
                 </StepBodyWrapper>
             </StepWrapper>

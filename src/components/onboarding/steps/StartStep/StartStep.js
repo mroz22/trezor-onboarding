@@ -12,6 +12,20 @@ import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../components/Wrapper';
 
+const StartOption = () => (
+    <React.Fragment>
+        <P>Start from scratch</P>
+        <img src="src/components/onboarding/steps/StartStep/images/create-2.svg" />
+    </React.Fragment>
+);
+
+const RecoverOption = () => (
+    <React.Fragment>
+        <P>Recover</P>
+        <img src="src/components/onboarding/steps/StartStep/images/recover-2.svg" />
+    </React.Fragment>
+);
+
 class StartStep extends React.Component {
     constructor() {
         super();
@@ -19,17 +33,15 @@ class StartStep extends React.Component {
             status: 'initial',
             progress: 0,
             options: [{
-                text: 'Start from scratch',
+                content: <StartOption />,
                 value: 1, // todo
+                key: 1,
             }, {
-                text: 'Recover',
+                content: <RecoverOption />,
                 value: 2, // todo
+                key: 2,
             }],
         };
-    }
-
-    componentWillUnmount() {
-        this.props.actions.reorganizeSteps();
     }
 
     createNew = async () => {
@@ -50,8 +62,9 @@ class StartStep extends React.Component {
         let response;
         try {
             response = await this.props.actions.resetDevice();
+            console.log('response', response);
         } catch (err) {
-            console.warn('err', err);
+            console.warn('catch', err);
             // ?
         } finally {
             console.log('finally');
@@ -76,6 +89,7 @@ class StartStep extends React.Component {
                     }
                     if (this.state.status === 'finished') {
                         clearInterval(interval);
+                        this.props.actions.reorganizeSteps();
                     }
                 }, 20);
             }

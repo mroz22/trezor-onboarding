@@ -79,7 +79,7 @@ class BackupProgressModelOne extends React.Component {
                     }
 
                     {
-                        !this.state.checkingWords && status === 'started' && (
+                        !this.state.checkingWords && status === 'started' && this.state.nthWord > 0 && (
                             <Wrapper>
                                 Write down <br />
                                 <NthWord number={this.state.nthWord} /> <br />
