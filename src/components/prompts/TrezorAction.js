@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
+import { P } from 'trezor-ui-components';
 
 import colors from 'config/colors';
 
@@ -40,11 +41,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* width: 36px; */
-    /* height: 36px; */
 `;
 
-const TrezorAction = () => (
+const TrezorAction = ({ text }) => (
     <Wrapper>
 
         <TrezorImgWrapper>
@@ -67,15 +66,16 @@ const TrezorAction = () => (
                 </g>
             </svg>
         </TrezorImgWrapper>
-
-        <div> Complete action on your device
-
-        </div>
+        { text }
     </Wrapper>
 );
 
-// TrezorAction.propTypes = {
-//     visible: PropTypes.bool,
-// };
+TrezorAction.defaultProps = {
+    text: <P>Complete action on your device</P>,
+};
+
+TrezorAction.propTypes = {
+    text: PropTypes.object,
+};
 
 export default TrezorAction;

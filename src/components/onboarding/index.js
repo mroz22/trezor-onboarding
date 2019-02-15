@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flags } from 'trezor-flags';
 import { ButtonText, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 
 import ProgressSteps from 'components/progress-steps';
-import Reconnect from './components/Reconnect';
+import Reconnect from 'components/onboarding/Reconnect';
 
 const Wrapper = styled.div`
     display: grid;

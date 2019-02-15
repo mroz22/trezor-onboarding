@@ -6,3 +6,4 @@ export const PHISING_URL = 'https://blog.trezor.io/phishing-attacks-used-to-stea
 export const SOCIAL_TWITTER_URL = 'https://twitter.com/trezor';
 export const SOCIAL_BLOG_URL = 'https://blog.trezor.io/';
 export const SOCIAL_FACEBOOK_URL = 'https://www.facebook.com/BitcoinTrezor/';
+export const TREZOR_RESELLERS_URL = 'https://trezor.io/resellers/';

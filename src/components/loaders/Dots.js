@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Dots extends React.Component {
     constructor(props) {
@@ -39,6 +40,11 @@ class Dots extends React.Component {
 Dots.defaultProps = {
     maxCount: 3,
     speed: 1000,
+};
+
+Dots.propTypes = {
+    maxCount: PropTypes.number,
+    speed: PropTypes.number,
 };
 
 export default Dots;

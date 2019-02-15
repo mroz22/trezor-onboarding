@@ -4,26 +4,26 @@ import { hot } from 'react-hot-loader/root';
 import * as Connect from 'trezor-connect';
 
 import Onboarding from 'components/onboarding';
-import ErrorBoundary from 'components/onboarding/components/Error';
+import ErrorBoundary from 'components/Errors';
 import Device from 'utils/Device';
 
-import BackupStepIntro from 'components/onboarding/steps/BackupStep/BackupIntro';
-import BookmarkStep from 'components/onboarding/steps/BookmarkStep';
-import BridgeStep from 'components/onboarding/steps/BridgeStep';
-import FinalStep from 'components/onboarding/steps/FinalStep';
-import FirmwareStep from 'components/onboarding/steps/FirmwareStep';
-import HologramStep from 'components/onboarding/steps/HologramStep/HologramStep';
-import NewsletterStep from 'components/onboarding/steps/NewsletterStep';
-import SelectDeviceStep from 'components/onboarding/steps/SelectDeviceStep';
-import SetPinStep from 'components/onboarding/steps/Pin/SetPinStep';
-import StartStep from 'components/onboarding/steps/StartStep/index'; // i dont get this..
-import WelcomeStep from 'components/onboarding/steps/WelcomeStep';
-import NameStep from 'components/onboarding/steps/NameStep';
-import ConnectStep from 'components/onboarding/steps/ConnectStep';
+import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro';
+import BookmarkStep from 'components/onboarding/steps/Bookmark';
+import BridgeStep from 'components/onboarding/steps/Bridge';
+import FinalStep from 'components/onboarding/steps/Final';
+import FirmwareStep from 'components/onboarding/steps/Firmware';
+import HologramStep from 'components/onboarding/steps/Hologram';
+import NewsletterStep from 'components/onboarding/steps/Newsletter';
+import SelectDeviceStep from 'components/onboarding/steps/SelectDevice';
+import SetPinStep from 'components/onboarding/steps/Pin';
+import StartStep from 'components/onboarding/steps/Start';
+import WelcomeStep from 'components/onboarding/steps/Welcome';
+import NameStep from 'components/onboarding/steps/Name';
+import ConnectStep from 'components/onboarding/steps/Connect';
 
+// TODO; env
+// eslint-disable-next-line no-underscore-dangle
 window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
-
-console.log(Connect);
 
 const Wrapper = styled.div`
     display: flex;
@@ -166,7 +166,6 @@ class App extends React.Component {
             // initialize new wallet with default name and skip backup
             resetDevice: async () => {
                 try {
-                    // throw new Error('error');
                     const response = await this.state.Connect.default.resetDevice({
                         label: 'My Trezor',
                         skipBackup: true,
@@ -217,7 +216,6 @@ class App extends React.Component {
             firmwareErase: () => this.state.Connect.default.firmwareErase({ keepSession: true }),
             firmwareUpload: firmware => this.state.Connect.default.firmwareUpload(firmware),
             initConnect: async () => {
-                console.log('init');
                 await Connect.default.init({
                     transportReconnect: true,
                     debug: true,
