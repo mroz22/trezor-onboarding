@@ -6,7 +6,7 @@ import {
 
 import { PIN_MANUAL_URL } from 'config/urls';
 import { types } from 'config/types';
-import { TrezorAction } from 'components/prompts';
+import { TrezorAction } from 'components/Prompts';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../Wrapper';

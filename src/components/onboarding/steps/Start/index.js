@@ -4,8 +4,8 @@ import { types } from 'config/types';
 import { DONUT_RADIUS, DONUT_STROKE } from 'config/constants';
 import { TOS_URL } from 'config/urls';
 
-import { Donut } from 'components/loaders';
-import { TrezorAction } from 'components/prompts';
+import { Donut } from 'components/Loaders';
+import { TrezorAction } from 'components/Prompts';
 import { OptionsList } from 'components/Options';
 
 import {

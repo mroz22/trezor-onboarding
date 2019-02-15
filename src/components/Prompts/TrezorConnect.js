@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const TrezorConnect = ({ model }) => {
-    const path = 'src/components/prompts/videos';
+    const path = 'src/components/Prompts/videos';
     const models = new Map([
         ['1', 'trezor-click-1.mp4'],
         ['2', 'trezor-click-2.mp4'],

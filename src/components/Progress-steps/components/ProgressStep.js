@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import colors from 'config/colors';
-import { IconCheck } from 'components/icons';
+import { IconCheck } from 'components/Icons';
 
 import Line from './Line';
 

@@ -3,8 +3,8 @@ import { P, H1, H2 } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 
-import { TrezorConnect } from 'components/prompts';
-import { Dots } from 'components/loaders';
+import { TrezorConnect } from 'components/Prompts';
+import { Dots } from 'components/Loaders';
 import { UnorderedList } from 'components/Lists';
 import ButtonText from 'trezor-ui-components/lib/components/buttons/ButtonText';
 import {

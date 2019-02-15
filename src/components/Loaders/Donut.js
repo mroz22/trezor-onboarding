@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import colors from 'config/colors';
 
-import { IconCheck } from 'components/icons';
+import { IconCheck } from 'components/Icons';
 
 const DonutWrapper = styled.div`
     display: flex;

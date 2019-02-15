@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { H1, P } from 'trezor-ui-components';
 
 import { UnorderedList } from 'components/Lists';
-import { TrezorConnect } from 'components/prompts';
+import { TrezorConnect } from 'components/Prompts';
 
 const ReconnectWrapper = styled.div`
     display: flex;

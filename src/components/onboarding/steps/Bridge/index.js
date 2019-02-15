@@ -10,10 +10,8 @@ import colors from 'config/colors';
 import { FONT_SIZE, FONT_WEIGHT } from 'config/constants';
 import { types } from 'config/types';
 
-// import ICONS from 'config/icons';
-
 import { UnorderedList } from 'components/Lists';
-import { Dots } from 'components/loaders';
+import { Dots } from 'components/Loaders';
 
 import {
     StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,

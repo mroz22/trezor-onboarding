@@ -4,7 +4,7 @@ import { P, H1, ButtonText } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { DONUT_STROKE, DONUT_RADIUS } from 'config/constants';
 
-import { Donut } from 'components/loaders';
+import { Donut } from 'components/Loaders';
 
 import {
     StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,

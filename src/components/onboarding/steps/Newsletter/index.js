@@ -6,7 +6,7 @@ import {
 import { Flags } from 'trezor-flags';
 import { types } from 'config/types';
 import { SOCIAL_FACEBOOK_URL, SOCIAL_BLOG_URL, SOCIAL_TWITTER_URL } from 'config/urls';
-import { IconSocial } from 'components/icons';
+import { IconSocial } from 'components/Icons';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../Wrapper';

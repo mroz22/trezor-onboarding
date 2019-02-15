@@ -2,7 +2,7 @@ import React from 'react';
 import { H1, P, ButtonText } from 'trezor-ui-components';
 import { types } from 'config/types';
 
-import { TrezorAction } from 'components/prompts';
+import { TrezorAction } from 'components/Prompts';
 import NameForm from './Form';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,

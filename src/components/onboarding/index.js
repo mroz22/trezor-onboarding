@@ -4,7 +4,7 @@ import { ButtonText, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 
-import ProgressSteps from 'components/progress-steps';
+import ProgressSteps from 'components/Progress-steps';
 import Reconnect from 'components/onboarding/Reconnect';
 
 const Wrapper = styled.div`

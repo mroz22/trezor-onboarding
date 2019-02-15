@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
