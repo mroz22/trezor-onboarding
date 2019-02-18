@@ -8,6 +8,7 @@ import * as Connect from 'trezor-connect';
 import Onboarding from 'components/onboarding';
 import ErrorBoundary from 'components/Errors';
 import Device from 'utils/Device';
+import * as conditions from 'utils/conditions';
 
 import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro';
 import BookmarkStep from 'components/onboarding/steps/Bookmark';
@@ -25,7 +26,7 @@ import ConnectStep from 'components/onboarding/steps/Connect';
 
 // TODO; env
 // eslint-disable-next-line no-underscore-dangle
-window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/';
+window.__TREZOR_CONNECT_SRC = 'https://sisyfos.trezor.io/blyat/';
 
 const Wrapper = styled.div`
     display: flex;
@@ -62,94 +63,92 @@ class App extends React.Component {
                     component: WelcomeStep,
                     showProgressSteps: false,
                     showControls: false,
-                    needsDevice: false,
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Select device',
                     component: SelectDeviceStep,
                     dot: 'Select device',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: false,
                 }, {
                     name: 'Unboxing',
                     component: HologramStep,
                     dot: 'Unboxing',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: false,
                 }, {
                     name: 'Bridge',
                     component: BridgeStep,
                     dot: 'Connect device',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: false,
-                    nextDisabled: state => state.transport.actual.type !== 'bridge', // ?
                 }, {
                     name: 'Connect',
                     component: ConnectStep,
                     dot: 'Connect device',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: false,
-                    nextDisabled: state => !state.device || !state.device.isFresh(),
                 }, {
                     name: 'Firmware',
                     component: FirmwareStep,
                     dot: 'Firmware',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: false, // is handled internally by FirwmareStep component
-                    nextDisabled: state => !state.device || state.device.firmware !== 'valid',
+                    entryConditions: [conditions.DEVICE_IS_NOT_INITIALIZED],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Start',
                     component: StartStep,
-                    // error: StartStepError,
                     dot: 'Start',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_IS_NOT_INITIALIZED],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Backup',
                     component: BackupStepIntro,
                     dot: 'Security',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Pin',
                     component: SetPinStep,
                     dot: 'Security',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Name',
                     component: NameStep,
                     dot: 'Security',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Bookmark',
                     component: BookmarkStep,
                     dot: 'Security',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Newsletter',
                     component: NewsletterStep,
                     dot: 'Security',
                     showProgressSteps: true,
                     showControls: false,
-                    needsDevice: true,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
                 }, {
                     name: 'Final',
                     component: FinalStep,
                     showProgressSteps: false,
                     showControls: false,
-                    needsDevice: false,
                 }],
         };
         this.actions = {
@@ -171,6 +170,7 @@ class App extends React.Component {
                     const response = await this.state.Connect.default.resetDevice({
                         label: 'My Trezor',
                         skipBackup: true,
+                        passhpraseProtection: true,
                     });
                     console.log('response', response);
                     if (!response.success && response.payload.code !== 'Failure_ActionCancelled') {
@@ -188,9 +188,7 @@ class App extends React.Component {
             applyFlags: flags => this.state.Connect.default.applyFlags({
                 flags,
             }),
-            applySettings: ({ label }) => this.state.Connect.default.applySettings({
-                label,
-            }),
+            applySettings: ({ label }) => this.state.Connect.default.applySettings({ label }),
             startBackup: () => this.state.Connect.default.backupDevice(),
             changePin: () => {
                 const onDeviceEvent = (event) => {
@@ -207,14 +205,11 @@ class App extends React.Component {
                 };
                 this.state.Connect.default.on(this.state.Connect.DEVICE_EVENT, onDeviceEvent);
                 this.state.Connect.default.on(this.state.Connect.UI_EVENT, onUIEvent);
-
                 return this.state.Connect.default.changePin();
             },
             submitNewPin: (pin) => {
-                console.log(pin);
                 this.state.Connect.default.uiResponse({ type: this.state.Connect.UI.RECEIVE_PIN, payload: pin });
             },
-
             firmwareErase: () => this.state.Connect.default.firmwareErase({ keepSession: true }),
             firmwareUpload: firmware => this.state.Connect.default.firmwareUpload(firmware),
             initConnect: async () => {
@@ -275,6 +270,7 @@ class App extends React.Component {
                     console.log('UI_EVENT', event);
                 });
             },
+
             handleError: (error) => {
                 console.log('handling Error');
                 this.setState({ error });
@@ -291,7 +287,6 @@ class App extends React.Component {
                         }
                         return step;
                     });
-                    console.warn('newSteps', newSteps);
                     return { steps: newSteps };
                 });
             },

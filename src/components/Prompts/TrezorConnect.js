@@ -2,15 +2,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import t1video from 'components/Prompts/videos/trezor-click-1.mp4';
+import t2video from 'components/Prompts/videos/trezor-click-2.mp4';
+
 const TrezorConnect = ({ model }) => {
-    const path = 'src/components/Prompts/videos';
     const models = new Map([
-        ['1', 'trezor-click-1.mp4'],
-        ['2', 'trezor-click-2.mp4'],
+        ['1', t1video],
+        ['2', t2video],
     ]);
     return (
         <video height={240} autoPlay loop>
-            <source src={`${path}/${models.get(model)}`} type="video/mp4" />
+            <source src={models.get(model)} type="video/mp4" />
         </video>
     );
 };

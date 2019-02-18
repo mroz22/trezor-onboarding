@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Proptypes from 'prop-types';
 import { P } from 'trezor-ui-components';
+import BugImage from 'components/Errors/images/bug.png';
 
 const ErrorWrapper = styled.div`
     margin-top: auto;
@@ -14,7 +15,7 @@ const Attribution = styled.div`
 `;
 
 const Bug = styled.div`
-    background-image: url('src/components/Errors/images/bug.png');
+    background-image: url(${BugImage});
     background-color: transparent;
     background-size: contain;
     width: 200px;

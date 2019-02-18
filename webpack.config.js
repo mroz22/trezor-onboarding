@@ -32,7 +32,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|gif|jpg)$/,
+                test: /\.(png|gif|jpg|mp4|svg)$/,
                 loader: 'file-loader?name=./images/[name].[ext]',
                 query: {
                     outputPath: './images',

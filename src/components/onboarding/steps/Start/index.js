@@ -7,25 +7,26 @@ import { TOS_URL } from 'config/urls';
 import { Donut } from 'components/Loaders';
 import { TrezorAction } from 'components/Prompts';
 import { OptionsList } from 'components/Options';
-
 import {
     ButtonText, P, H1, Link,
 } from 'trezor-ui-components';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../Wrapper';
+import CreateImg from '../images/create-2.svg';
+import RecoverImg from '../images/recover-2.svg';
 
 const StartOption = () => (
     <React.Fragment>
         <P>Start from scratch</P>
-        <img src="src/components/onboarding/steps/Start/images/create-2.svg" alt="create new wallet" />
+        <img src={CreateImg} alt="create new wallet" />
     </React.Fragment>
 );
 
 const RecoverOption = () => (
     <React.Fragment>
         <P>Recover</P>
-        <img src="src/components/onboarding/steps/Start/images/recover-2.svg" alt="recover wallet from seed" />
+        <img src={RecoverImg} alt="recover wallet from seed" />
     </React.Fragment>
 );
 

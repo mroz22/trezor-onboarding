@@ -1,6 +1,14 @@
+let previousDeviceId = null;
+
 class Device {
     constructor(device) {
         Object.assign(this, device);
+        if (!previousDeviceId || previousDeviceId === device.features.device_id) {
+            this.isSameDevice = true;
+        } else {
+            this.isSameDevice = false;
+        }
+        previousDeviceId = device.features.device_id;
     }
 
     isFresh() {

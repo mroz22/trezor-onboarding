@@ -3,7 +3,7 @@ import React from 'react';
 import { types } from 'config/types';
 
 import { ButtonText, H1 } from 'trezor-ui-components';
-import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../components/Wrapper';
+import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../Wrapper';
 
 const WelcomeStep = ({ actions, state }) => (
     <StepWrapper>

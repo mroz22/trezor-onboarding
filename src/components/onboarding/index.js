@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ButtonText, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
-
+import * as conditions from 'utils/conditions';
 import ProgressSteps from 'components/Progress-steps';
 import Reconnect from 'components/onboarding/Reconnect';
 
@@ -46,15 +46,12 @@ class Onboarding extends React.Component {
     render() {
         const { activeStep, steps } = this.props.state;
 
-        const shouldDisplayReconnect = this.getCurrentStep().needsDevice && !this.props.state.device;
-        const shouldDisplayStepErr = !!this.props.state.error;
+        console.warn('this.getCurrentStep()', this.getCurrentStep());
+        const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
+        const shouldDisplayReconnect = false;
+        console.log(reconnectConditionsResults);
+        const Component = this.getCurrentStep().component;
 
-        let Component;
-        if (shouldDisplayStepErr) {
-            Component = this.getCurrentStep().error;
-        } else {
-            Component = this.getCurrentStep().component;
-        }
         return (
             <Wrapper>
                 <ProgressStepsWrapper>

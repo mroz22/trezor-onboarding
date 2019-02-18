@@ -7220,8 +7220,10 @@ trezor-connect@../connect/npm:
     events "^1.1.1"
     whatwg-fetch "^2.0.4"
 
-trezor-flags@../trezor-flags:
+trezor-flags@^1.0.2:
   version "1.0.2"
+  resolved "https://registry.yarnpkg.com/trezor-flags/-/trezor-flags-1.0.2.tgz#594c6a52b91967dd1f0fc9fbd45711e99cd74198"
+  integrity sha512-eWMwDsxeHgh5+LW4RSViXYefkWi0UKsG8PpBeRqkaipwqQ17edj1TEKC0T75tvDcoKI66JhlO/nwabW0w5ajbw==
 
 "trezor-ui-components@file:../trezor-ui-components/npm":
   version "1.0.0"

@@ -1,6 +1,6 @@
 import React from 'react';
-import { P, Link } from 'trezor-ui-components';
-import { UnorderedList } from 'components/lists';
+import { P } from 'trezor-ui-components';
+import { UnorderedList } from 'components/Lists';
 
 const instructions = [{
     component: <P>Some other window or application is communicatig with your device</P>,
@@ -22,7 +22,7 @@ const StartStepError = ({ state }) => {
                 This might happen due to number of reasons:
                 </div>
 
-                <UnorderedList items={instructions}/>
+                <UnorderedList items={instructions} />
 
                 <div>Please try again. If the problem persists, contact our support.</div>
             </React.Fragment>
