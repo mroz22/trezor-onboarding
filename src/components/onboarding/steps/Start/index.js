@@ -13,8 +13,8 @@ import {
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../Wrapper';
-import CreateImg from '../images/create-2.svg';
-import RecoverImg from '../images/recover-2.svg';
+import CreateImg from './images/create-2.svg';
+import RecoverImg from './images/recover-2.svg';
 
 const StartOption = () => (
     <React.Fragment>
