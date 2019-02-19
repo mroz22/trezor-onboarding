@@ -8,7 +8,7 @@ import { Donut } from 'components/Loaders';
 import { TrezorAction } from 'components/Prompts';
 import { OptionsList } from 'components/Options';
 import {
-    ButtonText, P, H1, Link,
+    Button, P, H1, Link,
 } from 'trezor-ui-components';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
@@ -151,9 +151,9 @@ class StartStep extends React.Component {
                                         onSelect={() => { this.createNew(); }}
                                     />
                                     {/* <P>Are you new to crypto or have not used Trezor before? </P>
-                                    <ButtonText onClick={this.createNew}>Create new wallet</ButtonText>
+                                    <Button onClick={this.createNew}>Create new wallet</Button>
                                     <P>Do you have recovery seed? You might use it to recovery your wallet</P>
-                                    <ButtonText onClick={this.createNew}>Recover wallet</ButtonText> */}
+                                    <Button onClick={this.createNew}>Recover wallet</Button> */}
                                 </React.Fragment>
                             )
                     }
@@ -168,11 +168,11 @@ class StartStep extends React.Component {
                                 <React.Fragment>
                                     <P>Good job, your wallet is ready. But we strongly recommend you to spend few more minutes and improve your security</P>
                                     <ControlsWrapper>
-                                        <ButtonText onClick={this.props.actions.nextStep}>
+                                        <Button onClick={this.props.actions.nextStep}>
                                         Take me to security <br />
                                         (5 minutes)
-                                        </ButtonText>
-                                        <ButtonText isWhite>Skip for now</ButtonText>
+                                        </Button>
+                                        <Button isWhite>Skip for now</Button>
                                     </ControlsWrapper>
                                 </React.Fragment>
                             )

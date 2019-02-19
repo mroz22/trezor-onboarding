@@ -1,5 +1,5 @@
 import React from 'react';
-import { H1, P, ButtonText } from 'trezor-ui-components';
+import { H1, P, Button } from 'trezor-ui-components';
 import { types } from 'config/types';
 
 import { TrezorAction } from 'components/Prompts';
@@ -68,7 +68,7 @@ class NameStep extends React.Component {
                             <React.Fragment>
                                 <H1>Excellent, your device has a custom name now. It will be visible on your device display from now on.</H1>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                                    <Button onClick={this.props.actions.nextStep}>Continue</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

@@ -1,3 +1,7 @@
+/*
+TODO: NOT USED NOW
+*/
+
 import React from 'react';
 import styled from 'styled-components';
 

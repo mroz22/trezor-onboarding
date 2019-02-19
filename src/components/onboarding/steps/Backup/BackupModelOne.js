@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { H1, ButtonText } from 'trezor-ui-components';
+import { H1, Button } from 'trezor-ui-components';
 import { types } from 'config/types';
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
@@ -61,7 +61,7 @@ class BackupProgressModelOne extends React.Component {
                                 Now your device is going to show you 24 words to backup your wallet. Write them down.
                                 </H1>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.startBackup}>Okey</ButtonText>
+                                    <Button onClick={this.startBackup}>Okey</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
 
@@ -95,7 +95,7 @@ class BackupProgressModelOne extends React.Component {
                                 Backup is now on your recovery seed card. Once again dont lose it and keep it private!
                                 </H1>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.props.actions.nextStep}>My recovery card is safe</ButtonText>
+                                    <Button onClick={this.props.actions.nextStep}>My recovery card is safe</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

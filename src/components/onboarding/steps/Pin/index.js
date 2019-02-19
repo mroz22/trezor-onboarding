@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    P, H1, Pin, ButtonText, Link,
+    P, H1, Pin, Button, Link,
 } from 'trezor-ui-components';
 
 import { PIN_MANUAL_URL } from 'config/urls';
@@ -86,9 +86,9 @@ class SetPinStep extends React.Component {
                             <React.Fragment>
                                 <P>Protect device from unauthorized access by using a strong pin.</P>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={() => { this.changePin(); }}>
+                                    <Button onClick={() => { this.changePin(); }}>
                                     Set pin
-                                    </ButtonText>
+                                    </Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )
@@ -133,7 +133,7 @@ class SetPinStep extends React.Component {
                             Good. You entered a new pin. But to make sure you did not make mistake, please enter it again. Look
                             at your device now, numbers are now different.
                                 </P>
-                                <ButtonText onClick={() => this.setState({ status: 'repeatPin' })}>I understand</ButtonText>
+                                <Button onClick={() => this.setState({ status: 'repeatPin' })}>I understand</Button>
                             </React.Fragment>
                         )
                     }
@@ -162,7 +162,7 @@ class SetPinStep extends React.Component {
                         this.state.status === 'repeatPinEntered' && (
                             <React.Fragment>
                                 <P>Purfect! Your device is now secured by pin.</P>
-                                <ButtonText onClick={() => this.props.actions.nextStep()}>Continue</ButtonText>
+                                <Button onClick={() => this.props.actions.nextStep()}>Continue</Button>
                             </React.Fragment>
                         )
                     }
@@ -175,7 +175,7 @@ class SetPinStep extends React.Component {
                                 Are you confused, how PIN works? You can always refer to our
                                 </P>
                                 <Link href={PIN_MANUAL_URL}>documentation</Link>
-                                <ButtonText onClick={() => { this.changePin(); }}>Start again</ButtonText>
+                                <Button onClick={() => { this.changePin(); }}>Start again</Button>
                             </React.Fragment>
                         )
                     }

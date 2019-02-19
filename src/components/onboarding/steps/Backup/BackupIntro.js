@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    H1, P, ButtonText, Checkbox,
+    H1, P, Button, Checkbox,
 } from 'trezor-ui-components';
 
 import colors from 'config/colors';
@@ -85,12 +85,12 @@ class BackupStep extends React.Component {
                                     </CheckboxWrapper>
 
                                     <ControlsWrapper>
-                                        <ButtonText
+                                        <Button
                                             onClick={() => { this.setState({ status: 'started' }); }}
                                             isDisabled={!this.props.state.device || !this.state.userUnderstands}
                                         >
                                             Start backup
-                                        </ButtonText>
+                                        </Button>
                                     </ControlsWrapper>
                                 </React.Fragment>
                             )

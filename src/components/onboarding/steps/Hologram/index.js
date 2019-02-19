@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    H1, ButtonText, P, Link,
+    H1, Button, P, Link,
 } from 'trezor-ui-components';
 
 import { TREZOR_RESELLERS_URL, SUPPORT_URL } from 'config/urls';
@@ -32,10 +32,10 @@ class HologramStep extends React.Component {
                                 <Hologram model={this.props.state.selectedModel} />
 
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.props.actions.nextStep}>My hologram is OK</ButtonText>
-                                    <ButtonText onClick={() => this.setState({ status: 'hologram-different' })} isWhite>
+                                    <Button onClick={this.props.actions.nextStep}>My hologram is OK</Button>
+                                    <Button onClick={() => this.setState({ status: 'hologram-different' })} isWhite>
                                         My hologram looks different
-                                    </ButtonText>
+                                    </Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )
@@ -48,9 +48,9 @@ class HologramStep extends React.Component {
                                 If no, device you are holding in hands might be a counterfeit. Please <Link href={SUPPORT_URL}>contact our support</Link>
                                 </P>
                                 <ControlsWrapper>
-                                    <ButtonText isWhite onClick={() => this.setState({ status: 'initial' })}>Back</ButtonText>
+                                    <Button isWhite onClick={() => this.setState({ status: 'initial' })}>Back</Button>
                                     <Link href={SUPPORT_URL}>
-                                        <ButtonText>Contact support</ButtonText>
+                                        <Button>Contact support</Button>
                                     </Link>
                                 </ControlsWrapper>
                             </React.Fragment>

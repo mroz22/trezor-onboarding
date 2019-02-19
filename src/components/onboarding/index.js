@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonText, P, Link } from 'trezor-ui-components';
+import { Button, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 import * as conditions from 'utils/conditions';
@@ -72,12 +72,12 @@ class Onboarding extends React.Component {
                         (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
                     && (
                         <React.Fragment>
-                            <ButtonText onClick={this.props.actions.previousStep}>Back</ButtonText>
+                            <Button onClick={this.props.actions.previousStep}>Back</Button>
 
                             <P>
                             Dont know what to do? <Link href={USER_MANUAL_URL}> Read user manual</Link>
                             </P>
-                            <ButtonText
+                            <Button
                                 onClick={
                                     () => {
                                         if (this.getCurrentStep().onNextFn) {
@@ -89,7 +89,7 @@ class Onboarding extends React.Component {
                                 isDisabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
                             >
                                 Continue
-                            </ButtonText>
+                            </Button>
                         </React.Fragment>
                     )
                     }

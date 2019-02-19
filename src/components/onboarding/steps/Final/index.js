@@ -1,5 +1,5 @@
 import React from 'react';
-import { H1, ButtonText } from 'trezor-ui-components';
+import { H1, Button } from 'trezor-ui-components';
 
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../Wrapper';
 
@@ -10,7 +10,7 @@ const FinalStep = () => (
         </StepHeadingWrapper>
         <StepBodyWrapper>
             <H1>Now you are as secure, as a regular bank.</H1>
-            <ButtonText>Continue to wallet</ButtonText>
+            <Button>Continue to wallet</Button>
         </StepBodyWrapper>
     </StepWrapper>
 );

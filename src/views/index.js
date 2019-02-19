@@ -215,7 +215,7 @@ class App extends React.Component {
             initConnect: async () => {
                 await Connect.default.init({
                     transportReconnect: true,
-                    debug: false,
+                    debug: true,
                     popup: false,
                     webusb: false,
                 });

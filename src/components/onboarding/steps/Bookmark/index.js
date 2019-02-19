@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flags } from 'trezor-flags';
 import {
-    H1, P, Link, ButtonText,
+    H1, P, Link, Button,
 } from 'trezor-ui-components';
 import { PHISING_URL } from 'config/urls';
 import { types } from 'config/types';
@@ -25,7 +25,7 @@ class BookmarkStep extends React.Component {
                     Protect yourself against <Link isGreen href={PHISING_URL}>phishing attacks</Link>.
                     Bookmark Trezor Wallet (wallet.trezor.io) to avoid visiting fake sites. Use the keyboard shortcut Ctrl / ⌘ + D
                     </P>
-                    <ButtonText onClick={() => this.setBookmarkFlagAndContinue()}>Continue</ButtonText>
+                    <Button onClick={() => this.setBookmarkFlagAndContinue()}>Continue</Button>
                 </StepBodyWrapper>
             </StepWrapper>
         );

@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import {
-    Select, Link, H1, ButtonText, P,
+    Select, Link, H1, Button, P,
 } from 'trezor-ui-components';
 
 import colors from 'config/colors';
@@ -41,7 +41,7 @@ const Download = styled.div`
     justify-content: center;
 `;
 
-const DownloadBridgeButton = styled(ButtonText)`
+const DownloadBridgeButton = styled(Button)`
     padding-top: 5px;
     padding-bottom: 5px;
     display: flex;
@@ -139,11 +139,6 @@ class InstallBridge extends PureComponent {
                                     />
                                     <Link href={`${uri}${target.value}`}>
                                         <DownloadBridgeButton onClick={() => this.setState({ status: 'downloading' })}>
-                                            {/* <Icon
-                                            icon={ICONS.DOWNLOAD}
-                                            color={colors.WHITE}
-                                            size={30}
-                                            /> */}
                                             Download
                                         </DownloadBridgeButton>
                                     </Link>
@@ -169,7 +164,7 @@ class InstallBridge extends PureComponent {
                             <React.Fragment>
                                 <H1>Trezor bridge was successfully installed</H1>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                                    <Button onClick={this.props.actions.nextStep}>Continue</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

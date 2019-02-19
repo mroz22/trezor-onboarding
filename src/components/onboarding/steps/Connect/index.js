@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactTimeout from 'react-timeout';
-import { P, H1, H2 } from 'trezor-ui-components';
+import {
+    P, H1, H2, Button,
+} from 'trezor-ui-components';
 
 import { types } from 'config/types';
 
 import { TrezorConnect } from 'components/Prompts';
 import { Dots } from 'components/Loaders';
 import { UnorderedList } from 'components/Lists';
-import ButtonText from 'trezor-ui-components/lib/components/buttons/ButtonText';
 import {
     StepWrapper, StepHeadingWrapper, StepBodyWrapper, ControlsWrapper,
 } from '../../Wrapper';
@@ -21,14 +22,7 @@ class ConnectStep extends React.Component {
         };
     }
 
-    // TODO: timeouty jsou ted dodrbane
-
     componentDidMount() {
-        this.props.setTimeout(() => {
-            console.warn('initial timeout fired');
-            this.searchForDevice();
-        }, 5000);
-
         this.props.state.Connect.default.on(this.props.state.Connect.DEVICE_EVENT, this.onDeviceEvent);
     }
 
@@ -37,11 +31,22 @@ class ConnectStep extends React.Component {
     }
 
     onDeviceEvent = (event) => {
+        console.warn('event', event);
         if (event.type === 'device-disconnect' && this.state.status !== 'connect') {
-            console.warn('clearTimeout in onDevicedisconnect');
-            clearTimeout(this.searchForDeviceTimeout);
-            clearTimeout(this.searchingTooLongTimeout);
-            this.searchForDevice();
+            // console.warn('clearTimeout in onDevicedisconnect');
+            // clearTimeout(this.searchForDeviceTimeout);
+            // clearTimeout(this.searchingTooLongTimeout);
+            // this.searchForDevice();
+            this.setState({ status: 'initial' });
+        } else if (event.type === 'device-connected') {
+            console.warn('event device connected');
+            if (this.props.state.device) {
+                console.warn('went through if');
+                return this.setState({
+                    status: 'found',
+                    searchingTooLong: false,
+                });
+            }
         }
     };
 
@@ -53,18 +58,6 @@ class ConnectStep extends React.Component {
             console.warn('timeoutFired');
             this.setState({ searchingTooLong: true });
         }, 1000 * 15);
-
-        this.props.setTimeout(() => {
-            console.warn('too long timeout fired');
-            if (this.props.state.device) {
-                console.warn('clearTimeoutOnDeviceFound');
-                return this.setState({
-                    status: 'found',
-                    searchingTooLong: false,
-                });
-            }
-            return this.searchForDevice();
-        }, 200);
     }
 
     render() {
@@ -77,7 +70,12 @@ class ConnectStep extends React.Component {
                     <TrezorConnect model={this.props.state.selectedModel} />
 
                     {
-                        this.state.status === 'connect' && <P>Make sure its well connected to avoid communication failures</P>
+                        this.state.status === 'connect' && (
+                            <React.Fragment>
+                                <P>Make sure its well connected to avoid communication failures</P>
+                                <Button onClick={() => this.searchForDevice()}>Ok, it is connected well</Button>
+                            </React.Fragment>
+                        )
                     }
 
                     {
@@ -122,12 +120,12 @@ class ConnectStep extends React.Component {
                                     this.props.state.device.isFresh() && (
                                         <React.Fragment>
                                             <ControlsWrapper>
-                                                <ButtonText
+                                                <Button
                                                     onClick={this.props.actions.nextStep}
                                                     isDisabled={this.props.state.device.mode === 'bootloader'}
                                                 >
                                                 Continue
-                                                </ButtonText>
+                                                </Button>
                                             </ControlsWrapper>
                                             { this.props.state.device.mode === 'bootloader' && 'Device is in bootloader mode, reconnect it to continue'}
                                         </React.Fragment>

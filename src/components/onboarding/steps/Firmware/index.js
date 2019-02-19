@@ -1,5 +1,5 @@
 import React from 'react';
-import { P, H1, ButtonText } from 'trezor-ui-components';
+import { P, H1, Button } from 'trezor-ui-components';
 
 import { types } from 'config/types';
 import { DONUT_STROKE, DONUT_RADIUS } from 'config/constants';
@@ -80,7 +80,7 @@ class FirmwareStep extends React.Component {
                         connectedDevice && this.state.progress === 0 && connectedDevice.firmware === 'outdated' && (
                             <React.Fragment>
                                 <P>Device is shipped without firmware. Time to install it.</P>
-                                <ButtonText onClick={this.install}>Install</ButtonText>
+                                <Button onClick={this.install}>Install</Button>
                             </React.Fragment>
                         )
                     }
@@ -103,7 +103,7 @@ class FirmwareStep extends React.Component {
                                     Perfect. The newest firwmare is installed. Time to continue
                                 </H1>
                                 <ControlsWrapper>
-                                    <ButtonText onClick={this.props.actions.nextStep}>Continue</ButtonText>
+                                    <Button onClick={this.props.actions.nextStep}>Continue</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

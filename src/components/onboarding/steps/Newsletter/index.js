@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    H1, P, ButtonText, Link,
+    H1, P, Button, Link,
 } from 'trezor-ui-components';
 import { Flags } from 'trezor-flags';
 import { types } from 'config/types';
@@ -48,7 +48,7 @@ class NewsleterStep extends React.Component {
                         </Link>
                     </SocialWrapper>
                     <ControlsWrapper>
-                        <ButtonText onClick={() => this.applyHasEmailFlagAndContinue()}>Continue</ButtonText>
+                        <Button onClick={() => this.applyHasEmailFlagAndContinue()}>Continue</Button>
                     </ControlsWrapper>
                 </StepBodyWrapper>
             </StepWrapper>
