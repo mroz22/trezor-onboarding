@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactSVG from 'react-svg';
 
 import { types } from 'config/types';
 import { DONUT_RADIUS, DONUT_STROKE } from 'config/constants';
@@ -19,14 +20,14 @@ import RecoverImg from './images/recover-2.svg';
 const StartOption = () => (
     <React.Fragment>
         <P>Start from scratch</P>
-        <img src={CreateImg} alt="create new wallet" />
+        <ReactSVG svgStyle={{ width: '100%' }} src={CreateImg} alt="create new wallet" />
     </React.Fragment>
 );
 
 const RecoverOption = () => (
     <React.Fragment>
         <P>Recover</P>
-        <img src={RecoverImg} alt="recover wallet from seed" />
+        <ReactSVG svgStyle={{ width: '100%' }} src={RecoverImg} alt="recover wallet from seed" />
     </React.Fragment>
 );
 

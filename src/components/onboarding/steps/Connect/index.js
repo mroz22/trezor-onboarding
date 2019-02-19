@@ -5,7 +5,6 @@ import {
 } from 'trezor-ui-components';
 
 import { types } from 'config/types';
-
 import { TrezorConnect } from 'components/Prompts';
 import { Dots } from 'components/Loaders';
 import { UnorderedList } from 'components/Lists';
@@ -24,6 +23,9 @@ class ConnectStep extends React.Component {
 
     componentDidMount() {
         this.props.state.Connect.default.on(this.props.state.Connect.DEVICE_EVENT, this.onDeviceEvent);
+        this.props.setTimeout(() => {
+            this.searchForDevice();
+        }, 5000);
     }
 
     componentWillUnmount() {
@@ -33,15 +35,13 @@ class ConnectStep extends React.Component {
     onDeviceEvent = (event) => {
         console.warn('event', event);
         if (event.type === 'device-disconnect' && this.state.status !== 'connect') {
-            // console.warn('clearTimeout in onDevicedisconnect');
-            // clearTimeout(this.searchForDeviceTimeout);
-            // clearTimeout(this.searchingTooLongTimeout);
-            // this.searchForDevice();
-            this.setState({ status: 'initial' });
-        } else if (event.type === 'device-connected') {
-            console.warn('event device connected');
+            this.setState({ status: 'searching', searchingTooLong: false });
+            this.props.setTimeout(() => {
+                this.searchForDevice();
+            }, 1000);
+        } else if (event.type === 'device-connect' || event.type === 'device-changed') {
+            // todo: hmm is this 'if' needed?
             if (this.props.state.device) {
-                console.warn('went through if');
                 return this.setState({
                     status: 'found',
                     searchingTooLong: false,
@@ -51,13 +51,19 @@ class ConnectStep extends React.Component {
     };
 
     searchForDevice() {
-        this.setState({
-            status: 'searching',
-        });
+        if (this.props.state.device) {
+            return this.setState({
+                status: 'found',
+                searchingTooLong: false,
+            });
+        }
         this.props.setTimeout(() => {
-            console.warn('timeoutFired');
             this.setState({ searchingTooLong: true });
         }, 1000 * 15);
+
+        return this.setState({
+            status: 'searching',
+        });
     }
 
     render() {
@@ -73,7 +79,6 @@ class ConnectStep extends React.Component {
                         this.state.status === 'connect' && (
                             <React.Fragment>
                                 <P>Make sure its well connected to avoid communication failures</P>
-                                <Button onClick={() => this.searchForDevice()}>Ok, it is connected well</Button>
                             </React.Fragment>
                         )
                     }
@@ -110,7 +115,6 @@ class ConnectStep extends React.Component {
                             </React.Fragment>
                         )
                     }
-
 
                     {
                         this.state.status === 'found' && this.props.state.device && (
