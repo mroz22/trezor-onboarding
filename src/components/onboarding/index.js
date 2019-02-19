@@ -5,7 +5,7 @@ import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
 import * as conditions from 'utils/conditions';
 import ProgressSteps from 'components/Progress-steps';
-import Reconnect from 'components/onboarding/Reconnect';
+import UnexpectedState from 'components/onboarding/UnexpectedState';
 
 const Wrapper = styled.div`
     display: grid;
@@ -45,11 +45,9 @@ class Onboarding extends React.Component {
 
     render() {
         const { activeStep, steps } = this.props.state;
-
-        console.warn('this.getCurrentStep()', this.getCurrentStep());
         const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
-        const shouldDisplayReconnect = false;
-        console.log(reconnectConditionsResults);
+        const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
+
         const Component = this.getCurrentStep().component;
 
         return (
@@ -63,8 +61,8 @@ class Onboarding extends React.Component {
 
                 <ComponentWrapper>
                     {
-                        shouldDisplayReconnect
-                            ? <Reconnect model={this.props.state.selectedModel} />
+                        unmetConditions.length
+                            ? <UnexpectedState caseType={unmetConditions[0].condition} model={this.props.state.selectedModel || '1'} />
                             : <Component state={this.props.state} actions={this.props.actions} />
                     }
                 </ComponentWrapper>

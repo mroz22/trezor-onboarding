@@ -7,7 +7,7 @@ import * as Connect from 'trezor-connect';
 
 import Onboarding from 'components/onboarding';
 import ErrorBoundary from 'components/Errors';
-import Device from 'utils/Device';
+import DeviceManager from 'utils/Device';
 import * as conditions from 'utils/conditions';
 
 import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro';
@@ -215,7 +215,7 @@ class App extends React.Component {
             initConnect: async () => {
                 await Connect.default.init({
                     transportReconnect: true,
-                    debug: true,
+                    debug: false,
                     popup: false,
                     webusb: false,
                 });
@@ -254,12 +254,15 @@ class App extends React.Component {
                 });
 
                 const onDeviceEvent = (event) => {
-                    console.log('DEVICE_EVENT', event);
+                    console.warn('DEVICE_EVENT', event);
                     if (event.type === 'device-connected' || event.type === 'device-changed') {
-                        this.setState({ device: new Device(event.payload) });
+                        if (event.payload.type === 'unacquired') {
+                            return; // skip unacquired;
+                        }
+                        this.setState({ device: DeviceManager.createDevice(event.payload) });
                     // not sure about this
                     } else if (event.type === 'button') {
-                        this.setState({ device: new Device(event.payload.device) });
+                        this.setState({ device: DeviceManager.createDevice(event.payload.device) });
                     } else if (event.type === 'device-disconnect') {
                         this.setState({ device: null });
                     }

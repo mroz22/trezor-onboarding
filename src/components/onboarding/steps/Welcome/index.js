@@ -11,7 +11,11 @@ const WelcomeStep = ({ actions, state }) => (
             <H1>Thank you for choosing Trezor</H1>
         </StepHeadingWrapper>
         <StepBodyWrapper>
-            <ButtonText isDisabled={state.transport.error === null} onClick={actions.nextStep}>Get started (5 minutes)</ButtonText>
+            {
+                state.transport.error === false && (
+                    <ButtonText onClick={actions.nextStep}>Get started (5 minutes)</ButtonText>
+                )
+            }
         </StepBodyWrapper>
     </StepWrapper>
 );

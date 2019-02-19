@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTimeout from 'react-timeout';
 import { P, H1, H2 } from 'trezor-ui-components';
 
 import { types } from 'config/types';
@@ -20,8 +21,11 @@ class ConnectStep extends React.Component {
         };
     }
 
+    // TODO: timeouty jsou ted dodrbane
+
     componentDidMount() {
-        setTimeout(() => {
+        this.props.setTimeout(() => {
+            console.warn('initial timeout fired');
             this.searchForDevice();
         }, 5000);
 
@@ -30,20 +34,13 @@ class ConnectStep extends React.Component {
 
     componentWillUnmount() {
         this.props.state.Connect.default.off(this.props.state.Connect.DEVICE_EVENT, this.onDeviceEvent);
-        clearTimeout(this.searchForDeviceTimeout);
-        clearTimeout(this.searchingTooLongTimeout);
     }
 
     onDeviceEvent = (event) => {
-        if (event.type === 'device-connected') {
-            this.setState({
-                status: 'found',
-                searchingTooLong: false,
-            });
-
+        if (event.type === 'device-disconnect' && this.state.status !== 'connect') {
+            console.warn('clearTimeout in onDevicedisconnect');
             clearTimeout(this.searchForDeviceTimeout);
             clearTimeout(this.searchingTooLongTimeout);
-        } else if (event.type === 'device-disconnect' && this.state.status !== 'connect') {
             this.searchForDevice();
         }
     };
@@ -52,13 +49,15 @@ class ConnectStep extends React.Component {
         this.setState({
             status: 'searching',
         });
-        this.searchingTooLongTimeout = setTimeout(() => {
+        this.props.setTimeout(() => {
+            console.warn('timeoutFired');
             this.setState({ searchingTooLong: true });
         }, 1000 * 15);
 
-        this.searchForDeviceTimeout = setTimeout(() => {
+        this.props.setTimeout(() => {
+            console.warn('too long timeout fired');
             if (this.props.state.device) {
-                clearTimeout(this.searchForDeviceTimeout);
+                console.warn('clearTimeoutOnDeviceFound');
                 return this.setState({
                     status: 'found',
                     searchingTooLong: false,
@@ -157,4 +156,4 @@ class ConnectStep extends React.Component {
 
 ConnectStep.propTypes = types;
 
-export default ConnectStep;
+export default ReactTimeout(ConnectStep);

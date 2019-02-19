@@ -15,10 +15,11 @@ export const deviceHasBackup = state => state.device && state.device.needsBackup
 export const IS_SAME_DEVICE = 'is-same-device';
 export const DEVICE_IS_NOT_INITIALIZED = 'device-is-not-initialized';
 export const DEVICE_HAS_BACKUP = 'device-has-backup';
+export const DEVICE_IS_CONNECTED = 'device-is-connected'; // kokotina?
 
 export const resolve = (state, conditions) => {
     if (!conditions) {
-        return null;
+        return [];
     }
     const results = conditions.map((condition) => {
         let checkFn;
@@ -32,6 +33,9 @@ export const resolve = (state, conditions) => {
             case DEVICE_HAS_BACKUP:
                 checkFn = deviceHasBackup;
                 break;
+            case DEVICE_IS_CONNECTED:
+                checkFn = deviceIsConnected;
+                break;
             default:
                 throw new Error(`Wrong condition passed: ${condition}`);
         }
@@ -42,3 +46,5 @@ export const resolve = (state, conditions) => {
     });
     return results;
 };
+
+export const filterUnmet = conditions => conditions.filter(condition => condition.result === false);
