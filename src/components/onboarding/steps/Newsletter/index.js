@@ -68,12 +68,12 @@ class NewsleterStep extends React.Component {
                 console.warn('response', response);
                 this.setState({ status: 'social' });
                 this.setState({ emailSendStatus: 'success' });
-
+                // todo: handle success msg from response;
                 await this.applyHasEmailFlag();
             } catch (err) {
                 console.warn('err', err);
                 this.setState({ emailSendStatus: 'error' });
-                // todo: tudu tudu
+                // todo: tudu Ctudu
                 // todo: handle email error
                 // todo: handle setFlag Error;
             }

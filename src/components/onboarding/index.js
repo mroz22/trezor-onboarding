@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { applyMiddleware, compose, createStore } from 'redux';
-import { Button, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import * as conditions from 'utils/conditions';
+
+import { ID } from 'constants/steps';
+
 import ProgressSteps from 'components/Progress-steps';
 import UnexpectedState from 'components/onboarding/UnexpectedState';
+
+import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro'; // todo: path convention
+import BookmarkStep from 'components/onboarding/steps/Bookmark';
+import BridgeStep from 'components/onboarding/steps/Bridge';
+import FinalStep from 'components/onboarding/steps/Final';
+import FirmwareStep from 'components/onboarding/steps/Firmware';
+import HologramStep from 'components/onboarding/steps/Hologram';
+import NewsletterStep from 'components/onboarding/steps/Newsletter';
+import SelectDeviceStep from 'components/onboarding/steps/SelectDevice';
+import SetPinStep from 'components/onboarding/steps/Pin';
+import StartStep from 'components/onboarding/steps/Start';
+import WelcomeStep from 'components/onboarding/steps/Welcome';
+import NameStep from 'components/onboarding/steps/Name';
+import ConnectStep from 'components/onboarding/steps/Connect';
 
 const Wrapper = styled.div`
     display: grid;
@@ -26,26 +41,18 @@ const ComponentWrapper = styled.div`
     flex-direction: column;
 `;
 
-const ControlsWrapper = styled.div`
-    grid-area: controls;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0px 50px 50px 50px;
-`;
-
 class Onboarding extends Component {
     static propTypes = {
         state: types.state,
-        actions: types.actions,
     };
 
     getCurrentStep = () => this.props.state.steps[this.props.state.activeStep]
 
     render() {
-        const { activeStep, steps } = this.props.state;
+        const { activeStep } = this.props;
+        const { steps } = this.props.state;
         console.log('this.props', this.props);
-        this.props.onboardingActions.goToNextStep('dssfd');
+        // this.props.onboardingActions.goToNextStep('dssfd');
         // const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
         // const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
 
@@ -53,42 +60,17 @@ class Onboarding extends Component {
 
         return (
             <Wrapper>
-                {console.log('props', this.props)}
                 <ProgressStepsWrapper>
-                    {
+                    {/* {
                         this.getCurrentStep().showProgressSteps
                         && <ProgressSteps steps={[...new Set(steps.filter(s => s.dot).map(s => s.dot))]} activeStep={steps[activeStep]} dot={steps[activeStep].dot} />
-                    }
+                    } */}
                 </ProgressStepsWrapper>
 
-                <ControlsWrapper>
+                <ComponentWrapper>
+                    {activeStep === ID.WELCOME_STEP && <WelcomeStep />}
+                </ComponentWrapper>
 
-                    {
-                        (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
-                    && (
-                        <React.Fragment>
-                            <Button onClick={this.props.actions.previousStep}>Back</Button>
-
-                            <P>
-                            Dont know what to do? <Link href={USER_MANUAL_URL}> Read user manual</Link>
-                            </P>
-                            <Button
-                                onClick={
-                                    () => {
-                                        if (this.getCurrentStep().onNextFn) {
-                                            this.getCurrentStep().onNextFn();
-                                        }
-                                        this.props.actions.nextStep();
-                                    }
-                                }
-                                isDisabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
-                            >
-                                Continue
-                            </Button>
-                        </React.Fragment>
-                    )
-                    }
-                </ControlsWrapper>
             </Wrapper>
         );
     }
