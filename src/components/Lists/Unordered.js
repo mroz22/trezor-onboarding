@@ -22,9 +22,7 @@ const UnorderedListWrapper = styled.ul`
 
 const UnorderedList = ({ items }) => (
     <UnorderedListWrapper>
-        {
-            items.map(item => <ListItem key={item.key}>{item.component}</ListItem>)
-        }
+        {items.map(item => <ListItem key={item.key}>{item.component}</ListItem>)}
     </UnorderedListWrapper>
 );
 

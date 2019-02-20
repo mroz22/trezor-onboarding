@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import * as Connect from 'trezor-connect';
 
-import Onboarding from 'components/onboarding';
+import Onboarding from 'components/onboarding/Container';
 import ErrorBoundary from 'components/Errors';
 import DeviceManager from 'utils/Device';
 import * as conditions from 'utils/conditions';

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { Button, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import { USER_MANUAL_URL } from 'config/urls';
@@ -35,7 +36,7 @@ const ControlsWrapper = styled.div`
     padding: 0px 50px 50px 50px;
 `;
 
-class Onboarding extends React.Component {
+class Onboarding extends Component {
     static propTypes = {
         state: types.state,
         actions: types.actions,
@@ -45,27 +46,20 @@ class Onboarding extends React.Component {
 
     render() {
         const { activeStep, steps } = this.props.state;
-        const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
-        const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
+        // const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
+        // const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
 
-        const Component = this.getCurrentStep().component;
+        // const Component = this.getCurrentStep().component;
 
         return (
             <Wrapper>
+                {console.log('props', this.props)}
                 <ProgressStepsWrapper>
                     {
                         this.getCurrentStep().showProgressSteps
                         && <ProgressSteps steps={[...new Set(steps.filter(s => s.dot).map(s => s.dot))]} activeStep={steps[activeStep]} dot={steps[activeStep].dot} />
                     }
                 </ProgressStepsWrapper>
-
-                <ComponentWrapper>
-                    {
-                        unmetConditions.length
-                            ? <UnexpectedState caseType={unmetConditions[0].condition} model={this.props.state.selectedModel || '1'} />
-                            : <Component state={this.props.state} actions={this.props.actions} />
-                    }
-                </ComponentWrapper>
 
                 <ControlsWrapper>
                     {

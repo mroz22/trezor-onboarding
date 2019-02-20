@@ -1,0 +1,1 @@
+export const GO_TO_NEXT_STEP = 'onboarding__go__to__next__step';
