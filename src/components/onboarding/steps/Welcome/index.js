@@ -10,7 +10,7 @@ const WelcomeStep = ({ actions, state }) => (
         <StepHeadingWrapper>
             <H1>Thank you for choosing Trezor</H1>
         </StepHeadingWrapper>
-        <StepBodyWrapper>           
+        <StepBodyWrapper>
             {
                 state.transport.error === false && (
                     <Button onClick={actions.nextStep}>Get started (5 minutes)</Button>

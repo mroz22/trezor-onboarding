@@ -59,6 +59,37 @@ class App extends React.Component {
             deviceInteraction: false,
             steps: [
                 {
+                    name: 'Newsletter',
+                    component: NewsletterStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [
+                        conditions.IS_SAME_DEVICE,
+                        conditions.DEVICE_IS_CONNECTED,
+                        conditions.DEVICE_HAS_BACKUP,
+                    ],
+                },
+                {
+                    name: 'Name',
+                    component: NameStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE, conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                },
+                {
+                    name: 'Pin',
+                    component: SetPinStep,
+                    dot: 'Security',
+                    showProgressSteps: true,
+                    showControls: false,
+                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
+                    reconnectConditions: [conditions.IS_SAME_DEVICE],
+                },
+                {
                     name: 'Welcome',
                     component: WelcomeStep,
                     showProgressSteps: false,

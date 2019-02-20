@@ -22,8 +22,6 @@ class BackupProgressModelOne extends React.Component {
         };
     }
 
-    componentDidMount() {}
-
     startBackup = async () => {
         const { Connect } = this.props.state;
 

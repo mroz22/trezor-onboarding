@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    P, H1, Pin, Button, Link,
+    P, H1, Button, Link,
 } from 'trezor-ui-components';
 
 import { PIN_MANUAL_URL } from 'config/urls';
 import { types } from 'config/types';
 import { TrezorAction } from 'components/Prompts';
+import PinMatrix from './PinMatrix';
+
 import {
     StepWrapper, StepBodyWrapper, StepHeadingWrapper, ControlsWrapper,
 } from '../../Wrapper';
@@ -81,6 +83,7 @@ class SetPinStep extends React.Component {
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
 
+                    <PinMatrix />
                     {
                         this.state.status === 'initial' && (
                             <React.Fragment>
@@ -106,12 +109,7 @@ class SetPinStep extends React.Component {
                                         <img src="src/components/onboarding/steps/Pin/videos/pin.gif" alt="How to enter pin" width="200px" />
                                     </div>
 
-                                    <Pin
-                                        header={<P>Enter your new PIN</P>}
-                                        device={{
-                                            label: this.props.state.device.label,
-                                            path: this.props.state.device.path,
-                                        }}
+                                    <PinMatrix
                                         onPinSubmit={
                                             (pin) => {
                                                 this.setState({ status: 'newPinEntered' });
@@ -141,8 +139,7 @@ class SetPinStep extends React.Component {
                     {
                         this.state.status === 'repeatPin' && (
                             <React.Fragment>
-                                <Pin
-                                    header={<P>Repeat PIN</P>}
+                                <PinMatrix
                                     device={{
                                         label: this.props.state.device.label,
                                         path: this.props.state.device.path,

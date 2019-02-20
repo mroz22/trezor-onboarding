@@ -10,7 +10,7 @@ export const isSameDevice = (state) => {
 };
 export const deviceIsNotInitialized = state => state.device && state.device.features.initialized === false;
 
-export const deviceHasBackup = state => state.device && state.device.needsBackup === false && state.device.unfinished_backup !== true;
+export const deviceHasBackup = state => state.device && state.device.features.needs_backup === false && state.device.features.unfinished_backup !== true;
 
 export const IS_SAME_DEVICE = 'is-same-device';
 export const DEVICE_IS_NOT_INITIALIZED = 'device-is-not-initialized';
@@ -18,6 +18,7 @@ export const DEVICE_HAS_BACKUP = 'device-has-backup';
 export const DEVICE_IS_CONNECTED = 'device-is-connected'; // kokotina?
 
 export const resolve = (state, conditions) => {
+    console.log(state.device)
     if (!conditions) {
         return [];
     }

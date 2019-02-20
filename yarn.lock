@@ -9837,10 +9837,8 @@ touch@^2.0.1:
   dependencies:
     nopt "~1.0.10"
 
-trezor-connect@^6.0.5:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/trezor-connect/-/trezor-connect-6.0.5.tgz#fcaf0b11cbec656cdef81feb42660929488326f4"
-  integrity sha512-U5D8bEkGCBFCwT3zg4WAQUUBfkG9sDhumTY2Mgj2VN+TrRwkrP7nFyK4d0XRzt4ZsLJxBAT/Qg4/ZKqKh0a+wg==
+trezor-connect@/home/martinvarmuza/repos/connect/npm/:
+  version "6.0.3"
   dependencies:
     babel-runtime "^6.26.0"
     events "^1.1.1"
