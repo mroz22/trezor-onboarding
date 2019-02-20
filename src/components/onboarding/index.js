@@ -44,6 +44,8 @@ class Onboarding extends Component {
 
     render() {
         const { activeStep, steps } = this.props.state;
+        console.log('this.props', this.props);
+        this.props.onboardingActions.goToNextStep('dssfd');
         // const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
         // const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
 
@@ -60,6 +62,7 @@ class Onboarding extends Component {
                 </ProgressStepsWrapper>
 
                 <ControlsWrapper>
+
                     {
                         (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
                     && (
