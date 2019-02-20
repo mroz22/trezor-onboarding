@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { Button, P, Link } from 'trezor-ui-components';
 import { types } from 'config/types';
 import * as conditions from 'utils/conditions';
 import ProgressSteps from 'components/Progress-steps';
@@ -24,7 +26,15 @@ const ComponentWrapper = styled.div`
     flex-direction: column;
 `;
 
-class Onboarding extends React.Component {
+const ControlsWrapper = styled.div`
+    grid-area: controls;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 50px 50px 50px;
+`;
+
+class Onboarding extends Component {
     static propTypes = {
         state: types.state,
         actions: types.actions,
@@ -34,13 +44,14 @@ class Onboarding extends React.Component {
 
     render() {
         const { activeStep, steps } = this.props.state;
-        const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
-        const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
+        // const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
+        // const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
 
-        const Component = this.getCurrentStep().component;
+        // const Component = this.getCurrentStep().component;
 
         return (
             <Wrapper>
+                {console.log('props', this.props)}
                 <ProgressStepsWrapper>
                     {
                         this.getCurrentStep().showProgressSteps
@@ -48,14 +59,33 @@ class Onboarding extends React.Component {
                     }
                 </ProgressStepsWrapper>
 
-                <ComponentWrapper>
+                <ControlsWrapper>
                     {
-                        unmetConditions.length
-                            // TODO: its more render condition than reconnect or other condition
-                            ? <UnexpectedState caseType={unmetConditions[0].condition} model={this.props.state.selectedModel || '1'} />
-                            : <Component state={this.props.state} actions={this.props.actions} />
+                        (this.getCurrentStep().showControls && !this.props.state.deviceInteraction)
+                    && (
+                        <React.Fragment>
+                            <Button onClick={this.props.actions.previousStep}>Back</Button>
+
+                            <P>
+                            Dont know what to do? <Link href={USER_MANUAL_URL}> Read user manual</Link>
+                            </P>
+                            <Button
+                                onClick={
+                                    () => {
+                                        if (this.getCurrentStep().onNextFn) {
+                                            this.getCurrentStep().onNextFn();
+                                        }
+                                        this.props.actions.nextStep();
+                                    }
+                                }
+                                isDisabled={this.getCurrentStep().nextDisabled && this.getCurrentStep().nextDisabled(this.props.state)}
+                            >
+                                Continue
+                            </Button>
+                        </React.Fragment>
+                    )
                     }
-                </ComponentWrapper>
+                </ControlsWrapper>
             </Wrapper>
         );
     }
