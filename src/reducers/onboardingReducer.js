@@ -1,5 +1,6 @@
 import {
     GO_TO_NEXT_STEP, SELECT_TREZOR_MODEL, ERASE_FIRMWARE, DEVICE_CALL_START, DEVICE_CALL_ERROR, DEVICE_CALL_SUCCESS,
+    TOGGLE_DEVICE_INTERACTION,
 } from 'actions/constants/onboarding';
 import { ID } from 'constants/steps';
 import steps from 'components/onboarding/config/steps';
@@ -39,6 +40,11 @@ const onboarding = (state = initialState, action) => {
             return {
                 ...state,
                 selectedModel: action.model,
+            };
+        case TOGGLE_DEVICE_INTERACTION:
+            return {
+                ...state,
+                deviceInteraction: action.value,
             };
         case 'transport-start':
             return {

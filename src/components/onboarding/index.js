@@ -49,7 +49,7 @@ class Onboarding extends React.Component {
 
     render() {
         const {
-            onboardingActions, selectedModel, transport, activeStep, device,
+            onboardingActions, selectedModel, transport, activeStep, device, deviceInteraction,
         } = this.props;
 
         return (
@@ -68,7 +68,7 @@ class Onboarding extends React.Component {
                     {activeStep === ID.BRIDGE_STEP && <BridgeStep onboardingActions={onboardingActions} transport={transport} />}
                     {activeStep === ID.CONNECT_STEP && <ConnectStep onboardingActions={onboardingActions} model={selectedModel} device={device} />}
                     {activeStep === ID.FIRMWARE_STEP && <FirmwareStep onboardingActions={onboardingActions} device={device} />}
-                    {activeStep === ID.START_STEP && <StartStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.START_STEP && <StartStep onboardingActions={onboardingActions} device={device} deviceInteraction={deviceInteraction} />}
                     {activeStep === ID.BACKUP_STEP && <BackupStep onboardingActions={onboardingActions} />}
                     {activeStep === ID.SET_PIN_STEP && <SetPinStep onboardingActions={onboardingActions} />}
                     {activeStep === ID.NAME_STEP && <NameStep onboardingActions={onboardingActions} />}

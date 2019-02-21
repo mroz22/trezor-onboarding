@@ -51,62 +51,66 @@ class StartStep extends React.Component {
     }
 
     createNew = async () => {
-        const { Connect } = this.props.state;
-        const onCreateNewHandler = (event) => {
-            console.warn('Event', event);
-            console.warn('this.state.status', this.state.status);
-            if (event.type === 'button' && this.state.status === 'initial') {
-                this.props.actions.toggleDeviceInteraction(true);
-            }
-            // else if (event.type === 'ui-close_window' && this.state.status === 'initial') {
+        // const { Connect } = this.props.state;
+        // const onCreateNewHandler = (event) => {
+        //     console.warn('Event', event);
+        //     console.warn('this.state.status', this.state.status);
+        //     if (event.type === 'button' && this.state.status === 'initial') {
+        //         this.props.actions.toggleDeviceInteraction(true);
+        //     }
+        //     // else if (event.type === 'ui-close_window' && this.state.status === 'initial') {
 
-            // }
-        };
-        Connect.default.on(Connect.DEVICE_EVENT, onCreateNewHandler);
-        Connect.default.on(Connect.UI_EVENT, onCreateNewHandler);
-        Connect.default.on(Connect.RESPONSE_EVENT, onCreateNewHandler);
+        //     // }
+        // };
+        // Connect.default.on(Connect.DEVICE_EVENT, onCreateNewHandler);
+        // Connect.default.on(Connect.UI_EVENT, onCreateNewHandler);
+        // Connect.default.on(Connect.RESPONSE_EVENT, onCreateNewHandler);
+        this.props.onboardingActions.toggleDeviceInteraction(true);
+        setTimeout(() => {
+            this.props.onboardingActions.toggleDeviceInteraction(false);
+            this.props.onboardingActions.goToNextStep();
+        }, 2000);
+        // let response;
+        // try {
+        //     response = await this.props.onboardingActions.resetDevice();
+        //     console.log('response', response);
+        // } catch (err) {
+        //     console.warn('catch', err);
+        //     // ?
+        // } finally {
+        //     console.log('finally');
+        //     this.props.onboardingActions.toggleDeviceInteraction(false);
 
-        let response;
-        try {
-            response = await this.props.actions.resetDevice();
-            console.log('response', response);
-        } catch (err) {
-            console.warn('catch', err);
-            // ?
-        } finally {
-            console.log('finally');
-            this.props.actions.toggleDeviceInteraction(false);
-
-            if (!response || !response.success) {
-                this.setState({ status: 'initial' });
-            } else {
-                this.setState({ status: 'creating' });
-                const progressFn = () => {
-                    this.setState(prevState => ({ progress: prevState.progress + 1 }));
-                };
-                const tresholds = {
-                    creating: 100,
-                };
-                const interval = setInterval(() => {
-                    if (this.state.progress <= tresholds[this.state.status]) {
-                        progressFn();
-                    }
-                    if (this.state.progress === 100) {
-                        this.setState({ status: 'finished' });
-                    }
-                    if (this.state.status === 'finished') {
-                        clearInterval(interval);
-                        this.props.actions.reorganizeSteps();
-                    }
-                }, 20);
-            }
-            Connect.default.off(Connect.DEVICE_EVENT, onCreateNewHandler);
-        }
+        //     if (!response || !response.success) {
+        //         this.setState({ status: 'initial' });
+        //     } else {
+        //         this.setState({ status: 'creating' });
+        //         const progressFn = () => {
+        //             this.setState(prevState => ({ progress: prevState.progress + 1 }));
+        //         };
+        //         const tresholds = {
+        //             creating: 100,
+        //         };
+        //         const interval = setInterval(() => {
+        //             if (this.state.progress <= tresholds[this.state.status]) {
+        //                 progressFn();
+        //             }
+        //             if (this.state.progress === 100) {
+        //                 this.setState({ status: 'finished' });
+        //             }
+        //             if (this.state.status === 'finished') {
+        //                 clearInterval(interval);
+        //                 // this.props.actions.reorganizeSteps();
+        //             }
+        //         }, 20);
+        //     }
+        //     Connect.default.off(Connect.DEVICE_EVENT, onCreateNewHandler);
+        // }
     }
 
     render() {
         const { status } = this.state;
-        const { deviceInteraction } = this.props.state;
+        const { deviceInteraction, device } = this.props;
         if (deviceInteraction) {
             return (
                 <div style={{
@@ -137,24 +141,15 @@ class StartStep extends React.Component {
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
                     {
-                        // todo: tohle je blbost tak samo o sobe. Ta detekce bude asi nekde nahore
-                        this.props.state.device.features.initialized && <P>Device is already initialized. This means someone has already created a wallet and has access to it. You should reset your device and start again.</P>
-                    }
-
-                    {
                         status === 'initial'
                             && (
                                 <React.Fragment>
                                     <OptionsList
                                         options={this.state.options}
-                                        selected={this.props.state.selectedModel}
+                                        selected={null}
                                         selectedAccessor="value"
                                         onSelect={() => { this.createNew(); }}
                                     />
-                                    {/* <P>Are you new to crypto or have not used Trezor before? </P>
-                                    <Button onClick={this.createNew}>Create new wallet</Button>
-                                    <P>Do you have recovery seed? You might use it to recovery your wallet</P>
-                                    <Button onClick={this.createNew}>Recover wallet</Button> */}
                                 </React.Fragment>
                             )
                     }
@@ -169,7 +164,7 @@ class StartStep extends React.Component {
                                 <React.Fragment>
                                     <P>Good job, your wallet is ready. But we strongly recommend you to spend few more minutes and improve your security</P>
                                     <ControlsWrapper>
-                                        <Button onClick={this.props.actions.nextStep}>
+                                        <Button onClick={this.props.onboardingActions.nextStep}>
                                         Take me to security <br />
                                         (5 minutes)
                                         </Button>

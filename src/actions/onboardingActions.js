@@ -10,6 +10,11 @@ export const selectTrezorModel = model => ({
     model,
 });
 
+export const toggleDeviceInteraction = value => ({
+    type: ONBOARDING.TOGGLE_DEVICE_INTERACTION,
+    value,
+});
+
 export const init = () => async (dispatch, getState) => {
     // set listeners
     TrezorConnect.on(DEVICE_EVENT, (event) => {
