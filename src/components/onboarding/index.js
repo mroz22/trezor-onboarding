@@ -62,19 +62,80 @@ class Onboarding extends React.Component {
                 </ProgressStepsWrapper>
 
                 <ComponentWrapper>
-                    {activeStep === ID.WELCOME_STEP && <WelcomeStep onboardingActions={onboardingActions} transport={transport} />}
-                    {activeStep === ID.SELECT_DEVICE_STEP && <SelectDeviceStep onboardingActions={onboardingActions} />}
-                    {activeStep === ID.UNBOXING_STEP && <HologramStep onboardingActions={onboardingActions} model={selectedModel} />}
-                    {activeStep === ID.BRIDGE_STEP && <BridgeStep onboardingActions={onboardingActions} transport={transport} />}
-                    {activeStep === ID.CONNECT_STEP && <ConnectStep onboardingActions={onboardingActions} model={selectedModel} device={device} />}
-                    {activeStep === ID.FIRMWARE_STEP && <FirmwareStep onboardingActions={onboardingActions} device={device} />}
-                    {activeStep === ID.START_STEP && <StartStep onboardingActions={onboardingActions} device={device} deviceInteraction={deviceInteraction} />}
-                    {activeStep === ID.BACKUP_STEP && <BackupStep onboardingActions={onboardingActions} device={device} />}
-                    {activeStep === ID.SET_PIN_STEP && <SetPinStep onboardingActions={onboardingActions} />}
-                    {activeStep === ID.NAME_STEP && <NameStep onboardingActions={onboardingActions} />}
-                    {activeStep === ID.NEWSLETTER_STEP && <NewsletterStep onboardingActions={onboardingActions} />}
-                    {activeStep === ID.BOOKMARK_STEP && <BookmarkStep onboardingActions={onboardingActions} />}
-                    {activeStep === ID.FINAL_STEP && <FinalStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.WELCOME_STEP && (
+                        <WelcomeStep
+                            onboardingActions={onboardingActions}
+                            transport={transport}
+                        />
+                    )}
+                    {activeStep === ID.SELECT_DEVICE_STEP && (
+                        <SelectDeviceStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
+                    {activeStep === ID.UNBOXING_STEP && (
+                        <HologramStep
+                            onboardingActions={onboardingActions}
+                            model={selectedModel}
+                        />
+                    )}
+                    {activeStep === ID.BRIDGE_STEP && (
+                        <BridgeStep
+                            onboardingActions={onboardingActions}
+                            transport={transport}
+                        />
+                    )}
+                    {activeStep === ID.CONNECT_STEP && (
+                        <ConnectStep
+                            onboardingActions={onboardingActions}
+                            model={selectedModel}
+                            device={device}
+                        />
+                    )}
+                    {activeStep === ID.FIRMWARE_STEP && (
+                        <FirmwareStep
+                            onboardingActions={onboardingActions}
+                            device={device}
+                        />
+                    )}
+                    {activeStep === ID.START_STEP && (
+                        <StartStep
+                            onboardingActions={onboardingActions}
+                            device={device}
+                            deviceInteraction={deviceInteraction}
+                        />
+                    )}
+                    {activeStep === ID.BACKUP_STEP && (
+                        <BackupStep
+                            onboardingActions={onboardingActions}
+                            device={device}
+                        />
+                    )}
+                    {activeStep === ID.SET_PIN_STEP && (
+                        <SetPinStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
+                    {activeStep === ID.NAME_STEP && (
+                        <NameStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
+                    {activeStep === ID.NEWSLETTER_STEP && (
+                        <NewsletterStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
+                    {activeStep === ID.BOOKMARK_STEP && (
+                        <BookmarkStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
+                    {activeStep === ID.FINAL_STEP && (
+                        <FinalStep
+                            onboardingActions={onboardingActions}
+                        />
+                    )}
                 </ComponentWrapper>
             </Wrapper>
         );
