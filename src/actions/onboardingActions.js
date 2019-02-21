@@ -1,4 +1,5 @@
 import * as ONBOARDING from 'actions/constants/onboarding';
+import * as CONNECT from 'actions/constants/connect';
 import TrezorConnect, { DEVICE_EVENT, TRANSPORT_EVENT } from 'trezor-connect';
 
 export const goToNextStep = () => ({
@@ -57,51 +58,72 @@ export const init = () => async (dispatch, getState) => {
     }
 };
 
-export const firmwareErase = params => call('firmwareErase', params);
-export const firmwareUpload = params => call('firmwareUpload', params);
-
-// tohle jsem videl v nejakem tutorialu ale pripada mi to zbytecne na to delat funkci jeste
-const startCall = name => ({
-    type: ONBOARDING.DEVICE_CALL_START,
-    name,
-});
-
-const successCall = (name, payload) => ({
-    type: ONBOARDING.DEVICE_CALL_SUCCESS,
-    result: payload,
-    name,
-});
-
-export const call = (name, params) => async (dispatch) => {
-    let fn;
-
-    switch (name) {
-        case 'firmwareErase':
-            fn = () => TrezorConnect.firmwareErase(params);
-            break;
-        case 'firmwareUpload':
-            fn = () => TrezorConnect.firmwareUpload(params);
-            break;
-        default: throw new Error(`call ${name} does not exist`);
-    }
-
-    dispatch(startCall(name));
+const firmwareErase = async (params, dispatch) => {
+    dispatch({
+        type: CONNECT.FIRMWARE_ERASE,
+        isProgress: true,
+    });
     try {
-        const response = await fn(params);
+        const response = await TrezorConnect.firmwareErase(params);
         if (response.success) {
-            dispatch(successCall(name, response.payload));
+            dispatch({
+                type: CONNECT.FIRMWARE_ERASE,
+                isSuccess: true,
+                response,
+            });
         } else {
             dispatch({
-                type: ONBOARDING.DEVICE_CALL_ERROR,
-                error: response.error,
-                name,
+                type: CONNECT.FIRMWARE_ERASE,
+                isError: true,
+                errorMessage: response.error,
             });
         }
     } catch (err) {
-        // todo: rethink
         dispatch({
-            type: ONBOARDING.DEVICE_CALL_ERROR,
-            name,
+            type: CONNECT.FIRMWARE_ERASE,
+            isError: true,
         });
     }
+    dispatch({
+        type: CONNECT.FIRMWARE_ERASE,
+        isProgress: false,
+    });
+};
+
+
+const firmwareUpload = async (params, dispatch) => {
+    dispatch({
+        type: CONNECT.FIRMWARE_UPLOAD,
+        isProgress: true,
+    });
+    try {
+        const response = await TrezorConnect.firmwareUpload(params);
+        if (response.success) {
+            dispatch({
+                type: CONNECT.FIRMWARE_UPLOAD,
+                isSuccess: true,
+                response,
+            });
+        } else {
+            dispatch({
+                type: CONNECT.FIRMWARE_UPLOAD,
+                errorMessage: response.error,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: CONNECT.FIRMWARE_UPLOAD,
+            isError: true,
+        });
+    }
+    dispatch({
+        type: CONNECT.FIRMWARE_UPLOAD,
+        isProgress: false,
+    });
+};
+
+
+export {
+    firmwareErase,
+    firmwareUpload,
 };

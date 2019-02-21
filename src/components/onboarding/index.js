@@ -60,7 +60,6 @@ class Onboarding extends React.Component {
                         activeStep={steps.find(step => step.id === activeStep)}
                     />
                 </ProgressStepsWrapper>
-
                 <ComponentWrapper>
                     {activeStep === ID.WELCOME_STEP && (
                         <WelcomeStep
