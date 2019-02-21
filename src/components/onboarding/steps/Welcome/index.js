@@ -1,27 +1,26 @@
 import React from 'react';
+import Proptypes from 'prop-types';
 import { Button, H1 } from 'trezor-ui-components';
-
-import { types } from 'config/types';
 
 import { StepWrapper, StepBodyWrapper, StepHeadingWrapper } from '../../Wrapper';
 
-const WelcomeStep = ({ actions, state }) => (
+const WelcomeStep = props => (
     <StepWrapper>
         <StepHeadingWrapper>
             <H1>Thank you for choosing Trezor</H1>
         </StepHeadingWrapper>
-        {/* <StepBodyWrapper>
+        <StepBodyWrapper>
             {
-
-                state.transport.error === false && (
-                    <Button onClick={actions.nextStep}>Get started (5 minutes)</Button>
+                props.transport !== null && (
+                    <Button onClick={props.onboardingActions.goToNextStep}>Get started (5 minutes)</Button>
                 )
-
             }
-        </StepBodyWrapper> */}
+        </StepBodyWrapper>
     </StepWrapper>
 );
 
-WelcomeStep.propTypes = types;
+// WelcomeStep.propTypes = {
+
+// };
 
 export default WelcomeStep;

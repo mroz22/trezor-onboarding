@@ -34,9 +34,9 @@ class SelectDeviceStep extends React.Component {
                 <StepBodyWrapper>
                     <OptionsList
                         options={this.state.options}
-                        selected={this.props.state.selectedModel}
+                        selected={this.props.selectedModel}
                         selectedAccessor="value"
-                        onSelect={(model) => { this.props.actions.selectedModel(model); this.props.actions.nextStep(); }}
+                        onSelect={(model) => { this.props.onboardingActions.selectTrezorModel(model); this.props.onboardingActions.goToNextStep(); }}
                     />
                 </StepBodyWrapper>
             </StepWrapper>

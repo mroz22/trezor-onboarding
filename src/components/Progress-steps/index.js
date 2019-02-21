@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const isStepFinished = (steps, index, activeStep) => {
-    const activeStepIndex = steps.findIndex(s => s === activeStep.dot);
+    const activeStepIndex = steps.findIndex(s => s === activeStep.title);
     return activeStepIndex > index;
 };
 
@@ -21,7 +21,7 @@ const ProgressSteps = props => (
                     <ProgressStep
                         step={step}
                         index={index}
-                        isActive={props.activeStep.dot === step}
+                        isActive={props.activeStep.title === step}
                         isFinished={isStepFinished(props.steps, index, props.activeStep)}
                         isLast={props.steps.length - 1 === index}
                     />
@@ -33,7 +33,7 @@ const ProgressSteps = props => (
 
 ProgressSteps.propTypes = {
     activeStep: PropTypes.object.isRequired, // todo: better
-    dot: PropTypes.string.isRequired,
+    // dot: PropTypes.string.isRequired,
     steps: PropTypes.array.isRequired, // todo: better types string
 };
 

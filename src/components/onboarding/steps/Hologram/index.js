@@ -29,10 +29,10 @@ class HologramStep extends React.Component {
                     {
                         this.state.status !== 'hologram-different' && (
                             <React.Fragment>
-                                <Hologram model={this.props.state.selectedModel} />
+                                <Hologram model={this.props.model} />
 
                                 <ControlsWrapper>
-                                    <Button onClick={this.props.actions.nextStep}>My hologram is OK</Button>
+                                    <Button onClick={this.props.onboardingActions.goToNextStep}>My hologram is OK</Button>
                                     <Button onClick={() => this.setState({ status: 'hologram-different' })} isWhite>
                                         My hologram looks different
                                     </Button>

@@ -12,24 +12,24 @@ import {
 
 // todo: handle case when already has firmware, but it is outdated
 class FirmwareStep extends React.Component {
-    constructor({ state }) {
+    constructor({ device }) {
         super();
         this.state = {
-            progress: state.device.firmware === 'outdated' ? 0 : 100,
-            status: state.device.firmware === 'outdated' ? 'initial' : 'finished',
+            progress: device.firmware === 'outdated' ? 0 : 100,
+            status: device.firmware === 'outdated' ? 'initial' : 'finished',
         };
     }
 
-    componentDidMount() {
-        const { Connect } = this.props.state;
-        Connect.default.on(Connect.DEVICE_EVENT, (event) => {
-            // todo: what if different device connected?
-            if (event.type === 'device-changed' && this.state.status === 'reconnect') {
-                this.setState({ status: 'finished' });
-            // not sure about this
-            }
-        });
-    }
+    // componentDidMount() {
+    //     const { Connect } = this.props.state;
+    //     Connect.default.on(Connect.DEVICE_EVENT, (event) => {
+    //         // todo: what if different device connected?
+    //         if (event.type === 'device-changed' && this.state.status === 'reconnect') {
+    //             this.setState({ status: 'finished' });
+    //         // not sure about this
+    //         }
+    //     });
+    // }
 
     download = async () => {
         this.setState({ status: 'downloading' });
@@ -60,15 +60,16 @@ class FirmwareStep extends React.Component {
         // imitate wait of download
         setTimeout(async () => {
             this.setState({ status: 'preparing' });
-            await this.props.actions.firmwareErase();
+            // await this.props.onboardingActions.firmwareErase();
+            await this.props.onboardingActions.firmwareErase({ keepSession: true });
             this.setState({ status: 'uploading' });
-            await this.props.actions.firmwareUpload({ payload: firmware });
+            await this.props.onboardingActions.firmwareUpload({ payload: firmware });
             this.setState({ status: 'reconnect' });
         }, 4000);
     }
 
     render() {
-        const connectedDevice = this.props.state.device;
+        const connectedDevice = this.props.device;
 
         return (
             <StepWrapper>
@@ -103,7 +104,7 @@ class FirmwareStep extends React.Component {
                                     Perfect. The newest firwmare is installed. Time to continue
                                 </H1>
                                 <ControlsWrapper>
-                                    <Button onClick={this.props.actions.nextStep}>Continue</Button>
+                                    <Button onClick={() => this.props.onboardingActions.goToNextStep()}>Continue</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

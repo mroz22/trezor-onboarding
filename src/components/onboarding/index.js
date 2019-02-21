@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { types } from 'config/types';
-import * as conditions from 'utils/conditions';
+import Proptypes from 'prop-types';
 
 import { ID } from 'constants/steps';
 
 import ProgressSteps from 'components/Progress-steps';
 import UnexpectedState from 'components/onboarding/UnexpectedState';
 
-import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro'; // todo: path convention
+import BackupStep from 'components/onboarding/steps/Backup'; // todo: path convention
 import BookmarkStep from 'components/onboarding/steps/Bookmark';
 import BridgeStep from 'components/onboarding/steps/Bridge';
 import FinalStep from 'components/onboarding/steps/Final';
@@ -21,6 +20,8 @@ import StartStep from 'components/onboarding/steps/Start';
 import WelcomeStep from 'components/onboarding/steps/Welcome';
 import NameStep from 'components/onboarding/steps/Name';
 import ConnectStep from 'components/onboarding/steps/Connect';
+
+import steps from './config/steps';
 
 const Wrapper = styled.div`
     display: grid;
@@ -41,39 +42,48 @@ const ComponentWrapper = styled.div`
     flex-direction: column;
 `;
 
-class Onboarding extends Component {
-    static propTypes = {
-        state: types.state,
-    };
-
-    getCurrentStep = () => this.props.state.steps[this.props.state.activeStep]
+class Onboarding extends React.Component {
+    componentWillMount() {
+        this.props.onboardingActions.init();
+    }
 
     render() {
-        const { activeStep } = this.props;
-        const { steps } = this.props.state;
-        console.log('this.props', this.props);
-        // this.props.onboardingActions.goToNextStep('dssfd');
-        // const reconnectConditionsResults = conditions.resolve(this.props.state, this.getCurrentStep().reconnectConditions);
-        // const unmetConditions = conditions.filterUnmet(reconnectConditionsResults);
-
-        // const Component = this.getCurrentStep().component;
+        const {
+            onboardingActions, selectedModel, transport, activeStep, device,
+        } = this.props;
 
         return (
             <Wrapper>
                 <ProgressStepsWrapper>
-                    {/* {
-                        this.getCurrentStep().showProgressSteps
-                        && <ProgressSteps steps={[...new Set(steps.filter(s => s.dot).map(s => s.dot))]} activeStep={steps[activeStep]} dot={steps[activeStep].dot} />
-                    } */}
+                    <ProgressSteps
+                        steps={[...new Set(steps.filter(s => s.title).map(s => s.title))]}
+                        activeStep={steps.find(step => step.id === activeStep)}
+                    />
                 </ProgressStepsWrapper>
 
                 <ComponentWrapper>
-                    {activeStep === ID.WELCOME_STEP && <WelcomeStep />}
+                    {activeStep === ID.WELCOME_STEP && <WelcomeStep onboardingActions={onboardingActions} transport={transport} />}
+                    {activeStep === ID.SELECT_DEVICE_STEP && <SelectDeviceStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.UNBOXING_STEP && <HologramStep onboardingActions={onboardingActions} model={selectedModel} />}
+                    {activeStep === ID.BRIDGE_STEP && <BridgeStep onboardingActions={onboardingActions} transport={transport} />}
+                    {activeStep === ID.CONNECT_STEP && <ConnectStep onboardingActions={onboardingActions} model={selectedModel} device={device} />}
+                    {activeStep === ID.FIRMWARE_STEP && <FirmwareStep onboardingActions={onboardingActions} device={device} />}
+                    {activeStep === ID.START_STEP && <StartStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.BACKUP_STEP && <BackupStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.SET_PIN_STEP && <SetPinStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.NAME_STEP && <NameStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.NEWSLETTER_STEP && <NewsletterStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.BOOKMARK_STEP && <BookmarkStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.FINAL_STEP && <FinalStep onboardingActions={onboardingActions} />}
                 </ComponentWrapper>
-
             </Wrapper>
         );
     }
 }
+
+Onboarding.propTypes = {
+    // state: types.state,
+    activeStep: Proptypes.string.isRequired,
+};
 
 export default Onboarding;

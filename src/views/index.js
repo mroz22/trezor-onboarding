@@ -3,26 +3,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
-import * as Connect from 'trezor-connect';
+// import * as Connect from 'trezor-connect';
 
 import Onboarding from 'components/onboarding/Container';
 import ErrorBoundary from 'components/Errors';
 import DeviceManager from 'utils/Device';
 import * as conditions from 'utils/conditions';
-
-import BackupStepIntro from 'components/onboarding/steps/Backup/BackupIntro';
-import BookmarkStep from 'components/onboarding/steps/Bookmark';
-import BridgeStep from 'components/onboarding/steps/Bridge';
-import FinalStep from 'components/onboarding/steps/Final';
-import FirmwareStep from 'components/onboarding/steps/Firmware';
-import HologramStep from 'components/onboarding/steps/Hologram';
-import NewsletterStep from 'components/onboarding/steps/Newsletter';
-import SelectDeviceStep from 'components/onboarding/steps/SelectDevice';
-import SetPinStep from 'components/onboarding/steps/Pin';
-import StartStep from 'components/onboarding/steps/Start';
-import WelcomeStep from 'components/onboarding/steps/Welcome';
-import NameStep from 'components/onboarding/steps/Name';
-import ConnectStep from 'components/onboarding/steps/Connect';
 
 // TODO; env
 // eslint-disable-next-line no-underscore-dangle
@@ -57,143 +43,10 @@ class App extends React.Component {
             error: null,
             backupUnderstood: true,
             deviceInteraction: false,
-            steps: [
-                {
-                    name: 'Newsletter',
-                    component: NewsletterStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [
-                        conditions.IS_SAME_DEVICE,
-                        conditions.DEVICE_IS_CONNECTED,
-                        conditions.DEVICE_HAS_BACKUP,
-                    ],
-                },
-                {
-                    name: 'Name',
-                    component: NameStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE, conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                },
-                {
-                    name: 'Pin',
-                    component: SetPinStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                },
-                {
-                    name: 'Welcome',
-                    component: WelcomeStep,
-                    showProgressSteps: false,
-                    showControls: false,
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Select device',
-                    component: SelectDeviceStep,
-                    dot: 'Select device',
-                    showProgressSteps: true,
-                    showControls: false,
-                }, {
-                    name: 'Unboxing',
-                    component: HologramStep,
-                    dot: 'Unboxing',
-                    showProgressSteps: true,
-                    showControls: false,
-                }, {
-                    name: 'Bridge',
-                    component: BridgeStep,
-                    dot: 'Connect device',
-                    showProgressSteps: true,
-                    showControls: false,
-                }, {
-                    name: 'Connect',
-                    component: ConnectStep,
-                    dot: 'Connect device',
-                    showProgressSteps: true,
-                    showControls: false,
-                }, {
-                    name: 'Firmware',
-                    component: FirmwareStep,
-                    dot: 'Firmware',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_NOT_INITIALIZED],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Start',
-                    component: StartStep,
-                    dot: 'Start',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_IS_NOT_INITIALIZED],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Backup',
-                    component: BackupStepIntro,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Pin',
-                    component: SetPinStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Name',
-                    component: NameStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Bookmark',
-                    component: BookmarkStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Newsletter',
-                    component: NewsletterStep,
-                    dot: 'Security',
-                    showProgressSteps: true,
-                    showControls: false,
-                    entryConditions: [conditions.DEVICE_IS_CONNECTED, conditions.DEVICE_HAS_BACKUP],
-                    reconnectConditions: [conditions.IS_SAME_DEVICE],
-                }, {
-                    name: 'Final',
-                    component: FinalStep,
-                    showProgressSteps: false,
-                    showControls: false,
-                }],
         };
         this.actions = {
             toggleDeviceInteraction: (state) => {
                 this.setState({ deviceInteraction: state });
-            },
-            selectedModel: (selectedModel) => {
-                this.setState({ selectedModel });
-            },
-            nextStep: () => {
-                this.setState(prevState => ({ activeStep: prevState.activeStep + 1 }));
-            },
-            previousStep: () => {
-                this.setState(prevState => ({ activeStep: prevState.activeStep - 1 }));
             },
             // initialize new wallet with default name and skip backup
             resetDevice: async () => {
@@ -241,7 +94,7 @@ class App extends React.Component {
             submitNewPin: (pin) => {
                 this.state.Connect.default.uiResponse({ type: this.state.Connect.UI.RECEIVE_PIN, payload: pin });
             },
-            firmwareErase: () => this.state.Connect.default.firmwareErase({ keepSession: true }),
+
             firmwareUpload: firmware => this.state.Connect.default.firmwareUpload(firmware),
             initConnect: async () => {
                 await Connect.default.init({
@@ -329,12 +182,12 @@ class App extends React.Component {
 
     async componentDidMount() {
         try {
-            await this.actions.initConnect();
+            // await this.actions.initConnect();
         } catch (err) {
             console.warn('err', err);
         }
 
-        this.setState({ Connect });
+        // this.setState({ Connect });
     }
 
     render() {

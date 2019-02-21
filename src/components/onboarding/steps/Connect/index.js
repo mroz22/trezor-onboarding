@@ -22,58 +22,36 @@ class ConnectStep extends React.Component {
     }
 
     componentDidMount() {
-        this.props.state.Connect.default.on(this.props.state.Connect.DEVICE_EVENT, this.onDeviceEvent);
         this.props.setTimeout(() => {
             this.searchForDevice();
-        }, 5000);
+        }, 1000);
     }
-
-    componentWillUnmount() {
-        this.props.state.Connect.default.off(this.props.state.Connect.DEVICE_EVENT, this.onDeviceEvent);
-    }
-
-    onDeviceEvent = (event) => {
-        console.warn('event', event);
-        if (event.type === 'device-disconnect' && this.state.status !== 'connect') {
-            this.setState({ status: 'searching', searchingTooLong: false });
-            this.props.setTimeout(() => {
-                this.searchForDevice();
-            }, 1000);
-        } else if (event.type === 'device-connect' || event.type === 'device-changed') {
-            // todo: hmm is this 'if' needed?
-            if (this.props.state.device) {
-                return this.setState({
-                    status: 'found',
-                    searchingTooLong: false,
-                });
-            }
-        }
-    };
 
     searchForDevice() {
-        if (this.props.state.device) {
+        this.setState({
+            status: 'searching',
+        });
+
+        if (this.props.device && this.props.device.connected) {
             return this.setState({
-                status: 'found',
                 searchingTooLong: false,
             });
         }
         this.props.setTimeout(() => {
             this.setState({ searchingTooLong: true });
         }, 1000 * 15);
-
-        return this.setState({
-            status: 'searching',
-        });
     }
 
     render() {
+        const deviceIsConnected = Boolean(this.props.device && this.props.device.connected);
+        const device = this.props.device;
         return (
             <StepWrapper>
                 <StepHeadingWrapper>
-                    <H1>Time to connect your device</H1>
+                    <H1>Time to connect your device {`${deviceIsConnected}`}</H1>
                 </StepHeadingWrapper>
                 <StepBodyWrapper>
-                    <TrezorConnect model={this.props.state.selectedModel} />
+                    <TrezorConnect model={this.props.model} />
 
                     {
                         this.state.status === 'connect' && (
@@ -84,7 +62,7 @@ class ConnectStep extends React.Component {
                     }
 
                     {
-                        this.state.status === 'searching' && (
+                        !deviceIsConnected && this.state.status !== 'connect' && (
                             <React.Fragment>
                                 <P>Searching for your device</P>
                                 <Dots />
@@ -93,7 +71,7 @@ class ConnectStep extends React.Component {
                     }
 
                     {
-                        this.state.status === 'searching' && this.state.searchingTooLong && (
+                        !deviceIsConnected && this.state.searchingTooLong && this.state.status !== 'connect' && (
                             <React.Fragment>
                                 <P />
                                 <P>Searching for your device takes too long, you might want to try to:</P>
@@ -117,27 +95,28 @@ class ConnectStep extends React.Component {
                     }
 
                     {
-                        this.state.status === 'found' && this.props.state.device && (
+                        // todo: resolve duplicity of status === 'found' and device.connected
+                        deviceIsConnected && this.state.status !== 'connect' && (
                             <React.Fragment>
                                 <P>Detected device!</P>
                                 {
-                                    this.props.state.device.isFresh() && (
+                                    !device.features.initialized && (
                                         <React.Fragment>
                                             <ControlsWrapper>
                                                 <Button
-                                                    onClick={this.props.actions.nextStep}
-                                                    isDisabled={this.props.state.device.mode === 'bootloader'}
+                                                    onClick={this.props.onboardingActions.goToNextStep}
+                                                    isDisabled={!device.features.firmware_present ? false : device.mode === 'bootloader'}
                                                 >
                                                 Continue
                                                 </Button>
                                             </ControlsWrapper>
-                                            { this.props.state.device.mode === 'bootloader' && 'Device is in bootloader mode, reconnect it to continue'}
+                                            { device.features.firmware_present && device.mode === 'bootloader' && 'Device is in bootloader mode, reconnect it to continue'}
                                         </React.Fragment>
                                     )
                                 }
 
                                 {
-                                    !this.props.state.device.isFresh() && (
+                                    device.features.initialized && (
                                         <React.Fragment>
                                             <H2>Hold on</H2>
                                             <P>

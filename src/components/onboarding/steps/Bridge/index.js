@@ -61,12 +61,6 @@ class InstallBridge extends PureComponent {
         };
     }
 
-    componentDidMount() {
-        // setInterval(() => {
-
-        // })
-    }
-
     onChange(value) {
         this.setState({
             target: value,
@@ -74,14 +68,14 @@ class InstallBridge extends PureComponent {
     }
 
     getStatus() {
-        if (this.props.state.transport.error === false && this.props.state.transport.actual.type === 'bridge') {
+        if (this.props.transport.type === 'bridge') {
             return 'installed';
         }
         return this.state.status;
     }
 
     getInstallers() {
-        return this.props.state.transport.new.installers.map(p => ({
+        return this.props.transport.bridge.packages.map(p => ({
             label: p.name,
             value: p.url,
             signature: p.signature,
@@ -98,10 +92,7 @@ class InstallBridge extends PureComponent {
         }, {
             component: <P>Double click it to run installer</P>,
             key: '2',
-        },
-
-
-        ];
+        }];
         if (target.signature) {
             installInstructions.push({
                 component: (
@@ -119,7 +110,7 @@ class InstallBridge extends PureComponent {
                     <H1>
                         Trezor Bridge
                         <Version>
-                            { status === 'installed' ? this.props.state.transport.actual.version : 'not installed' }
+                            { status === 'installed' ? this.props.transport.version : 'not installed' }
                         </Version>
                     </H1>
                 </StepHeadingWrapper>
@@ -164,7 +155,7 @@ class InstallBridge extends PureComponent {
                             <React.Fragment>
                                 <H1>Trezor bridge was successfully installed</H1>
                                 <ControlsWrapper>
-                                    <Button onClick={this.props.actions.nextStep}>Continue</Button>
+                                    <Button onClick={this.props.onboardingActions.goToNextStep}>Continue</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )
@@ -180,3 +171,15 @@ class InstallBridge extends PureComponent {
 InstallBridge.propTypes = types;
 
 export default InstallBridge;
+
+/*
+bridge:
+changelog: (6) ["Use interrupt reads without timeouts even on FreeBSD and linux", "Stop using hidapi for t1 on linux", "Lowlevel code cleanup", "Add debuglink support (UDP + libusb)", "Add support for one-directional calls (read, write)", "Fix windows 7 driver installer when run first time"]
+directory: "bridge/2.0.25/"
+packages: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+version: (3) [2, 0, 25]
+__proto__: Object
+outdated: false
+type: "bridge"
+version: "2.0.25"
+*/
