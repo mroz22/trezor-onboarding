@@ -69,7 +69,7 @@ class Onboarding extends React.Component {
                     {activeStep === ID.CONNECT_STEP && <ConnectStep onboardingActions={onboardingActions} model={selectedModel} device={device} />}
                     {activeStep === ID.FIRMWARE_STEP && <FirmwareStep onboardingActions={onboardingActions} device={device} />}
                     {activeStep === ID.START_STEP && <StartStep onboardingActions={onboardingActions} device={device} deviceInteraction={deviceInteraction} />}
-                    {activeStep === ID.BACKUP_STEP && <BackupStep onboardingActions={onboardingActions} />}
+                    {activeStep === ID.BACKUP_STEP && <BackupStep onboardingActions={onboardingActions} device={device} />}
                     {activeStep === ID.SET_PIN_STEP && <SetPinStep onboardingActions={onboardingActions} />}
                     {activeStep === ID.NAME_STEP && <NameStep onboardingActions={onboardingActions} />}
                     {activeStep === ID.NEWSLETTER_STEP && <NewsletterStep onboardingActions={onboardingActions} />}

@@ -79,7 +79,6 @@ class BackupStep extends React.Component {
                                         <Checkbox
                                             isChecked={this.state.userUnderstands}
                                             onClick={() => this.setState(prevState => ({ userUnderstands: !prevState.userUnderstands }))}
-                                            // onClick={}
                                         />
                                         <P>I have read the instructions and agree</P>
                                     </CheckboxWrapper>
@@ -87,7 +86,7 @@ class BackupStep extends React.Component {
                                     <ControlsWrapper>
                                         <Button
                                             onClick={() => { this.setState({ status: 'started' }); }}
-                                            isDisabled={!this.props.state.device || !this.state.userUnderstands}
+                                            isDisabled={!this.props.device || !this.state.userUnderstands}
                                         >
                                             Start backup
                                         </Button>

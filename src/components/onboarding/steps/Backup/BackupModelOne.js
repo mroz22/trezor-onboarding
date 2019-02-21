@@ -23,27 +23,27 @@ class BackupProgressModelOne extends React.Component {
     }
 
     startBackup = async () => {
-        const { Connect } = this.props.state;
+        // const { Connect } = this.props.state;
 
         this.setState({
             status: 'started',
         });
-        const onStartBackupHandler = (event) => {
-            if (event.type === 'button' && event.payload.code === 'ButtonRequest_ConfirmWord') {
-                this.setState(prevState => ({ nthWord: prevState.nthWord + 1 }));
-                this.setState(prevState => ({ checkingWords: (prevState.nthWord - 24) > 0 }));
-            }
-        };
-        Connect.default.on(Connect.DEVICE_EVENT, onStartBackupHandler);
-        await this.props.actions.startBackup();
+        // const onStartBackupHandler = (event) => {
+        //     if (event.type === 'button' && event.payload.code === 'ButtonRequest_ConfirmWord') {
+        //         this.setState(prevState => ({ nthWord: prevState.nthWord + 1 }));
+        //         this.setState(prevState => ({ checkingWords: (prevState.nthWord - 24) > 0 }));
+        //     }
+        // };
+        // Connect.default.on(Connect.DEVICE_EVENT, onStartBackupHandler);
+        // await this.props.actions.startBackup();
         // const response =
         // if (response.success) {
 
         // } else {
         //     //todo: //
         // }
-        Connect.default.off(Connect.DEVICE_EVENT, onStartBackupHandler);
-        this.setState({ status: 'finished' });
+        // Connect.default.off(Connect.DEVICE_EVENT, onStartBackupHandler);
+        // this.setState({ status: 'finished' });
     }
 
     render() {
@@ -56,7 +56,7 @@ class BackupProgressModelOne extends React.Component {
                         status === 'initial' && (
                             <React.Fragment>
                                 <H1>
-                                Now your device is going to show you 24 words to backup your wallet. Write them down.
+                                    Now your device is going to show you 24 words to backup your wallet. Write them down.
                                 </H1>
                                 <ControlsWrapper>
                                     <Button onClick={this.startBackup}>Okey</Button>
@@ -69,7 +69,7 @@ class BackupProgressModelOne extends React.Component {
                     {
                         checkingWords && status === 'started' && (
                             <Wrapper>
-                            Check <br />
+                                Check <br />
                                 <NthWord number={this.state.nthWord - 24} /> <br />
                             </Wrapper>
                         )
@@ -93,7 +93,7 @@ class BackupProgressModelOne extends React.Component {
                                 Backup is now on your recovery seed card. Once again dont lose it and keep it private!
                                 </H1>
                                 <ControlsWrapper>
-                                    <Button onClick={this.props.actions.nextStep}>My recovery card is safe</Button>
+                                    <Button onClick={this.props.onboardingActions.goToNextStep}>My recovery card is safe</Button>
                                 </ControlsWrapper>
                             </React.Fragment>
                         )

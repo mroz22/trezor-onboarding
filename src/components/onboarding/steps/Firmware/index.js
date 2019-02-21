@@ -60,7 +60,6 @@ class FirmwareStep extends React.Component {
         // imitate wait of download
         setTimeout(async () => {
             this.setState({ status: 'preparing' });
-            // await this.props.onboardingActions.firmwareErase();
             await this.props.onboardingActions.firmwareErase({ keepSession: true });
             this.setState({ status: 'uploading' });
             await this.props.onboardingActions.firmwareUpload({ payload: firmware });
@@ -87,17 +86,17 @@ class FirmwareStep extends React.Component {
                     }
 
                     {
-                        this.state.status !== 'finished' && this.state.progress > 0 && (
+                        this.state.status !== 'finished' && connectedDevice.firmware !== 'valid' && this.state.progress > 0 && (
                             <React.Fragment>
                                 <Donut progress={this.state.progress} radius={DONUT_RADIUS} stroke={DONUT_STROKE} />
-                                { connectedDevice && this.state.status === 'reconnect' && <H1>Disconnect your device now</H1> }
-                                { !connectedDevice && this.state.status === 'reconnect' && <H1>And connect it again</H1> }
+                                { connectedDevice.connected && this.state.status === 'reconnect' && <H1>Disconnect your device now</H1> }
+                                { !connectedDevice.connected && this.state.status === 'reconnect' && <H1>And connect it again</H1> }
                             </React.Fragment>
                         )
                     }
 
                     {
-                        connectedDevice && this.state.status === 'finished' && connectedDevice.firmware === 'valid'
+                        connectedDevice && connectedDevice.connected && connectedDevice.firmware === 'valid'
                         && (
                             <React.Fragment>
                                 <H1>

@@ -64,7 +64,7 @@ const onboarding = (state = initialState, action) => {
         case 'device-changed':
             return {
                 ...state,
-                device: action.device,
+                device: { connected: true, ...action.device },
             };
         case 'device-disconnect':
             return {
